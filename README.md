@@ -1,5 +1,5 @@
-Wolop (pronounced Whoa-Lup)
+Wolop (pronounced Whoa-Lop)
 =====
 
-Real-Time Web Server using CoffeeScript, Jade and Stylus
+Real-Time Web Server using Express, CoffeeScript, Jade, Stylus and Socket.io
 
