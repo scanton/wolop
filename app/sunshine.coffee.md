@@ -1,12 +1,16 @@
 #Wolop - a SatoriSunshine server
+
 ##Port (defaults to 3000)
-Just to make it easy t set the port, we start by setting the value at the top of our code file.  This will probably be moved into ./app/config.coffee.md in an upcomming commit.
+
+Just to make it easy to set the port, we start by setting the value at the top of our code file.  This will probably be moved into ./app/config.coffee.md in an upcomming commit.
 
     port = process.env.PORT || 3000
 
 ##Import required Node.js packages 
+
 These are all npm packages that have descriptions in the npm registry.
-You can search NPM by Googling any of these required items as 'npm <required item>'.  You can also search the NPM registry from the command line with 'npm search <required item>'.  So we will not document each required item here.
+
+You can search NPM by Googling any of these required items as 'npm [required item]'.  You can also search the NPM registry from the command line with 'npm search [required item]'.  So we will not document each required item here.
 
     debug = require('debug') 'wolop'
     express = require 'express'
@@ -16,12 +20,7 @@ You can search NPM by Googling any of these required items as 'npm <required ite
     cookieParser = require 'cookie-parser'
     bodyParser = require 'body-parser'
     compression = require 'compression'
-    routes = require './routes/index'
-    partials = require './routes/partials'
     coffeescript = require 'connect-coffee-script'
-    app = express()
-    http = require('http').Server app
-    io = require('socket.io') http
     stylus = require 'stylus'
     nib = require 'nib'
     crypto = require 'crypto'
@@ -29,23 +28,47 @@ You can search NPM by Googling any of these required items as 'npm <required ite
     Hashids = require 'hashids'
     ids = new Hashids 'f699abd2b2cae56e3bfe81154e29ed47'
 
+#App Creation
+
+Here we create the Express.js application (called 'app'), we then pass the app as an argument to invoke the Server method of the Node.js 'http' module.  This creates the webserver.
+
+    app = express()
+    http = require('http').Server app
+
 ##App settings
+
 We defined a couple of variables that we can use throughout the application.
 
     app.set 'env', 'development'
     app.set 'port', port
 
-#View Engine
+#View Engines
+
 ##JADE
+
 Here is where we tell the application where to find our view files and to use Jade as the templating engine
 
     app.set 'views', path.join(__dirname, 'views')
     app.set 'view engine', 'jade'
 
+##Other options
+
+####EJS
+
+EJS uses a syntax most similar to PHP or ASP, using tags in the HTML to delimit where JavaScript code should be processed and echoed out to the page.  This option is not currently installed, but could be if we found a need for it.
+
+####Handlebars & Mustache
+
+Handlebars & Mustache are related template frameworks that use curly braces to delimit where code should be placed in a web template.  This is not currently installed on this server, but could be, and is commonly used in many Node.js frameworks.
+
 #Middleware
+
 Middleware is a core concept of an Express.js server.  It's part of the Connect.js framework that underlies the Express.js application.  It's what gives us the functionality to handle different parts of a request in discrete steps.
-##favicon
-Everything in Express.js that isn't specific to being a web server is handled with middlewares.  That includes things like supporting favicons, logging, compression, and the actual parsing of the body of the http request and the cookies contained in the headers.
+
+##using Middleware
+
+Everything in Express.js that isn't specific to being a web server is handled with thes Connect middlewares.  That includes things like supporting favicons, logging, compression, and the actual parsing of the body of the http request and the cookies contained in the headers.
+
 We add these middlewares through this list of calls to 'app.use'.
 
     app.use favicon(__dirname + '/public/favicon.ico')
@@ -56,23 +79,27 @@ We add these middlewares through this list of calls to 'app.use'.
     app.use cookieParser()
 
 ##Stylus and nib
+
 'nib' is a CSS3 middleware that will look at our Stylus code and automaticlly insert vendor specific CSS3 rules.  For example, if we define a CSS rule that is 'border-radius 10px', nib will automatically insert the '-webkit-border-radius 10px', '-moz-border-radius 10px'.... '-o-border-radius 10px'.
+
 Enabling nib is a little tricky.  It requires this custom Stylus compilaton code:
 
-    stylusCustomCompile = (str, path) ->
-        stylus(str)
-            .set('filename', path)
-            .set('compress', false)
-            .use nib()
     app.use stylus.middleware(
         src: path.join __dirname, 'public'
-        compile: stylusCustomCompile
+        compile: (str, path) ->
+            stylus(str)
+                .set('filename', path)
+                .set('compress', false)
+                .use nib()
     )
 
 ##CoffeeScript
+
 Here we enable the application to use CoffeeScript for client-side code.  CoffeeScript files will be stored in the './app/coffee' directory, which is above the public scope of the client-side javascript files.
 This web server will automatically look in this coffee directory when requests are made for javascript files located in './app/public/javascripts/'.  If the CoffeeScript file of the same name exists in this directory, it will be compiled into a JavaScript file, cached in the javascripts directory, and served to the user.
+
 ####Does it compile the CoffeeScript on every single request?
+
 No.  If the JavaScript file in the cache is newer than the CoffeeScript source file, then the cached version of the JavaScript file is set to the user instantly.
 
     app.use coffeescript 
@@ -81,22 +108,29 @@ No.  If the JavaScript file in the cache is newer than the CoffeeScript source f
         prefix: '/javascripts'
 
 ##Serving Static Files
+
 Static files, like images, PDFs, etc. need to be served out of a specific folder that doesn't include the rest of the source code for this web application.  So we use the built in 'express.static' middleware to tell the server to send any files that exist in this directory to the user without any further processing.
 
     app.use express.static(path.join(__dirname, 'public'))
 
 #Routes
-Routes are used to define requests for specific pages of content.  We imported two route packages at the top of this file, called 'routes' and 'partials'.
-All requests to the root domain (as indicated by the path '/' below) will be handled by routes defined in the routes package.  This package can be found in './app/routes/index.js'.
 
+Routes are used to define requests for specific pages of content.
+
+All requests to the root domain (as indicated by the path '/' below) will be handled by routes defined in the routes package.  This package can be found in './app/routes/index.js'.
+    
+    routes = require './routes/index'
     app.use '/', routes
 
 ##Angular.js Partials
-Partials are HTML snippets that will be used to build Angular.js components.  There is no Angular.js code in the server side of this application.  But we have to define the partials folder and its routing rules, which we've done in the file './app/routes/partials.js'.
 
+Partials are HTML snippets that will be used to build Angular.js components.  There is no Angular.js code in the server side of this application.  But we have to define the partials folder and its routing rules, which we've done in the file './app/routes/partials.js' so that our web server will send us this snippets when requested.
+
+    partials = require './routes/partials'
     app.use '/partials', partials
 
 #404's
+
 Here, we catch 404s and forward them to an error handler
 
     app.use (req, res, next) ->
@@ -105,6 +139,7 @@ Here, we catch 404s and forward them to an error handler
         next err
 
 ##Mongoose (MongoDB ORM)
+
 for now these are commented out.  But they are some inline examples of using Mongoose to define MongoDB schemas.
 
     """
@@ -123,17 +158,25 @@ for now these are commented out.  But they are some inline examples of using Mon
     """ 
 
 ##Socket.io (web socket server)
-for now, this is just a basic Socket.io connection event handler, that echos out that us user connected, and shows how to register additional listeners for when a user disconnects.
+
+Socket.io is the socket server that maintains a 2-way communication socket between the client and the server for real-time communications.  The client does not have to request data for the server to push updates to the client.
+
+We invoke Socket.io by passing the http server instance into its root method call.
+
+    io = require('socket.io') http
+
+This is the Socket.io connection event handler.  It lets us know when a user is connected or disconnected from the applicaton via the web socket.
+
     io.on 'connection', (socket) ->
         #domain = socket.handshake.headers.host.split(':')[0]
         #ip = socket.client.conn.remoteAddress
         console.log '+ user connected +'
         socket.on 'disconnect', ->
             console.log '- user disconnected -'
-            
 
 ##Error Handlers
-If we are in a 'development' environment, then we add the error handler that will print stacktrace
+
+If we are running the appliation in a 'development' environment, then we add the error handler that will print stacktrace
 
     if app.get('env') is 'development'
         app.use (err, req, res, next) ->
@@ -142,7 +185,7 @@ If we are in a 'development' environment, then we add the error handler that wil
                 message: err.message
                 error: err
 
-production error handler no stacktraces leaked to user
+This is the production error handler used so that no stacktraces leaked to user.
 
     app.use (err, req, res, next) ->
         res.status err.status or 500
@@ -151,12 +194,14 @@ production error handler no stacktraces leaked to user
             error: {}
 
 #Server startup
+
 Here is where we actually invoke the server to listen on a particular port and respond to requests.
 
     server = http.listen app.get('port'), ->
         debug 'Sunshine server listening on port ' + server.address().port
 
 #Module.exports
+
 This is the final step in bootstrapping the server.  At this point, the server should be fully functional and all that's left to do is export the component parts of the sunshine server.
         
     module.exports = 
