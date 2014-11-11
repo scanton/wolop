@@ -8,9 +8,9 @@ Just to make it easy to set the port, we start by setting the value at the top o
 
 ##Import required Node.js packages 
 
-These are all npm packages that have descriptions in the npm registry.
+These are all [npm packages](https://www.npmjs.org/) that have descriptions in the [npm registry](https://www.npmjs.org/).
 
-You can search NPM by Googling any of these required items as 'npm [required item]'.  You can also search the NPM registry from the command line with 'npm search [required item]'.  So we will not document each required item here.
+You can search NPM by [Googling](http://google.com/) any of these required items as 'npm [required item]'.  You can also search the NPM registry from the command line with 'npm search [required item]'.  So we will not document each required item here.
 
     debug = require('debug') 'wolop'
     express = require 'express'
@@ -30,7 +30,7 @@ You can search NPM by Googling any of these required items as 'npm [required ite
 
 #App Creation
 
-Here we create the Express.js application (called 'app'), we then pass the app as an argument to invoke the Server method of the Node.js 'http' module.  This creates the webserver.
+Here we create the [Express.js](http://expressjs.com/) application (called 'app'), we then pass the app as an argument to invoke the Server method of the Node.js 'http' module.  This creates the webserver.
 
     app = express()
     http = require('http').Server app
@@ -46,7 +46,7 @@ We defined a couple of variables that we can use throughout the application.
 
 ##JADE
 
-Here is where we tell the application where to find our view files and to use Jade as the templating engine
+Here is where we tell the application where to find our view files and to use [Jade as the templating engine](http://jade-lang.com/)
 
     app.set 'views', path.join(__dirname, 'views')
     app.set 'view engine', 'jade'
@@ -55,15 +55,15 @@ Here is where we tell the application where to find our view files and to use Ja
 
 ####EJS
 
-EJS uses a syntax most similar to PHP or ASP, using tags in the HTML to delimit where JavaScript code should be processed and echoed out to the page.  This option is not currently installed, but could be if we found a need for it.
+[EJS](http://www.embeddedjs.com/) uses a syntax most similar to PHP or ASP, using tags in the HTML to delimit where JavaScript code should be processed and echoed out to the page.  This option is not currently installed, but could be if we found a need for it.
 
 ####Handlebars & Mustache
 
-Handlebars & Mustache are related template frameworks that use curly braces to delimit where code should be placed in a web template.  This is not currently installed on this server, but could be, and is commonly used in many Node.js frameworks.
+[Handlebars](http://handlebarsjs.com/) & [Mustache](http://mustache.github.io/) are related template frameworks that use curly braces to delimit where code should be placed in a web template.  This is not currently installed on this server, but could be, and is commonly used in many Node.js frameworks.
 
 #Middleware
 
-Middleware is a core concept of an Express.js server.  It's part of the Connect.js framework that underlies the Express.js application.  It's what gives us the functionality to handle different parts of a request in discrete steps.
+Middleware is a [core concept](http://stephensugden.com/middleware_guide/) of an Express.js server.  It's part of the [Connect.js](https://github.com/senchalabs/connect) framework that underlies the Express.js application.  It's what gives us the functionality to handle different parts of a request in discrete steps.
 
 ##using Middleware
 
@@ -80,7 +80,7 @@ We add these middlewares through this list of calls to 'app.use'.
 
 ##Stylus and nib
 
-'nib' is a CSS3 middleware that will look at our Stylus code and automaticlly insert vendor specific CSS3 rules.  For example, if we define a CSS rule that is 'border-radius 10px', nib will automatically insert the '-webkit-border-radius 10px', '-moz-border-radius 10px'.... '-o-border-radius 10px'.
+[nib](http://tj.github.io/nib/) is a CSS3 middleware that will look at our [Stylus](http://learnboost.github.io/stylus/) code and automaticlly insert vendor specific CSS3 rules.  For example, if we define a CSS rule that is 'border-radius 10px', nib will automatically insert the '-webkit-border-radius 10px', '-moz-border-radius 10px'.... '-o-border-radius 10px'.
 
 Enabling nib is a little tricky.  It requires this custom Stylus compilaton code:
 
@@ -95,7 +95,7 @@ Enabling nib is a little tricky.  It requires this custom Stylus compilaton code
 
 ##CoffeeScript
 
-Here we enable the application to use CoffeeScript for client-side code.  CoffeeScript files will be stored in the './app/coffee' directory, which is above the public scope of the client-side javascript files.
+Here we enable the application to use [CoffeeScript](http://coffeescript.org/) for client-side code.  CoffeeScript files will be stored in the './app/coffee' directory, which is above the public scope of the client-side javascript files.
 This web server will automatically look in this coffee directory when requests are made for javascript files located in './app/public/javascripts/'.  If the CoffeeScript file of the same name exists in this directory, it will be compiled into a JavaScript file, cached in the javascripts directory, and served to the user.
 
 ####Does it compile the CoffeeScript on every single request?
@@ -124,7 +124,7 @@ All requests to the root domain (as indicated by the path '/' below) will be han
 
 ##Angular.js Partials
 
-Partials are HTML snippets that will be used to build Angular.js components.  There is no Angular.js code in the server side of this application.  But we have to define the partials folder and its routing rules, which we've done in the file './app/routes/partials.js' so that our web server will send us this snippets when requested.
+Partials are HTML snippets that will be used to build [Angular.js](https://angularjs.org/) components.  There is no Angular.js code in the server side of this application.  But we have to define the partials folder and its routing rules, which we've done in the file './app/routes/partials.js' so that our web server will send us this snippets when requested.
 
     partials = require './routes/partials'
     app.use '/partials', partials
@@ -140,7 +140,7 @@ Here, we catch 404s and forward them to an error handler
 
 ##Mongoose (MongoDB ORM)
 
-for now these are commented out.  But they are some inline examples of using Mongoose to define MongoDB schemas.
+for now these are commented out.  But they are some inline examples of using [Mongoose](http://mongoosejs.com/) to define [MongoDB](http://www.mongodb.org/) schemas.
 
     """
     mongoose.connect 'mongodb://localhost:42047/wolop'
@@ -159,7 +159,7 @@ for now these are commented out.  But they are some inline examples of using Mon
 
 ##Socket.io (web socket server)
 
-Socket.io is the socket server that maintains a 2-way communication socket between the client and the server for real-time communications.  The client does not have to request data for the server to push updates to the client.
+[Socket.io](http://socket.io/) is the socket server that maintains a 2-way communication socket between the client and the server for real-time communications.  The client does not have to request data for the server to push updates to the client.
 
 We invoke Socket.io by passing the http server instance into its root method call.
 
