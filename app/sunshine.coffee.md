@@ -67,7 +67,7 @@ Middleware is a [core concept](http://stephensugden.com/middleware_guide/) of an
 
 ##using Middleware
 
-Everything in Express.js that isn't specific to being a web server is handled with thes Connect middlewares.  That includes things like supporting favicons, logging, compression, and the actual parsing of the body of the http request and the cookies contained in the headers.
+Everything in Express.js that isn't specific to being a web server is handled with these Connect middlewares.  That includes things like supporting favicons, logging, compression, and the actual parsing of the body of the http request and the cookies contained in the headers.
 
 We add these middlewares through this list of calls to 'app.use'.
 
