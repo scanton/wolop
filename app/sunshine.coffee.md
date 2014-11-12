@@ -1,4 +1,4 @@
-##NOTE: 
+##CoffeeScript/JavaScript Note: 
 
 This code file is written in CoffeeScript.  If you find it easier to read this code in JavaScript, you can use [this CoffeeScript to JavaScript converter](http://js2coffee.org/) to automatically convert to and from CoffeeScript to JavaScript.
 
