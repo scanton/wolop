@@ -4,11 +4,14 @@ This code file is written in CoffeeScript.  If you find it easier to read this c
 
 #Wolop - a [SatoriSunshine](http://satorisunshine.com/) server.
 
-##Port (defaults to 3000)
+##Config (/app/config.coffee.md)
 
-Just to make it easy to set the port, we start by setting the value at the top of our code file.  This will probably be moved into ./app/config.coffee.md in an upcomming commit.
+We start by setting the environment variable that will select the type of configuraton we need from /app/config.coffee.md.
+    
+    env = 'development'
 
-    port = process.env.PORT || 3000
+    config = require('./config')[env]
+    console.log 'Sunshine server configured for ' + env + ', listening on port ' + config.port
 
 ##Import required Node.js packages 
 
@@ -43,8 +46,8 @@ Here we create the [Express.js](http://expressjs.com/) application (called 'app'
 
 We defined a couple of variables that we can use throughout the application.
 
-    app.set 'env', 'development'
-    app.set 'port', port
+    app.set 'env', env
+    app.set 'port', config.port
 
 #View Engines
 
