@@ -124,14 +124,14 @@ Static files, like images, PDFs, etc. need to be served out of a specific folder
 
 Routes are used to define requests for specific pages of content.
 
-All requests to the root domain (as indicated by the path '/' below) will be handled by routes defined in the routes package.  This package can be found in './app/routes/index.js'.
+All requests to the root domain (as indicated by the path '/' below) will be handled by routes defined in the routes package.  This package can be found in './app/routes/index.coffee'.
     
     routes = require './routes/index'
     app.use '/', routes
 
 ##Angular.js Partials
 
-Partials are HTML snippets that will be used to build [Angular.js](https://angularjs.org/) components.  There is no Angular.js code in the server side of this application.  But we have to define the partials folder and its routing rules, which we've done in the file './app/routes/partials.js' so that our web server will send us this snippets when requested.
+Partials are HTML snippets that will be used to build [Angular.js](https://angularjs.org/) components.  There is no Angular.js code in the server side of this application.  But we have to define the partials folder and its routing rules, which we've done in the file './app/routes/partials.coffee' so that our web server will send us this snippets when requested.
 
     partials = require './routes/partials'
     app.use '/partials', partials
@@ -192,7 +192,7 @@ If we are running the appliation in a 'development' environment, then we add the
                 message: err.message
                 error: err
 
-This is the production error handler used so that no stacktraces leaked to user.
+This is the production error handler used so that no stacktraces are leaked to user.
 
     app.use (err, req, res, next) ->
         res.status err.status or 500
