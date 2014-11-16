@@ -33,7 +33,7 @@ You can search NPM by [Googling](http://google.com/) any of these required items
     crypto = require 'crypto'
     mongoose = require 'mongoose'
     Hashids = require 'hashids'
-    ids = new Hashids 'f699abd2b2cae56e3bfe81154e29ed47'
+    ids = new Hashids config.hashidSalt
 
 #App Creation
 
