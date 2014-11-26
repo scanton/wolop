@@ -3,7 +3,7 @@ router = express.Router()
 
 router.get '/', (req, res) ->
 	res.render 'index',
-		title: 'Lifeplus'
+		title: 'Wolop'
 
 pageHandler = (req, res) ->
 	res.render 'page',
