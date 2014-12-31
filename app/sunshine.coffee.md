@@ -1,4 +1,4 @@
-#Wolop - a [SatoriSunshine](http://satorisunshine.com/) server.
+#Wolop - Global Content Management System
 
 ##CoffeeScript/JavaScript Note: 
 
