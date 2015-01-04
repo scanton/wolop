@@ -10,9 +10,23 @@ html
 		script(src='/javascripts/bootstrap.js')
 		script(src='/javascripts/angular-bootstrap/ui-bootstrap-tpls.js')
 		script(src='/javascripts/script.js')
-	body
+	body.angular-app(ng-app="wolop-cms", ng-controller="CmsController as mainController")
+		nav.navbar.navbar-default
+			.container-fluid
+			.navbar-header
+				button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+				span.sr-only Toggle navigation
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.navbar-brand(href='#') Wolop
+			#bs-example-navbar-collapse-1.collapse.navbar-collapse
+				ul.nav.navbar-nav
+					li.active
+						a(href='#')
+							| Link
+					li
+						a(href='#') Link
 		.container.main-container
-			.row.logo
-				img(src='/images/wolop-logo.png', style='max-height: 200px;')
 			.row.main-row
 				block content
