@@ -165,6 +165,10 @@ for now these are commented out.  But they are some inline examples of using [Mo
 		slug: {type: String, unique: true}
 		domain: String
 	)
+	ContentGroup = mongoose.model('ContentGroup',
+		name: {type: String, unique: true}
+		slug: {type: String, unique: true}
+    )
 	Page = mongoose.model('Page',
 		name: String
 		slug: {type: String, unique: true}
