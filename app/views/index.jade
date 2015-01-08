@@ -1,20 +1,43 @@
 extends layout
 
 block content
-	.row
-		div(ng-show="!isLoggedIn")
-			.col-xs-2
-			.col-xs-8
-				.panel.panel-default
-					.panel-heading Please Login
-					.panel-body
-						.col-xs-4
-							img(src='/images/wolop-logo.png', style='max-height: 150px')
-						.col-xs-8
-							form
-								.form-group
-									input.form-control(type='text', placeholder='Username')
-								.form-group
-									input.form-control(type='password', placeholder='Password')
-								button.btn.btn-default.pull-right(type='submit') Login
-			.col-xs-2
+    .row
+        div(ng-show="!isLoggedIn")
+            .col-xs-2
+            .col-xs-8
+                .panel.panel-default
+                    .panel-heading Please Login
+                    .panel-body
+                        .col-xs-4
+                            img(src='/images/wolop-logo.png', style='max-height: 150px')
+                        .col-xs-8
+                            form
+                                .form-group
+                                    input.form-control(name='username', type='text', placeholder='Username')
+                                .form-group
+                                    input.form-control(name='password', type='password', placeholder='Password')
+                                button.btn.btn-default.pull-right(type='submit') Login
+            .col-xs-2
+    .row
+        div
+            .col-xs-2
+            .col.xs-8
+                .panel.panel-default
+                    .panel-heading Create User
+                    .panel-body
+                        form
+                            .col-xs-6
+                                .form-group
+                                    input.form-control(name='first-name', type='text', placeholder='First Name')
+                            .col-xs-6
+                                .form-group
+                                    input.form-control(name='last-name', type='text', placeholder='Last Name')
+                            .form-group
+                                input.form-control(name='email', type='text', placeholder='Email Address')
+                            .form-group
+                                input.form-control(name='username', type='text', placeholder='Username')
+                            .form-group
+                                input.form-control(name='password', type='password', placeholder='Password')
+                            button.btn.btn-default.pull-right(type='submit') Create User
+
+            .col-xs-2
