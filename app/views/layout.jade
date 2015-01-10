@@ -1,13 +1,14 @@
 doctype html
 html
 	head
-		title Lifeplus - #{title}
+		title #{title}
 		link(rel='stylesheet', href='/stylesheets/bootstrap.css')
 		link(rel='stylesheet', href='/stylesheets/bootstrap-theme.css')
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		script(src='../socket.io/socket.io.js')
 		script(src='/javascripts/jquery.min.js')
 		script(src='/javascripts/angular/angular.min.js')
+		script(src='/javascripts/angular/angular-route.js')
 		script(src='/javascripts/bootstrap.js')
 		script(src='/javascripts/angular-bootstrap/ui-bootstrap-tpls.js')
 		script(src='/javascripts/script.js')
@@ -23,11 +24,16 @@ html
 				a.navbar-brand(href='#') Wolop
 			#bs-example-navbar-collapse-1.collapse.navbar-collapse
 				ul.nav.navbar-nav
-					li.active
-						a(href='#')
-							| Link
-					li
-						a(href='#') Link
+					li.active(ng-show="isLoggedIn")
+						a(href='#websites') Websites
+					li(ng-show="isLoggedIn")
+						a(href='#pages') Pages
+					li(ng-show="isLoggedIn")
+						a(href='#menus') Menus
+					li(ng-show="isLoggedIn")
+						a(href='#content-groups') Content Groups
+					li(ng-show="isLoggedIn")
+						a(href='#users') Users
 		.container.main-container
 			.row.main-row
 				block content

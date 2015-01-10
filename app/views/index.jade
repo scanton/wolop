@@ -4,26 +4,5 @@ block content
 	.row
 		div(ng-show="!isLoggedIn")
 			user-login
-	//-.row
-		div
-			.col-xs-2
-			.col.xs-8
-				.panel.panel-default
-					.panel-heading Create User
-					.panel-body
-						form(ng-submit='addUser(newUser)')
-							.col-xs-6
-								.form-group
-									input.form-control(ng-model="newUser.firstName", name='first-name', type='text', placeholder='First Name')
-							.col-xs-6
-								.form-group
-									input.form-control(ng-model="newUser.lastName", name='last-name', type='text', placeholder='Last Name')
-							.form-group
-								input.form-control(ng-model="newUser.email", name='email', type='text', placeholder='Email Address')
-							.form-group
-								input.form-control(ng-model="newUser.username", name='username', type='text', placeholder='Username')
-							.form-group
-								input.form-control(ng-model="newUser.password", name='password', type='password', placeholder='Password')
-							button.btn.btn-default.pull-right(type='submit') Create User
-
-			.col-xs-2
+	.row(ng-show="isLoggedIn")
+		div(ng-view)
