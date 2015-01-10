@@ -156,10 +156,11 @@ for now these are commented out.  But they are some inline examples of using [Mo
 	mongoose.connect 'mongodb://localhost:27017/wolop'
 
 	Admin = mongoose.model('Admin',
-		username: {type: String, unique: true}
-		password: String
 		firstName: String
 		lastName: String
+		email: {type: String, unique: true}
+		username: {type: String, unique: true}
+		password: String
 	)
 	Website = mongoose.model('Website',
 		name: String
@@ -189,12 +190,27 @@ We invoke Socket.io by passing the http server instance into its root method cal
 This is the Socket.io connection event handler.  It lets us know when a user is connected or disconnected from the applicaton via the web socket.
 
 	io.on 'connection', (socket) ->
-		#domain = socket.handshake.headers.host.split(':')[0]
-		#ip = socket.client.conn.remoteAddress
-		console.log '+ user connected +'
+		domain = socket.handshake.headers.host.split(':')[0]
+		ip = socket.client.conn.remoteAddress
+		console.log '+ user connected + domain: ' + domain + ' IP: ' + ip
 		socket.on 'disconnect', ->
 			console.log '- user disconnected -'
-
+		socket.on 'user-login', (data) ->
+			if data
+				Admin.findOne({username: data.username, password: data.password}, (err, data) ->
+					if data
+						data.password = '***************'
+						socket.emit 'login-success', data
+				)
+		socket.on 'add-new-user', (data) ->
+			if data && data.email
+				console.log data
+				Admin.findOneAndUpdate(
+					{email: data.email}
+					{$set: data}
+					{upsert: true}
+				).exec()
+			
 ##Error Handlers
 
 If we are running the appliation in a 'development' environment, then we add the error handler that will print stacktrace
