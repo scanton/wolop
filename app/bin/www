@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 debug = require('debug')('sunshine')
-sunshine = require '../sunshine'
+sunshine = require '../app'
 server = sunshine.server
 app = sunshine.app
 io = sunshine.io
