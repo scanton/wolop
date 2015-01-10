@@ -158,10 +158,11 @@ for now these are commented out.  But they are some inline examples of using [Mo
 	Admin = mongoose.model('Admin',
 		username: {type: String, unique: true}
 		password: String
-		name: String
+		firstName: String
+		lastName: String
 	)
 	Website = mongoose.model('Website',
-		name: {type: String, unique: true}
+		name: String
 		slug: {type: String, unique: true}
 		domain: String
 	)
