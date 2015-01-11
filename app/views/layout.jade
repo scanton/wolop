@@ -2,12 +2,17 @@ doctype html
 html
 	head
 		title #{title}
+		//link(rel='stylesheet', href='/javascripts/bower_components/codemirror/lib/codemirror.css')
 		link(rel='stylesheet', href='/stylesheets/bootstrap.css')
 		link(rel='stylesheet', href='/stylesheets/bootstrap-theme.css')
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		script(src='../socket.io/socket.io.js')
 		script(src='/javascripts/jquery.min.js')
-		script(src='/javascripts/angular/angular.min.js')
+		script(src='/javascripts/bower_components/ace-builds/src-min-noconflict/ace.js')
+		//script(src='/javascripts/bower_components/codemirror/lib/codemirror.js')
+		script(src='/javascripts/bower_components/angular/angular.js')
+		script(src='/javascripts/bower_components/angular-ui-ace/ui-ace.js')
+		//script(src='/javascripts/bower_components/angular-ui-codemirror/ui-codemirror.js')
 		script(src='/javascripts/angular/angular-route.js')
 		script(src='/javascripts/bootstrap.js')
 		script(src='/javascripts/angular-bootstrap/ui-bootstrap-tpls.js')
@@ -21,8 +26,8 @@ html
 					span.icon-bar
 					span.icon-bar
 					span.icon-bar
-				a.navbar-brand(href='#') Wolop
-			#bs-example-navbar-collapse-1.collapse.navbar-collapse
+				a.navbar-brand(href='#/') Wolop
+			.collapse.navbar-collapse
 				ul.nav.navbar-nav
 					li.active(ng-show="isLoggedIn")
 						a(href='#websites') Websites

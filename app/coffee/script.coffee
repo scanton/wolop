@@ -1,5 +1,5 @@
 socket = io()
-app = angular.module 'wolop-cms', ['ngRoute']
+app = angular.module 'wolop-cms', ['ngRoute', 'ui.ace'] #, 'ui.codemirror'
 
 app.config ($routeProvider) ->
 	path = $routeProvider.when
@@ -50,6 +50,10 @@ app.controller 'CmsController', ($scope) ->
 	$scope.isLoggedIn = false
 	$scope.userData = {}
 	$scope.newUser = {}
+	$scope.codemirrorOptions =
+		lineWrapping: true
+		lineNumbers: true
+		mode: 'html'
 	$scope.addUser = (data) ->
 		socket.emit 'add-new-user', data
 	socket.on 'login-success', (data) ->

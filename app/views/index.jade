@@ -1,8 +1,5 @@
 extends layout
 
 block content
-	.row
-		div(ng-show="!isLoggedIn")
-			user-login
-	.row(ng-show="isLoggedIn")
-		div(ng-view)
+	user-login(ng-show="!isLoggedIn")
+	div(ng-view, ng-show="isLoggedIn")
