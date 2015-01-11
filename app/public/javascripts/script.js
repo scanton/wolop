@@ -3,7 +3,7 @@
 
   socket = io();
 
-  app = angular.module('wolop-cms', ['ngRoute', 'ui.ace', 'ui.codemirror']);
+  app = angular.module('wolop-cms', ['ngRoute', 'ui.ace']);
 
   app.config(function($routeProvider) {
     var path;
@@ -62,11 +62,6 @@
     $scope.isLoggedIn = false;
     $scope.userData = {};
     $scope.newUser = {};
-    $scope.codemirrorOptions = {
-      lineWrapping: true,
-      lineNumbers: true,
-      mode: 'html'
-    };
     $scope.addUser = function(data) {
       return socket.emit('add-new-user', data);
     };
