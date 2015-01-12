@@ -1,5 +1,4 @@
-.ace_editor,
-ui-codemirror {
+.ace_editor {
   min-height: 300px;
   height: 100%;
 }

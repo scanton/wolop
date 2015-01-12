@@ -3,7 +3,7 @@
 	.panel.panel-default
 		.panel-heading Create User
 		.panel-body
-			form(ng-submit='createUser(createUserData)')
+			form()
 				.col-xs-6
 					.form-group
 						input.form-control(ng-model="createUserData.firstName", name='first-name', type='text', placeholder='First Name')
@@ -20,6 +20,6 @@
 					.form-group
 						input.form-control(ng-model="createUserData.password", name='password', type='password', placeholder='Password')
 				.col-xs-12
-					button.btn.btn-default.pull-right(type='submit') Create User
+					button.btn.btn-default.pull-right(ng-click='createUser(createUserData)') Create User
 
 .col-xs-2

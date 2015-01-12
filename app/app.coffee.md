@@ -202,7 +202,7 @@ This is the Socket.io connection event handler.  It lets us know when a user is 
 						data.password = '***************'
 						socket.emit 'login-success', data
 				)
-		socket.on 'add-new-user', (data) ->
+		socket.on 'create-user', (data) ->
 			if data && data.email
 				console.log data
 				Admin.findOneAndUpdate(

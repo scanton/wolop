@@ -5,6 +5,45 @@
 
   app = angular.module('wolop-cms', ['ngRoute', 'ui.ace']);
 
+  app.controller('CmsController', function($scope) {
+    $scope.isLoggedIn = false;
+    $scope.userData = {};
+    $scope.newUser = {};
+    return socket.on('login-success', function(data) {
+      return $scope.$apply(function() {
+        $scope.userData = data;
+        return $scope.isLoggedIn = true;
+      });
+    });
+  });
+
+  app.directive('userLogin', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/partials/user-login.html',
+      controller: function($scope) {
+        $scope.loginData = {};
+        return $scope.userLogin = function(data) {
+          return socket.emit('user-login', data);
+        };
+      }
+    };
+  });
+
+  app.directive('createUser', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/partials/create-user.html',
+      controller: function($scope) {
+        $scope.createUserData = {};
+        return $scope.createUser = function(data) {
+          console.log(data);
+          return socket.emit('create-user', data);
+        };
+      }
+    };
+  });
+
   app.config(function($routeProvider) {
     var path;
     path = $routeProvider.when;
@@ -56,47 +95,6 @@
 
   app.controller('UsersController', function($scope) {
     return console.log('users-controller');
-  });
-
-  app.controller('CmsController', function($scope) {
-    $scope.isLoggedIn = false;
-    $scope.userData = {};
-    $scope.newUser = {};
-    $scope.addUser = function(data) {
-      return socket.emit('add-new-user', data);
-    };
-    return socket.on('login-success', function(data) {
-      return $scope.$apply(function() {
-        $scope.userData = data;
-        return $scope.isLoggedIn = true;
-      });
-    });
-  });
-
-  app.directive('userLogin', function() {
-    return {
-      restrict: 'E',
-      templateUrl: '/partials/user-login.html',
-      controller: function($scope) {
-        $scope.loginData = {};
-        return $scope.userLogin = function(data) {
-          return socket.emit('user-login', data);
-        };
-      }
-    };
-  });
-
-  app.directive('createUser', function() {
-    return {
-      restrict: 'E',
-      templateUrl: '/partials/create-user.html',
-      controller: function($scope) {
-        $scope.createUserData = {};
-        return $scope.createUser = function(data) {
-          return socket.emit('create-user', data);
-        };
-      }
-    };
   });
 
 }).call(this);
