@@ -151,7 +151,7 @@ Here, we catch 404s and forward them to an error handler
 
 ##Mongoose (MongoDB ORM)
 
-for now these are commented out.  But they are some inline examples of using [Mongoose](http://mongoosejs.com/) to define [MongoDB](http://www.mongodb.org/) schemas.
+We are using [Mongoose](http://mongoosejs.com/) to define [MongoDB](http://www.mongodb.org/) schemas.
 
 	mongoose.connect 'mongodb://localhost:27017/wolop'
 
