@@ -6,6 +6,7 @@ router.get '/', (req, res) ->
 		title: 'Partials folder'
 
 router.get '*', (req, res) ->
-	template = req.url.replace('/', '').replace('.html', '')
-	res.render 'partials/' + template
+	template = req.url.replace('.html', '')
+	console.log 'partials' + template
+	res.render 'partials' + template
 module.exports = router

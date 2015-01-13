@@ -3,7 +3,7 @@
 
   socket = io();
 
-  app = angular.module('wolop-cms', ['ngRoute', 'ui.ace']);
+  app = angular.module('wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']);
 
   app.controller('CmsController', function($scope) {
     $scope.isLoggedIn = false;
@@ -20,7 +20,7 @@
   app.directive('userLogin', function() {
     return {
       restrict: 'E',
-      templateUrl: '/partials/user-login.html',
+      templateUrl: '/partials/directives/user-login.html',
       controller: function($scope) {
         $scope.loginData = {};
         return $scope.userLogin = function(data) {
@@ -33,13 +33,45 @@
   app.directive('createUser', function() {
     return {
       restrict: 'E',
-      templateUrl: '/partials/create-user.html',
-      controller: function($scope) {
+      templateUrl: '/partials/directives/create-user.html',
+      controller: function($scope, $log) {
         $scope.createUserData = {};
         return $scope.createUser = function(data) {
-          console.log(data);
+          $log.info(data);
           return socket.emit('create-user', data);
         };
+      }
+    };
+  });
+
+  app.directive('navBar', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/partials/directives/nav-bar.html',
+      controller: function($scope, $location, $log) {
+        $log.info($location.path());
+        $scope.path = $location.path();
+        $scope.$on('$locationChangeStart', function(event, next, current) {
+          return $scope.path = next.split('#')[1];
+        });
+        return $scope.navData = [
+          {
+            label: 'Websites',
+            link: '/websites'
+          }, {
+            label: 'Pages',
+            link: '/pages'
+          }, {
+            label: 'Menus',
+            link: '/menus'
+          }, {
+            label: 'Content Groups',
+            link: '/content-groups'
+          }, {
+            label: 'Users',
+            link: '/users'
+          }
+        ];
       }
     };
   });
@@ -73,28 +105,40 @@
     });
   });
 
-  app.controller('HomeController', function($scope) {
-    return console.log('home-controller');
+  app.controller('HomeController', function($scope, $modal, $log) {
+    return $log.info('home-controller');
   });
 
-  app.controller('WebsitesController', function($scope) {
-    return console.log('websites-controller');
+  app.controller('WebsitesController', function($scope, $modal, $log) {
+    return $log.info('websites-controller');
   });
 
-  app.controller('PagesController', function($scope) {
-    return console.log('pages-controller');
+  app.controller('PagesController', function($scope, $modal, $log) {
+    return $log.info('pages-controller');
   });
 
-  app.controller('MenusController', function($scope) {
-    return console.log('menus-controller');
+  app.controller('MenusController', function($scope, $modal, $log) {
+    return $log.info('menus-controller');
   });
 
-  app.controller('ContentGroupsController', function($scope) {
-    return console.log('content-groups-controller');
+  app.controller('ContentGroupsController', function($scope, $modal, $log) {
+    return $log.info('content-groups-controller');
   });
 
-  app.controller('UsersController', function($scope) {
-    return console.log('users-controller');
+  app.controller('UsersController', function($scope, $modal, $log) {
+    $log.info('users-controller');
+    return $scope.showCreateUser = function() {
+      return $modal.open({
+        templateUrl: '/partials/directives/create-user',
+        controller: 'CreateUserController'
+      });
+    };
+  });
+
+  app.controller('CreateUserController', function($scope, $modalInstance) {
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
   });
 
 }).call(this);

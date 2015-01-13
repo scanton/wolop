@@ -15,7 +15,7 @@ We start by setting the environment variable that will select the type of config
 	env = 'development'
 
 	config = require('./config')[env]
-	console.log 'Sunshine server configured for ' + env + ', listening on port ' + config.port
+	console.log 'Wolop CMS configured for ' + env + ', listening on port ' + config.port
 
 ##Import required Node.js packages 
 
@@ -235,7 +235,7 @@ This is the production error handler used so that no stacktraces are leaked to u
 Here is where we actually invoke the server to listen on a particular port and respond to requests.
 
 	server = http.listen app.get('port'), ->
-		debug 'Sunshine server listening on port ' + server.address().port
+		debug 'Wolop listening on port ' + server.address().port
 
 #Module.exports
 

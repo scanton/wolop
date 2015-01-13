@@ -15,27 +15,7 @@ html
 		script(src='/javascripts/angular-bootstrap/ui-bootstrap-tpls.js')
 		script(src='/javascripts/script.js')
 	body.angular-app(ng-app="wolop-cms", ng-controller="CmsController as mainController")
-		nav.navbar.navbar-default
-			.container-fluid
-			.navbar-header
-				button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
-				span.sr-only Toggle navigation
-					span.icon-bar
-					span.icon-bar
-					span.icon-bar
-				a.navbar-brand(href='#/') Wolop
-			.collapse.navbar-collapse
-				ul.nav.navbar-nav
-					li.active(ng-show="isLoggedIn")
-						a(href='#websites') Websites
-					li(ng-show="isLoggedIn")
-						a(href='#pages') Pages
-					li(ng-show="isLoggedIn")
-						a(href='#menus') Menus
-					li(ng-show="isLoggedIn")
-						a(href='#content-groups') Content Groups
-					li(ng-show="isLoggedIn")
-						a(href='#users') Users
+		nav-bar(ng-show="isLoggedIn")
 		.container.main-container
 			.row.main-row
 				block content

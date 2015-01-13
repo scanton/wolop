@@ -1,0 +1,17 @@
+.container-fluid.user-login-form
+	.row
+		.col-xs-2
+		.col-xs-8
+			.panel.panel-default
+				.panel-heading Please Login
+				.panel-body
+					.col-xs-4
+						img(src='/images/wolop-logo.png', style='max-height: 150px')
+					.col-xs-8
+						form(ng-submit='userLogin(loginData)', method='post')
+							.form-group
+								input.form-control(ng-model='loginData.username', name='username', type='text', placeholder='Username')
+							.form-group
+								input.form-control(ng-model='loginData.password', name='password', type='password', placeholder='Password')
+							button.btn.btn-default.pull-right(type='submit') Login
+		.col-xs-2

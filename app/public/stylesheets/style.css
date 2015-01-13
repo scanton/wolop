@@ -2,3 +2,12 @@
   min-height: 300px;
   height: 100%;
 }
+.modal-content {
+  padding-bottom: 25px;
+}
+.modal-content .btn {
+  margin-left: 1em;
+}
+.user-login-form {
+  margin-top: 25px;
+}
