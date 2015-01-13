@@ -39,6 +39,7 @@ app.directive 'navBar', ->
 			{label: 'Pages', link: '/pages'}
 			{label: 'Menus', link: '/menus'}
 			{label: 'Content Groups', link: '/content-groups'}
+			{label: 'Locales', link: '/locales'}
 			{label: 'Users', link: '/users'}
 		]
 
@@ -64,6 +65,10 @@ app.config ($routeProvider) ->
 	path '/content-groups',
 		templateUrl: '/partials/content-groups.html'
 		controller: 'ContentGroupsController'
+
+	path '/locales',
+		templateUrl: '/partials/locales.html'
+		controller: 'LocalesController'
 
 	path '/users',
 		templateUrl: '/partials/users.html'
@@ -112,6 +117,16 @@ app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
+app.controller 'LocalesController', ($scope, $modal, $log) ->
+	$scope.showCreateLocale = ->
+		$modal.open
+			templateUrl: '/partials/forms/create-locale'
+			controller: 'CreateLocaleController'
+
+app.controller 'CreateLocaleController', ($scope, $modalInstance, $log) ->
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+
 app.controller 'UsersController', ($scope, $modal, $log) ->
 	$scope.showCreateUser = ->
 		$modal.open
@@ -119,9 +134,9 @@ app.controller 'UsersController', ($scope, $modal, $log) ->
 			controller: 'CreateUserController'
 
 app.controller 'CreateUserController', ($scope, $modalInstance, $log) ->
-	$scope.cancel = ->
-		$modalInstance.dismiss 'cancel'
 	$scope.createUserData = {}
 	$scope.createUser = (data) ->
 		$log.info data
 		socket.emit 'create-user', data
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'

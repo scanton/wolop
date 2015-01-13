@@ -67,6 +67,9 @@
             label: 'Content Groups',
             link: '/content-groups'
           }, {
+            label: 'Locales',
+            link: '/locales'
+          }, {
             label: 'Users',
             link: '/users'
           }
@@ -97,6 +100,10 @@
     path('/content-groups', {
       templateUrl: '/partials/content-groups.html',
       controller: 'ContentGroupsController'
+    });
+    path('/locales', {
+      templateUrl: '/partials/locales.html',
+      controller: 'LocalesController'
     });
     return path('/users', {
       templateUrl: '/partials/users.html',
@@ -166,6 +173,21 @@
     };
   });
 
+  app.controller('LocalesController', function($scope, $modal, $log) {
+    return $scope.showCreateLocale = function() {
+      return $modal.open({
+        templateUrl: '/partials/forms/create-locale',
+        controller: 'CreateLocaleController'
+      });
+    };
+  });
+
+  app.controller('CreateLocaleController', function($scope, $modalInstance, $log) {
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
+  });
+
   app.controller('UsersController', function($scope, $modal, $log) {
     return $scope.showCreateUser = function() {
       return $modal.open({
@@ -176,13 +198,13 @@
   });
 
   app.controller('CreateUserController', function($scope, $modalInstance, $log) {
-    $scope.cancel = function() {
-      return $modalInstance.dismiss('cancel');
-    };
     $scope.createUserData = {};
-    return $scope.createUser = function(data) {
+    $scope.createUser = function(data) {
       $log.info(data);
       return socket.emit('create-user', data);
+    };
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
     };
   });
 
