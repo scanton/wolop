@@ -123,6 +123,10 @@
   });
 
   app.controller('CreateWebsiteController', function($scope, $modalInstance, $log) {
+    $scope.createWebsite = function(data) {
+      $log.info(data);
+      return socket.emit('create-website', data);
+    };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
     };
@@ -138,6 +142,10 @@
   });
 
   app.controller('CreatePageController', function($scope, $modalInstance, $log) {
+    $scope.createPage = function(data) {
+      $log.info(data);
+      return socket.emit('create-page', data);
+    };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
     };
@@ -153,6 +161,10 @@
   });
 
   app.controller('CreateMenuController', function($scope, $modalInstance, $log) {
+    $scope.createMenu = function(data) {
+      $log.info(data);
+      return socket.emit('create-menu', data);
+    };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
     };
@@ -168,6 +180,10 @@
   });
 
   app.controller('CreateContentGroupController', function($scope, $modalInstance, $log) {
+    $scope.createContentGroup = function(data) {
+      $log.info(data);
+      return socket.emit('create-content-group', data);
+    };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
     };
@@ -183,6 +199,10 @@
   });
 
   app.controller('CreateLocaleController', function($scope, $modalInstance, $log) {
+    $scope.createLocale = function(data) {
+      $log.info(data);
+      return socket.emit('create-locale', data);
+    };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
     };

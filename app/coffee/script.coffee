@@ -84,6 +84,9 @@ app.controller 'WebsitesController', ($scope, $modal, $log) ->
 			controller: 'CreateWebsiteController'
 
 app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
+	$scope.createWebsite = (data) ->
+		$log.info data
+		socket.emit 'create-website', data
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -94,6 +97,9 @@ app.controller 'PagesController', ($scope, $modal, $log) ->
 			controller: 'CreatePageController'
 
 app.controller 'CreatePageController', ($scope, $modalInstance, $log) ->
+	$scope.createPage = (data) ->
+		$log.info data
+		socket.emit 'create-page', data
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -104,6 +110,9 @@ app.controller 'MenusController', ($scope, $modal, $log) ->
 			controller: 'CreateMenuController'
 
 app.controller 'CreateMenuController', ($scope, $modalInstance, $log) ->
+	$scope.createMenu = (data) ->
+		$log.info data
+		socket.emit 'create-menu', data
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -114,6 +123,9 @@ app.controller 'ContentGroupsController', ($scope, $modal, $log) ->
 			controller: 'CreateContentGroupController'
 
 app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
+	$scope.createContentGroup = (data) ->
+		$log.info data
+		socket.emit 'create-content-group', data
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -124,6 +136,9 @@ app.controller 'LocalesController', ($scope, $modal, $log) ->
 			controller: 'CreateLocaleController'
 
 app.controller 'CreateLocaleController', ($scope, $modalInstance, $log) ->
+	$scope.createLocale = (data) ->
+		$log.info data
+		socket.emit 'create-locale', data
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 

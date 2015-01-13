@@ -175,8 +175,13 @@ We are using [Mongoose](http://mongoosejs.com/) to define [MongoDB](http://www.m
 		name: String
 		slug: {type: String, unique: true}
 	)
+	Locale = mongoose.model('Locale',
+		name: String
+		slug: {type: String, unique: true}
+	)
 	Menu = mongoose.model('Menu',
 		name: String
+		slug: {type: String, unique: true}
 	)
 
 ##Socket.io (web socket server)
@@ -207,6 +212,46 @@ This is the Socket.io connection event handler.  It lets us know when a user is 
 				console.log data
 				Admin.findOneAndUpdate(
 					{email: data.email}
+					{$set: data}
+					{upsert: true}
+				).exec()
+		socket.on 'create-website', (data) ->
+			if data && data.slug
+				console.log data
+				Website.findOneAndUpdate(
+					{slug: data.slug}
+					{$set: data}
+					{upsert: true}
+				).exec()
+		socket.on 'create-page', (data) ->
+			if data && data.slug
+				console.log data
+				Page.findOneAndUpdate(
+					{slug: data.slug}
+					{$set: data}
+					{upsert: true}
+				).exec()
+		socket.on 'create-content-group', (data) ->
+			if data && data.slug
+				console.log data
+				ContentGroup.findOneAndUpdate(
+					{slug: data.slug}
+					{$set: data}
+					{upsert: true}
+				).exec()
+		socket.on 'create-locale', (data) ->
+			if data && data.slug
+				console.log data
+				Locale.findOneAndUpdate(
+					{slug: data.slug}
+					{$set: data}
+					{upsert: true}
+				).exec()
+		socket.on 'create-menu', (data) ->
+			if data && data.slug
+				console.log data
+				Menu.findOneAndUpdate(
+					{slug: data.slug}
 					{$set: data}
 					{upsert: true}
 				).exec()

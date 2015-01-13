@@ -3,3 +3,13 @@
 		.modal-header
 			h2 Create Menu
 		.modal-body
+			form
+				.col-xs-12
+					.form-group
+						input.form-control(ng-model="createMenuData.name", name='name', type='text', placeholder='Name')
+				.col-xs-12
+					.form-group
+						input.form-control(ng-model="createMenuData.slug", name='slug', type='text', placeholder='slug')
+				.col-xs-12
+					button.btn.btn-default.pull-right(ng-click='createMenu(createMenuData)') Create Menu
+					button.btn.btn-default.pull-right(ng-click='cancel()') Cancel
