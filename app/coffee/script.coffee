@@ -31,7 +31,6 @@ app.directive 'navBar', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/nav-bar.html'
 	controller: ($scope, $location, $log) ->
-		$log.info $location.path()
 		$scope.path = $location.path()
 		$scope.$on '$locationChangeStart', (event, next, current) ->
 			$scope.path = next.split('#')[1]
@@ -71,27 +70,58 @@ app.config ($routeProvider) ->
 		controller: 'UsersController'
 
 app.controller 'HomeController', ($scope, $modal, $log) ->
-	$log.info 'home-controller'
+	#$log.info 'home-controller'
 
 app.controller 'WebsitesController', ($scope, $modal, $log) ->
-	$log.info 'websites-controller'
-
-app.controller 'PagesController', ($scope, $modal, $log) ->
-	$log.info 'pages-controller'
-
-app.controller 'MenusController', ($scope, $modal, $log) ->
-	$log.info 'menus-controller'
-
-app.controller 'ContentGroupsController', ($scope, $modal, $log) ->
-	$log.info 'content-groups-controller'
-
-app.controller 'UsersController', ($scope, $modal, $log) ->
-	$log.info 'users-controller'
-	$scope.showCreateUser = ->
+	$scope.showCreateWebsite = ->
 		$modal.open
-			templateUrl: '/partials/directives/create-user'
-			controller: 'CreateUserController'
+			templateUrl: '/partials/forms/create-website'
+			controller: 'CreateWebsiteController'
 
-app.controller 'CreateUserController', ($scope, $modalInstance) ->
+app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
+
+app.controller 'PagesController', ($scope, $modal, $log) ->
+	$scope.showCreatePage = ->
+		$modal.open
+			templateUrl: '/partials/forms/create-page'
+			controller: 'CreatePageController'
+
+app.controller 'CreatePageController', ($scope, $modalInstance, $log) ->
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+
+app.controller 'MenusController', ($scope, $modal, $log) ->
+	$scope.showCreateMenu = ->
+		$modal.open
+			templateUrl: '/partials/forms/create-menu'
+			controller: 'CreateMenuController'
+
+app.controller 'CreateMenuController', ($scope, $modalInstance, $log) ->
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+
+app.controller 'ContentGroupsController', ($scope, $modal, $log) ->
+	$scope.showCreateContentGroup = ->
+		$modal.open
+			templateUrl: '/partials/forms/create-content-group'
+			controller: 'CreateContentGroupController'
+
+app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+
+app.controller 'UsersController', ($scope, $modal, $log) ->
+	$scope.showCreateUser = ->
+		$modal.open
+			templateUrl: '/partials/forms/create-user'
+			controller: 'CreateUserController'
+
+app.controller 'CreateUserController', ($scope, $modalInstance, $log) ->
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+	$scope.createUserData = {}
+	$scope.createUser = (data) ->
+		$log.info data
+		socket.emit 'create-user', data

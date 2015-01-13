@@ -49,7 +49,6 @@
       restrict: 'E',
       templateUrl: '/partials/directives/nav-bar.html',
       controller: function($scope, $location, $log) {
-        $log.info($location.path());
         $scope.path = $location.path();
         $scope.$on('$locationChangeStart', function(event, next, current) {
           return $scope.path = next.split('#')[1];
@@ -105,39 +104,85 @@
     });
   });
 
-  app.controller('HomeController', function($scope, $modal, $log) {
-    return $log.info('home-controller');
-  });
+  app.controller('HomeController', function($scope, $modal, $log) {});
 
   app.controller('WebsitesController', function($scope, $modal, $log) {
-    return $log.info('websites-controller');
+    return $scope.showCreateWebsite = function() {
+      return $modal.open({
+        templateUrl: '/partials/forms/create-website',
+        controller: 'CreateWebsiteController'
+      });
+    };
+  });
+
+  app.controller('CreateWebsiteController', function($scope, $modalInstance, $log) {
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
   });
 
   app.controller('PagesController', function($scope, $modal, $log) {
-    return $log.info('pages-controller');
+    return $scope.showCreatePage = function() {
+      return $modal.open({
+        templateUrl: '/partials/forms/create-page',
+        controller: 'CreatePageController'
+      });
+    };
+  });
+
+  app.controller('CreatePageController', function($scope, $modalInstance, $log) {
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
   });
 
   app.controller('MenusController', function($scope, $modal, $log) {
-    return $log.info('menus-controller');
+    return $scope.showCreateMenu = function() {
+      return $modal.open({
+        templateUrl: '/partials/forms/create-menu',
+        controller: 'CreateMenuController'
+      });
+    };
+  });
+
+  app.controller('CreateMenuController', function($scope, $modalInstance, $log) {
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
   });
 
   app.controller('ContentGroupsController', function($scope, $modal, $log) {
-    return $log.info('content-groups-controller');
+    return $scope.showCreateContentGroup = function() {
+      return $modal.open({
+        templateUrl: '/partials/forms/create-content-group',
+        controller: 'CreateContentGroupController'
+      });
+    };
+  });
+
+  app.controller('CreateContentGroupController', function($scope, $modalInstance, $log) {
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
   });
 
   app.controller('UsersController', function($scope, $modal, $log) {
-    $log.info('users-controller');
     return $scope.showCreateUser = function() {
       return $modal.open({
-        templateUrl: '/partials/directives/create-user',
+        templateUrl: '/partials/forms/create-user',
         controller: 'CreateUserController'
       });
     };
   });
 
-  app.controller('CreateUserController', function($scope, $modalInstance) {
-    return $scope.cancel = function() {
+  app.controller('CreateUserController', function($scope, $modalInstance, $log) {
+    $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
+    };
+    $scope.createUserData = {};
+    return $scope.createUser = function(data) {
+      $log.info(data);
+      return socket.emit('create-user', data);
     };
   });
 
