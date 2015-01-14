@@ -43,6 +43,15 @@ app.directive 'navBar', ->
 			{label: 'Users', link: '/users'}
 		]
 
+app.directive 'websitesOverview', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/websites-overview.html'
+	controller: ($scope, $log) ->
+		$scope.websites = []
+		socket.on 'websites-update', (data) ->
+			$scope.$apply ->
+				$scope.websites = data
+
 app.config ($routeProvider) ->
 	path = $routeProvider.when
 
@@ -85,8 +94,8 @@ app.controller 'WebsitesController', ($scope, $modal, $log) ->
 
 app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
 	$scope.createWebsite = (data) ->
-		$log.info data
 		socket.emit 'create-website', data
+		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -98,8 +107,8 @@ app.controller 'PagesController', ($scope, $modal, $log) ->
 
 app.controller 'CreatePageController', ($scope, $modalInstance, $log) ->
 	$scope.createPage = (data) ->
-		$log.info data
 		socket.emit 'create-page', data
+		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -111,8 +120,8 @@ app.controller 'MenusController', ($scope, $modal, $log) ->
 
 app.controller 'CreateMenuController', ($scope, $modalInstance, $log) ->
 	$scope.createMenu = (data) ->
-		$log.info data
 		socket.emit 'create-menu', data
+		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -124,8 +133,8 @@ app.controller 'ContentGroupsController', ($scope, $modal, $log) ->
 
 app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
 	$scope.createContentGroup = (data) ->
-		$log.info data
 		socket.emit 'create-content-group', data
+		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -137,8 +146,8 @@ app.controller 'LocalesController', ($scope, $modal, $log) ->
 
 app.controller 'CreateLocaleController', ($scope, $modalInstance, $log) ->
 	$scope.createLocale = (data) ->
-		$log.info data
 		socket.emit 'create-locale', data
+		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
@@ -151,7 +160,7 @@ app.controller 'UsersController', ($scope, $modal, $log) ->
 app.controller 'CreateUserController', ($scope, $modalInstance, $log) ->
 	$scope.createUserData = {}
 	$scope.createUser = (data) ->
-		$log.info data
 		socket.emit 'create-user', data
+		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'

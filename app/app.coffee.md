@@ -195,6 +195,16 @@ We invoke Socket.io by passing the http server instance into its root method cal
 This is the Socket.io connection event handler.  It lets us know when a user is connected or disconnected from the applicaton via the web socket.
 
 	io.on 'connection', (socket) ->
+		Admin.find(
+			{}
+			(err, allAdmins) ->
+				socket.emit 'users-update', allAdmins
+		).exec()
+		Website.find(
+			{}
+			(err, allWebsites) ->
+				socket.emit 'websites-update', allWebsites
+		).exec()
 		domain = socket.handshake.headers.host.split(':')[0]
 		ip = socket.client.conn.remoteAddress
 		console.log '+ user connected + domain: ' + domain + ' IP: ' + ip
@@ -214,6 +224,12 @@ This is the Socket.io connection event handler.  It lets us know when a user is 
 					{email: data.email}
 					{$set: data}
 					{upsert: true}
+					(err, rows) ->
+						Admin.find(
+							{}
+							(err, allAdmins) ->
+								socket.emit 'users-update', allAdmins
+						)
 				).exec()
 		socket.on 'create-website', (data) ->
 			if data && data.slug

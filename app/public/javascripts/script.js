@@ -78,6 +78,21 @@
     };
   });
 
+  app.directive('websitesOverview', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/partials/directives/websites-overview.html',
+      controller: function($scope, $log) {
+        $scope.websites = [];
+        return socket.on('websites-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.websites = data;
+          });
+        });
+      }
+    };
+  });
+
   app.config(function($routeProvider) {
     var path;
     path = $routeProvider.when;
@@ -114,6 +129,7 @@
   app.controller('HomeController', function($scope, $modal, $log) {});
 
   app.controller('WebsitesController', function($scope, $modal, $log) {
+    $log.debug('websites');
     return $scope.showCreateWebsite = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-website',
@@ -124,8 +140,8 @@
 
   app.controller('CreateWebsiteController', function($scope, $modalInstance, $log) {
     $scope.createWebsite = function(data) {
-      $log.info(data);
-      return socket.emit('create-website', data);
+      socket.emit('create-website', data);
+      return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
@@ -143,8 +159,8 @@
 
   app.controller('CreatePageController', function($scope, $modalInstance, $log) {
     $scope.createPage = function(data) {
-      $log.info(data);
-      return socket.emit('create-page', data);
+      socket.emit('create-page', data);
+      return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
@@ -162,8 +178,8 @@
 
   app.controller('CreateMenuController', function($scope, $modalInstance, $log) {
     $scope.createMenu = function(data) {
-      $log.info(data);
-      return socket.emit('create-menu', data);
+      socket.emit('create-menu', data);
+      return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
@@ -181,8 +197,8 @@
 
   app.controller('CreateContentGroupController', function($scope, $modalInstance, $log) {
     $scope.createContentGroup = function(data) {
-      $log.info(data);
-      return socket.emit('create-content-group', data);
+      socket.emit('create-content-group', data);
+      return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
@@ -200,8 +216,8 @@
 
   app.controller('CreateLocaleController', function($scope, $modalInstance, $log) {
     $scope.createLocale = function(data) {
-      $log.info(data);
-      return socket.emit('create-locale', data);
+      socket.emit('create-locale', data);
+      return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
@@ -220,8 +236,8 @@
   app.controller('CreateUserController', function($scope, $modalInstance, $log) {
     $scope.createUserData = {};
     $scope.createUser = function(data) {
-      $log.info(data);
-      return socket.emit('create-user', data);
+      socket.emit('create-user', data);
+      return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
