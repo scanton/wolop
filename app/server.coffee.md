@@ -114,7 +114,7 @@ This web server will automatically look in this coffee directory when requests a
 No.  If the JavaScript file in the cache is newer than the CoffeeScript source file, then the cached version of the JavaScript file is set to the user instantly.
 
 	app.use coffeescript 
-		src: __dirname + '/coffee'
+		src: __dirname + '/coffee_clients'
 		dest: __dirname + '/public/javascripts'
 		prefix: '/javascripts'
 
@@ -154,123 +154,14 @@ Here, we catch 404s and forward them to an error handler
 We are using [Mongoose](http://mongoosejs.com/) to define [MongoDB](http://www.mongodb.org/) schemas.
 
 	mongoose.connect 'mongodb://localhost:27017/wolop'
-
-	Admin = mongoose.model('Admin',
-		firstName: String
-		lastName: String
-		email: {type: String, unique: true}
-		username: {type: String, unique: true}
-		password: String
-	)
-	Website = mongoose.model('Website',
-		name: String
-		slug: {type: String, unique: true}
-		domain: String
-	)
-	ContentGroup = mongoose.model('ContentGroup',
-		name: {type: String, unique: true}
-		slug: {type: String, unique: true}
-    )
-	Page = mongoose.model('Page',
-		name: String
-		slug: {type: String, unique: true}
-	)
-	Locale = mongoose.model('Locale',
-		name: String
-		slug: {type: String, unique: true}
-	)
-	Menu = mongoose.model('Menu',
-		name: String
-		slug: {type: String, unique: true}
-	)
+	models = require './coffee_modules/models.coffee'
 
 ##Socket.io (web socket server)
 
 [Socket.io](http://socket.io/) is the socket server that maintains a 2-way communication socket between the client and the server for real-time communications.  The client does not have to request data for the server to push updates to the client.
 
-We invoke Socket.io by passing the http server instance into its root method call.
-
 	io = require('socket.io') http
-
-This is the Socket.io connection event handler.  It lets us know when a user is connected or disconnected from the applicaton via the web socket.
-
-	io.on 'connection', (socket) ->
-		Admin.find(
-			{}
-			(err, allAdmins) ->
-				socket.emit 'users-update', allAdmins
-		).exec()
-		Website.find(
-			{}
-			(err, allWebsites) ->
-				socket.emit 'websites-update', allWebsites
-		).exec()
-		domain = socket.handshake.headers.host.split(':')[0]
-		ip = socket.client.conn.remoteAddress
-		console.log '+ user connected + domain: ' + domain + ' IP: ' + ip
-		socket.on 'disconnect', ->
-			console.log '- user disconnected -'
-		socket.on 'user-login', (data) ->
-			if data
-				Admin.findOne({username: data.username, password: data.password}, (err, data) ->
-					if data
-						data.password = '***************'
-						socket.emit 'login-success', data
-				)
-		socket.on 'create-user', (data) ->
-			if data && data.email
-				console.log data
-				Admin.findOneAndUpdate(
-					{email: data.email}
-					{$set: data}
-					{upsert: true}
-					(err, rows) ->
-						Admin.find(
-							{}
-							(err, allAdmins) ->
-								socket.emit 'users-update', allAdmins
-						)
-				).exec()
-		socket.on 'create-website', (data) ->
-			if data && data.slug
-				console.log data
-				Website.findOneAndUpdate(
-					{slug: data.slug}
-					{$set: data}
-					{upsert: true}
-				).exec()
-		socket.on 'create-page', (data) ->
-			if data && data.slug
-				console.log data
-				Page.findOneAndUpdate(
-					{slug: data.slug}
-					{$set: data}
-					{upsert: true}
-				).exec()
-		socket.on 'create-content-group', (data) ->
-			if data && data.slug
-				console.log data
-				ContentGroup.findOneAndUpdate(
-					{slug: data.slug}
-					{$set: data}
-					{upsert: true}
-				).exec()
-		socket.on 'create-locale', (data) ->
-			if data && data.slug
-				console.log data
-				Locale.findOneAndUpdate(
-					{slug: data.slug}
-					{$set: data}
-					{upsert: true}
-				).exec()
-		socket.on 'create-menu', (data) ->
-			if data && data.slug
-				console.log data
-				Menu.findOneAndUpdate(
-					{slug: data.slug}
-					{$set: data}
-					{upsert: true}
-				).exec()
+	socketManager = require('./coffee_modules/socket-manager.coffee') io
 			
 ##Error Handlers
 

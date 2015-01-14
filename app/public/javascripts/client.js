@@ -129,7 +129,6 @@
   app.controller('HomeController', function($scope, $modal, $log) {});
 
   app.controller('WebsitesController', function($scope, $modal, $log) {
-    $log.debug('websites');
     return $scope.showCreateWebsite = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-website',
