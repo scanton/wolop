@@ -1,7 +1,7 @@
 socket = io()
 app = angular.module 'wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']
 
-app.controller 'CmsController', ($scope) ->
+app.controller 'CmsController', ($scope, $log) ->
 	$scope.isLoggedIn = false
 	$scope.userData = {}
 	$scope.newUser = {}
@@ -10,10 +10,16 @@ app.controller 'CmsController', ($scope) ->
 			$scope.userData = data
 			$scope.isLoggedIn = true
 
+app.directive 'chatWidget', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/chat-widget.html'
+	controller: ($scope, $log) ->
+		$scope.peers = []
+
 app.directive 'userLogin', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/user-login.html'
-	controller: ($scope) ->
+	controller: ($scope, $log) ->
 		$scope.loginData = {}
 		$scope.userLogin = (data) ->
 			socket.emit 'user-login', data
@@ -43,12 +49,63 @@ app.directive 'navBar', ->
 			{label: 'Users', link: '/users'}
 		]
 
+app.directive 'usersOverview', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/users-overview.html'
+	controller: ($scope, $log) ->
+		$scope.users = []
+		socket.on 'users-update', (data) ->
+			$log.info data
+			$scope.$apply ->
+				$scope.users = data
+
+app.directive 'contentGroupsOverview', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/content-groups-overview.html'
+	controller: ($scope, $log) ->
+		$scope.users = []
+		socket.on 'content-groups-update', (data) ->
+			$log.info data
+			$scope.$apply ->
+				$scope.contentGroups = data
+
+app.directive 'localesOverview', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/locales-overview.html'
+	controller: ($scope, $log) ->
+		$scope.users = []
+		socket.on 'locales-update', (data) ->
+			$log.info data
+			$scope.$apply ->
+				$scope.locales = data
+
+app.directive 'menusOverview', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/menus-overview.html'
+	controller: ($scope, $log) ->
+		$scope.users = []
+		socket.on 'menus-update', (data) ->
+			$log.info data
+			$scope.$apply ->
+				$scope.menus = data
+
+app.directive 'pagesOverview', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/pages-overview.html'
+	controller: ($scope, $log) ->
+		$scope.users = []
+		socket.on 'pages-update', (data) ->
+			$log.info data
+			$scope.$apply ->
+				$scope.pages = data
+
 app.directive 'websitesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/websites-overview.html'
 	controller: ($scope, $log) ->
 		$scope.websites = []
 		socket.on 'websites-update', (data) ->
+			$log.info data
 			$scope.$apply ->
 				$scope.websites = data
 
@@ -87,6 +144,7 @@ app.controller 'HomeController', ($scope, $modal, $log) ->
 	#$log.info 'home-controller'
 
 app.controller 'WebsitesController', ($scope, $modal, $log) ->
+	socket.emit 'get-websites'
 	$scope.showCreateWebsite = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-website'
@@ -100,6 +158,7 @@ app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
 		$modalInstance.dismiss 'cancel'
 
 app.controller 'PagesController', ($scope, $modal, $log) ->
+	socket.emit 'get-pages'
 	$scope.showCreatePage = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-page'
@@ -113,6 +172,7 @@ app.controller 'CreatePageController', ($scope, $modalInstance, $log) ->
 		$modalInstance.dismiss 'cancel'
 
 app.controller 'MenusController', ($scope, $modal, $log) ->
+	socket.emit 'get-menus'
 	$scope.showCreateMenu = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-menu'
@@ -126,6 +186,7 @@ app.controller 'CreateMenuController', ($scope, $modalInstance, $log) ->
 		$modalInstance.dismiss 'cancel'
 
 app.controller 'ContentGroupsController', ($scope, $modal, $log) ->
+	socket.emit 'get-content-groups'
 	$scope.showCreateContentGroup = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-content-group'
@@ -139,6 +200,7 @@ app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
 		$modalInstance.dismiss 'cancel'
 
 app.controller 'LocalesController', ($scope, $modal, $log) ->
+	socket.emit 'get-locales'
 	$scope.showCreateLocale = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-locale'
@@ -152,6 +214,7 @@ app.controller 'CreateLocaleController', ($scope, $modalInstance, $log) ->
 		$modalInstance.dismiss 'cancel'
 
 app.controller 'UsersController', ($scope, $modal, $log) ->
+	socket.emit 'get-users'
 	$scope.showCreateUser = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-user'

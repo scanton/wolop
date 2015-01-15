@@ -11,3 +11,13 @@
 .user-login-form {
   margin-top: 25px;
 }
+.main-container {
+  height: 100%;
+}
+.main-container .main-footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  min-height: 1em;
+}
