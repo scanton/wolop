@@ -22,7 +22,12 @@
       restrict: 'E',
       templateUrl: '/partials/directives/chat-widget.html',
       controller: function($scope, $log) {
-        return $scope.peers = [];
+        $scope.peers = {};
+        return socket.on('new-users', function(data) {
+          return $scope.$apply(function() {
+            return $scope.peers = data;
+          });
+        });
       }
     };
   });

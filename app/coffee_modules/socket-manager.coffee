@@ -1,6 +1,6 @@
 _und = require 'underscore'
 models = require '../coffee_modules/models.coffee'
-authenticatedUsers = []
+authenticatedUsers = {}
 
 module.exports = (io) ->
 
@@ -69,12 +69,8 @@ module.exports = (io) ->
 					if data
 						data.password = '***************'
 						socket.emit 'login-success', data
-
-						"""
-						KEEP A LIST OF LOGGED IN MO FO's
-						"""
-
-
+						authenticatedUsers[socket.id] = data
+						socket.emit 'new-users', authenticatedUsers
 				)
 		socket.on 'create-user', (data) ->
 			if data && data.email

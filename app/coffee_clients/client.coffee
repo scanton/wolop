@@ -14,7 +14,10 @@ app.directive 'chatWidget', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/chat-widget.html'
 	controller: ($scope, $log) ->
-		$scope.peers = []
+		$scope.peers = {}
+		socket.on 'new-users', (data) ->
+			$scope.$apply ->
+				$scope.peers = data
 
 app.directive 'userLogin', ->
 	restrict: 'E'
