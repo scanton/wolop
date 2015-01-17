@@ -15,7 +15,7 @@ app.directive 'chatWidget', ->
 	templateUrl: '/partials/directives/chat-widget.html'
 	controller: ($scope, $log) ->
 		$scope.peers = {}
-		socket.on 'new-users', (data) ->
+		socket.on 'update-users', (data) ->
 			$scope.$apply ->
 				$scope.peers = data
 

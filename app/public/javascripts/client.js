@@ -23,7 +23,7 @@
       templateUrl: '/partials/directives/chat-widget.html',
       controller: function($scope, $log) {
         $scope.peers = {};
-        return socket.on('new-users', function(data) {
+        return socket.on('update-users', function(data) {
           return $scope.$apply(function() {
             return $scope.peers = data;
           });
