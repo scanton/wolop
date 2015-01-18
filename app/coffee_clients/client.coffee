@@ -1,4 +1,20 @@
 socket = io()
+currentScope = undefined
+
+websites = []
+contentGroups = []
+locales = []
+menus = []
+pages = []
+users = []
+
+socket.on 'websites-update', (data) -> websites = data
+socket.on 'content-groups-update', (data) -> contentGroups = data
+socket.on 'locales-update', (data) -> locales = data
+socket.on 'menus-update', (data) -> menus = data
+socket.on 'pages-update', (data) -> pages = data
+socket.on 'users-update', (data) -> users = data
+
 app = angular.module 'wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']
 
 app.controller 'CmsController', ($scope, $log) ->
@@ -15,7 +31,13 @@ app.directive 'chatWidget', ->
 	templateUrl: '/partials/directives/chat-widget.html'
 	controller: ($scope, $log) ->
 		$scope.peers = {}
-		socket.on 'update-users', (data) ->
+		$scope.chatArray = []
+		$scope.sendMessage = (message) ->
+			socket.emit 'chat-message', message
+		socket.on 'chat-message-update', (data) ->
+			$scope.$apply ->
+				$scope.chatArray.push data
+		socket.on 'auth-users-update', (data) ->
 			$scope.$apply ->
 				$scope.peers = data
 
@@ -56,61 +78,37 @@ app.directive 'usersOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/users-overview.html'
 	controller: ($scope, $log) ->
-		$scope.users = []
-		socket.on 'users-update', (data) ->
-			$log.info data
-			$scope.$apply ->
-				$scope.users = data
+		$scope.users = users
 
 app.directive 'contentGroupsOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/content-groups-overview.html'
 	controller: ($scope, $log) ->
-		$scope.users = []
-		socket.on 'content-groups-update', (data) ->
-			$log.info data
-			$scope.$apply ->
-				$scope.contentGroups = data
+		$scope.contentGroups = contentGroups
 
 app.directive 'localesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/locales-overview.html'
 	controller: ($scope, $log) ->
-		$scope.users = []
-		socket.on 'locales-update', (data) ->
-			$log.info data
-			$scope.$apply ->
-				$scope.locales = data
+		$scope.locales = locales
 
 app.directive 'menusOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/menus-overview.html'
 	controller: ($scope, $log) ->
-		$scope.users = []
-		socket.on 'menus-update', (data) ->
-			$log.info data
-			$scope.$apply ->
-				$scope.menus = data
+		$scope.menus = menus
 
 app.directive 'pagesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/pages-overview.html'
 	controller: ($scope, $log) ->
-		$scope.users = []
-		socket.on 'pages-update', (data) ->
-			$log.info data
-			$scope.$apply ->
-				$scope.pages = data
+		$scope.pages = pages
 
 app.directive 'websitesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/websites-overview.html'
 	controller: ($scope, $log) ->
-		$scope.websites = []
-		socket.on 'websites-update', (data) ->
-			$log.info data
-			$scope.$apply ->
-				$scope.websites = data
+		$scope.websites = websites
 
 app.config ($routeProvider) ->
 	path = $routeProvider.when

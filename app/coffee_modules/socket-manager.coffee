@@ -3,11 +3,19 @@ models = require '../coffee_modules/models'
 db = require '../coffee_modules/data-api'
 authenticatedUsers = {}
 
-websites = {}
-contentGroups = {}
-locales = {}
-menus = {}
-pages = {}
+websites = []
+contentGroups = []
+locales = []
+menus = []
+pages = []
+users = []
+
+db.getWebsites (data) -> websites = data
+db.getContentGroups (data) -> contentGroups = data
+db.getLocales (data) -> locales = data
+db.getMenus (data) -> menus = data
+db.getPages (data) -> pages = data
+db.getAdmins (data) -> users = data
 
 module.exports = (io) ->
 
@@ -22,66 +30,54 @@ module.exports = (io) ->
 
 		socket.on 'disconnect', ->
 			authenticatedUsers[socket.id] = undefined
-			io.to('auth-users').emit 'update-users', authenticatedUsers
+			io.to('auth-users').emit 'auth-users-update', authenticatedUsers
 			console.log '- user ' + socket.id + ' disconnected - ' + domain + ' IP: ' + ip
 
-		sendAdminsUpdate = ->
-			db.getAdmins (data) ->
-				socket.emit 'users-update', data
-		socket.on 'get-users', ->
-			sendAdminsUpdate()
 		socket.on 'create-user', (data) ->
-			db.upsertAdmin data, sendAdminsUpdate
+			db.upsertAdmin data, ->
+			io.to('auth-users').emit 'users-update', users
 
-		sendContentGroupsUpdate = ->
-			db.getContentGroups (data) ->
-				socket.emit 'content-groups-update', data
-		socket.on 'get-content-groups', ->
-			sendContentGroupsUpdate()
 		socket.on 'create-content-group', (data) ->
-			db.upsertContentGroup data, sendContentGroupsUpdate
+			db.upsertContentGroup data, ->
+			socket.emit 'content-groups-update', contentGroups
 
-		sendLocalesUpdate = ->
-			db.getLocales (data) ->
-				socket.emit 'locales-update', data
-		socket.on 'get-locales', ->
-			sendLocalesUpdate()
 		socket.on 'create-locale', (data) ->
-			db.upsertLocale data, sendLocalesUpdate
+			db.upsertLocale data, ->
+			socket.emit 'locales-update', locales
 
-		sendMenusUpdate = ->
-			db.getMenus (data) ->
-				socket.emit 'menus-update', data
-		socket.on 'get-menus', ->
-			sendMenusUpdate()
 		socket.on 'create-menu', (data) ->
-			db.upsertMenu data, sendMenusUpdate
+			db.upsertMenu data, ->
+			socket.emit 'menus-update', menus
 
-		sendPagesUpdate = ->
-			db.getPages (data) ->
-				socket.emit 'pages-update', data
-		socket.on 'get-pages', ->
-			sendPagesUpdate()
 		socket.on 'create-page', (data) ->
-			db.upsertPage data, sendPagesUpdate
+			db.upsertPage data, ->
+			socket.emit 'pages-update', pages
 
-
-		sendWebsitesUpdate = ->
-			db.getWebsites (data) ->
-				socket.emit 'websites-update', data
-		socket.on 'get-websites', ->
-			sendWebsitesUpdate()
 		socket.on 'create-website', (data) ->
-			db.upsertWebsite data, sendWebsitesUpdate
+			db.upsertWebsite data, ->
+			socket.emit 'websites-update', websites
 
 		socket.on 'user-login', (data) ->
 			if data
 				models.Admin.findOne({username: data.username, password: data.password}, (err, data) ->
 					if data
 						socket.join 'auth-users'
+						socket.join 'chat-message'
+						socket.join 'users'
+						socket.join 'content-groups'
+						socket.join 'locales'
+						socket.join 'menus'
+						socket.join 'page'
+						socket.join 'websites'
 						data.password = data.username = data.email = data.__v = undefined
 						data.socket = socket.id
 						socket.emit 'login-success', data
 						authenticatedUsers[socket.id] = data
-						io.to('auth-users').emit 'update-users', authenticatedUsers
+						io.to('auth-users').emit 'auth-users-update', authenticatedUsers
+						socket.emit 'websites-update', websites
+						socket.emit 'content-groups-update', contentGroups
+						socket.emit 'locales-update', locales
+						socket.emit 'menus-update', menus
+						socket.emit 'pages-update', pages
+						socket.emit 'users-update', users
 				)

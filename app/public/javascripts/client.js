@@ -1,7 +1,45 @@
 (function() {
-  var app, socket;
+  var app, contentGroups, currentScope, locales, menus, pages, socket, users, websites;
 
   socket = io();
+
+  currentScope = void 0;
+
+  websites = [];
+
+  contentGroups = [];
+
+  locales = [];
+
+  menus = [];
+
+  pages = [];
+
+  users = [];
+
+  socket.on('websites-update', function(data) {
+    return websites = data;
+  });
+
+  socket.on('content-groups-update', function(data) {
+    return contentGroups = data;
+  });
+
+  socket.on('locales-update', function(data) {
+    return locales = data;
+  });
+
+  socket.on('menus-update', function(data) {
+    return menus = data;
+  });
+
+  socket.on('pages-update', function(data) {
+    return pages = data;
+  });
+
+  socket.on('users-update', function(data) {
+    return users = data;
+  });
 
   app = angular.module('wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']);
 
@@ -23,7 +61,16 @@
       templateUrl: '/partials/directives/chat-widget.html',
       controller: function($scope, $log) {
         $scope.peers = {};
-        return socket.on('update-users', function(data) {
+        $scope.chatArray = [];
+        $scope.sendMessage = function(message) {
+          return socket.emit('chat-message', message);
+        };
+        socket.on('chat-message-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.chatArray.push(data);
+          });
+        });
+        return socket.on('auth-users-update', function(data) {
           return $scope.$apply(function() {
             return $scope.peers = data;
           });
@@ -98,13 +145,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/users-overview.html',
       controller: function($scope, $log) {
-        $scope.users = [];
-        return socket.on('users-update', function(data) {
-          $log.info(data);
-          return $scope.$apply(function() {
-            return $scope.users = data;
-          });
-        });
+        return $scope.users = users;
       }
     };
   });
@@ -114,13 +155,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/content-groups-overview.html',
       controller: function($scope, $log) {
-        $scope.users = [];
-        return socket.on('content-groups-update', function(data) {
-          $log.info(data);
-          return $scope.$apply(function() {
-            return $scope.contentGroups = data;
-          });
-        });
+        return $scope.contentGroups = contentGroups;
       }
     };
   });
@@ -130,13 +165,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/locales-overview.html',
       controller: function($scope, $log) {
-        $scope.users = [];
-        return socket.on('locales-update', function(data) {
-          $log.info(data);
-          return $scope.$apply(function() {
-            return $scope.locales = data;
-          });
-        });
+        return $scope.locales = locales;
       }
     };
   });
@@ -146,13 +175,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/menus-overview.html',
       controller: function($scope, $log) {
-        $scope.users = [];
-        return socket.on('menus-update', function(data) {
-          $log.info(data);
-          return $scope.$apply(function() {
-            return $scope.menus = data;
-          });
-        });
+        return $scope.menus = menus;
       }
     };
   });
@@ -162,13 +185,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/pages-overview.html',
       controller: function($scope, $log) {
-        $scope.users = [];
-        return socket.on('pages-update', function(data) {
-          $log.info(data);
-          return $scope.$apply(function() {
-            return $scope.pages = data;
-          });
-        });
+        return $scope.pages = pages;
       }
     };
   });
@@ -178,13 +195,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/websites-overview.html',
       controller: function($scope, $log) {
-        $scope.websites = [];
-        return socket.on('websites-update', function(data) {
-          $log.info(data);
-          return $scope.$apply(function() {
-            return $scope.websites = data;
-          });
-        });
+        return $scope.websites = websites;
       }
     };
   });

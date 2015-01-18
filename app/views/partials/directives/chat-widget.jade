@@ -1,4 +1,3 @@
-{{peers}}
 .chat-widget
 	ul.peers
-		li(ng-repeat="peer in peers") {{peer}}
+		li(ng-repeat="peer in peers", data-id="{{peer._id}}") {{peer.firstName}} {{peer.lastName}}
