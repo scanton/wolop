@@ -35,36 +35,39 @@ module.exports = (io) ->
 
 		socket.on 'create-user', (data) ->
 			db.upsertAdmin data, ->
-                db.getAdmins (data) ->
-                    users = data
-                    io.to('auth-users').emit 'users-update', data
+				db.getAdmins (data) ->
+					users = data
+					io.to('auth-users').emit 'users-update', data
 
 		socket.on 'create-content-group', (data) ->
 			db.upsertContentGroup data, ->
-                db.getContentGroups (data) ->
-                    contentGroups = data
-                    io.to('auth-users').emit 'content-groups-update', data
+				db.getContentGroups (data) ->
+					contentGroups = data
+					io.to('auth-users').emit 'content-groups-update', data
 
 		socket.on 'create-locale', (data) ->
 			db.upsertLocale data, ->
-                db.getLocales (data) ->
-                    locales = data
-                    io.to('auth-users').emit 'locales-update', data
+				db.getLocales (data) ->
+					locales = data
+					io.to('auth-users').emit 'locales-update', data
 
 		socket.on 'create-menu', (data) ->
 			db.upsertMenu data, ->
-                db.getMenus (data) -> menus = data
-                io.to('auth-users').emit 'menus-update', data
+				db.getMenus (data) -> 
+					menus = data
+					io.to('auth-users').emit 'menus-update', data
 
 		socket.on 'create-page', (data) ->
 			db.upsertPage data, ->
-                db.getPages (data) -> pages = data
-                io.to('auth-users').emit 'pages-update', data
+				db.getPages (data) -> 
+					pages = data
+					io.to('auth-users').emit 'pages-update', data
 
 		socket.on 'create-website', (data) ->
 			db.upsertWebsite data, ->
-                db.getAdmins (data) -> users = data
-                io.to('auth-users').emit 'websites-update', data
+				db.getWebsites (data) -> 
+					websites = data
+					io.to('auth-users').emit 'websites-update', data
 
 		socket.on 'user-login', (data) ->
 			if data

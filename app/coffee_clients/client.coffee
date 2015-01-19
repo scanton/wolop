@@ -10,8 +10,7 @@ app.controller 'CmsController', ($scope, $log) ->
 			$scope.isLoggedIn = true
 
 socket = io()
-app.factory 'ioService', ->
-	subscribers = []
+app.factory 'globalModel', ->
 	model = 
 		websites: []
 		contentGroups: []
@@ -21,34 +20,26 @@ app.factory 'ioService', ->
 		users: []
 		peers: []
 		messages: []
-	broadcastUpdate = (channel, data) ->
-		l = subscribers.length
-		while l--
-			subscribers[l] data
 
 	socket.on 'websites-update', (data) -> 
 		model.websites = data
-		broadcastUpdate 'websites', data
 	socket.on 'content-groups-update', (data) -> 
 		model.contentGroups = data
-		broadcastUpdate 'content-groups', data
 	socket.on 'locales-update', (data) -> 
 		model.locales = data
-		broadcastUpdate 'locales'
 	socket.on 'menus-update', (data) -> 
 		model.menus = data
-		broadcastUpdate 'menus'
 	socket.on 'pages-update', (data) -> 
 		model.pages = data
-		broadcastUpdate 'pages'
 	socket.on 'users-update', (data) -> 
 		model.users = data
-		broadcastUpdate 'users'
 
-	subscribe: (channel) ->
-		subscribers[channel] = [] if !subscribers[channel]
-		#subscribers[channel].push callback
-		model[if channel == 'content-group' then 'contentGroup' else channel] #TODO write a function to manage this conversion
+	getUsers: -> model.users
+	getWebsites: -> model.websites
+	getContentGroups: -> model.contentGroups
+	getLocales: -> model.locales
+	getMenus: -> model.menus
+	getPages: -> model.pages
 
 app.directive 'chatWidget', ->
 	restrict: 'E'
@@ -101,38 +92,56 @@ app.directive 'navBar', ->
 app.directive 'usersOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/users-overview.html'
-	controller: ($scope, ioService, $log) ->
-		$scope.users = ioService.subscribe 'users'
-
+	controller: ($scope, globalModel, $log) ->
+		$scope.users = globalModel.getUsers()
+		socket.on 'users-update', (data) -> 
+			$scope.$apply ->
+				$scope.users = data
+		
 app.directive 'contentGroupsOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/content-groups-overview.html'
-	controller: ($scope, ioService, $log) ->
-		$scope.contentGroups = ioService.subscribe 'contentGroups'
+	controller: ($scope, globalModel, $log) ->
+		$scope.contentGroups = globalModel.getContentGroups()
+		socket.on 'content-groups-update', (data) ->
+			$scope.$apply ->
+				$scope.contentGroups = data
 
 app.directive 'localesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/locales-overview.html'
-	controller: ($scope, ioService, $timeout, $log) ->
-		$scope.locales = ioService.subscribe 'locales'
+	controller: ($scope, globalModel, $log) ->
+		$scope.locales = globalModel.getLocales()
+		socket.on 'locales-update', (data) ->
+			$scope.$apply ->
+				$scope.locales = data
 
 app.directive 'menusOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/menus-overview.html'
-	controller: ($scope, ioService, $log) ->
-		$scope.menus = ioService.subscribe 'menus'
+	controller: ($scope, globalModel, $log) ->
+		$scope.menus = globalModel.getMenus()
+		socket.on 'menus-update', (data) ->
+			$scope.$apply ->
+				$scope.menus = data
 
 app.directive 'pagesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/pages-overview.html'
-	controller: ($scope, ioService, $log) ->
-		$scope.pages = ioService.subscribe 'pages'
+	controller: ($scope, globalModel, $log) ->
+		$scope.pages = globalModel.getPages()
+		socket.on 'pages-update', (data) ->
+			$scope.$apply ->
+				$scope.pages = data
 
 app.directive 'websitesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/websites-overview.html'
-	controller: ($scope, ioService, $log) ->
-		$scope.websites = ioService.subscribe 'websites'
+	controller: ($scope, globalModel, $log) ->
+		$scope.websites = globalModel.getWebsites()
+		socket.on 'websites-update', (data) ->
+			$scope.$apply ->
+				$scope.websites = data
 
 app.config ($routeProvider) ->
 	path = $routeProvider.when

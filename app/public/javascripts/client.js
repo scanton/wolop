@@ -17,9 +17,8 @@
 
   socket = io();
 
-  app.factory('ioService', function() {
-    var broadcastUpdate, model, subscribers;
-    subscribers = [];
+  app.factory('globalModel', function() {
+    var model;
     model = {
       websites: [],
       contentGroups: [],
@@ -30,45 +29,42 @@
       peers: [],
       messages: []
     };
-    broadcastUpdate = function(channel, data) {
-      var l, _results;
-      l = subscribers.length;
-      _results = [];
-      while (l--) {
-        _results.push(subscribers[l](data));
-      }
-      return _results;
-    };
     socket.on('websites-update', function(data) {
-      model.websites = data;
-      return broadcastUpdate('websites', data);
+      return model.websites = data;
     });
     socket.on('content-groups-update', function(data) {
-      model.contentGroups = data;
-      return broadcastUpdate('content-groups', data);
+      return model.contentGroups = data;
     });
     socket.on('locales-update', function(data) {
-      model.locales = data;
-      return broadcastUpdate('locales');
+      return model.locales = data;
     });
     socket.on('menus-update', function(data) {
-      model.menus = data;
-      return broadcastUpdate('menus');
+      return model.menus = data;
     });
     socket.on('pages-update', function(data) {
-      model.pages = data;
-      return broadcastUpdate('pages');
+      return model.pages = data;
     });
     socket.on('users-update', function(data) {
-      model.users = data;
-      return broadcastUpdate('users');
+      return model.users = data;
     });
     return {
-      subscribe: function(channel) {
-        if (!subscribers[channel]) {
-          subscribers[channel] = [];
-        }
-        return model[channel === 'content-group' ? 'contentGroup' : channel];
+      getUsers: function() {
+        return model.users;
+      },
+      getWebsites: function() {
+        return model.websites;
+      },
+      getContentGroups: function() {
+        return model.contentGroups;
+      },
+      getLocales: function() {
+        return model.locales;
+      },
+      getMenus: function() {
+        return model.menus;
+      },
+      getPages: function() {
+        return model.pages;
       }
     };
   });
@@ -162,8 +158,13 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/users-overview.html',
-      controller: function($scope, ioService, $log) {
-        return $scope.users = ioService.subscribe('users');
+      controller: function($scope, globalModel, $log) {
+        $scope.users = globalModel.getUsers();
+        return socket.on('users-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.users = data;
+          });
+        });
       }
     };
   });
@@ -172,8 +173,13 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/content-groups-overview.html',
-      controller: function($scope, ioService, $log) {
-        return $scope.contentGroups = ioService.subscribe('contentGroups');
+      controller: function($scope, globalModel, $log) {
+        $scope.contentGroups = globalModel.getContentGroups();
+        return socket.on('content-groups-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.contentGroups = data;
+          });
+        });
       }
     };
   });
@@ -182,8 +188,13 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/locales-overview.html',
-      controller: function($scope, ioService, $timeout, $log) {
-        return $scope.locales = ioService.subscribe('locales');
+      controller: function($scope, globalModel, $log) {
+        $scope.locales = globalModel.getLocales();
+        return socket.on('locales-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.locales = data;
+          });
+        });
       }
     };
   });
@@ -192,8 +203,13 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/menus-overview.html',
-      controller: function($scope, ioService, $log) {
-        return $scope.menus = ioService.subscribe('menus');
+      controller: function($scope, globalModel, $log) {
+        $scope.menus = globalModel.getMenus();
+        return socket.on('menus-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.menus = data;
+          });
+        });
       }
     };
   });
@@ -202,8 +218,13 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/pages-overview.html',
-      controller: function($scope, ioService, $log) {
-        return $scope.pages = ioService.subscribe('pages');
+      controller: function($scope, globalModel, $log) {
+        $scope.pages = globalModel.getPages();
+        return socket.on('pages-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.pages = data;
+          });
+        });
       }
     };
   });
@@ -212,8 +233,13 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/websites-overview.html',
-      controller: function($scope, ioService, $log) {
-        return $scope.websites = ioService.subscribe('websites');
+      controller: function($scope, globalModel, $log) {
+        $scope.websites = globalModel.getWebsites();
+        return socket.on('websites-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.websites = data;
+          });
+        });
       }
     };
   });
