@@ -64,12 +64,11 @@
       return broadcastUpdate('users');
     });
     return {
-      subscribe: function(channel, callback) {
+      subscribe: function(channel) {
         if (!subscribers[channel]) {
           subscribers[channel] = [];
         }
-        subscribers[channel].push(callback);
-        return callback(model[channel === 'content-group' ? 'contentGroup' : channel]);
+        return model[channel === 'content-group' ? 'contentGroup' : channel];
       }
     };
   });
@@ -164,15 +163,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/users-overview.html',
       controller: function($scope, ioService, $log) {
-        return ioService.subscribe('users', function(data) {
-          if (!$scope.$$phase) {
-            return $scope.$apply(function() {
-              return $scope.users = data;
-            });
-          } else {
-            return $scope.users = data;
-          }
-        });
+        return $scope.users = ioService.subscribe('users');
       }
     };
   });
@@ -182,15 +173,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/content-groups-overview.html',
       controller: function($scope, ioService, $log) {
-        return ioService.subscribe('contentGroups', function(data) {
-          if (!$scope.$$phase) {
-            return $scope.$apply(function() {
-              return $scope.contentGroups = data;
-            });
-          } else {
-            return $scope.contentGroups = data;
-          }
-        });
+        return $scope.contentGroups = ioService.subscribe('contentGroups');
       }
     };
   });
@@ -199,10 +182,8 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/locales-overview.html',
-      controller: function($scope, ioService, $log) {
-        return ioService.subscribe('locales', function(data) {
-          return $scope.locales = data;
-        });
+      controller: function($scope, ioService, $timeout, $log) {
+        return $scope.locales = ioService.subscribe('locales');
       }
     };
   });
@@ -212,9 +193,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/menus-overview.html',
       controller: function($scope, ioService, $log) {
-        return ioService.subscribe('menus', function(data) {
-          return $scope.menus = data;
-        });
+        return $scope.menus = ioService.subscribe('menus');
       }
     };
   });
@@ -224,9 +203,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/pages-overview.html',
       controller: function($scope, ioService, $log) {
-        return ioService.subscribe('pages', function(data) {
-          return $scope.pages = data;
-        });
+        return $scope.pages = ioService.subscribe('pages');
       }
     };
   });
@@ -236,9 +213,7 @@
       restrict: 'E',
       templateUrl: '/partials/directives/websites-overview.html',
       controller: function($scope, ioService, $log) {
-        return ioService.subscribe('websites', function(data) {
-          return $scope.websites = data;
-        });
+        return $scope.websites = ioService.subscribe('websites');
       }
     };
   });

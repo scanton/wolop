@@ -45,10 +45,10 @@ app.factory 'ioService', ->
 		model.users = data
 		broadcastUpdate 'users'
 
-	subscribe: (channel, callback) ->
+	subscribe: (channel) ->
 		subscribers[channel] = [] if !subscribers[channel]
-		subscribers[channel].push callback
-		callback model[if channel == 'content-group' then 'contentGroup' else channel] #TODO write a function to manage this conversion
+		#subscribers[channel].push callback
+		model[if channel == 'content-group' then 'contentGroup' else channel] #TODO write a function to manage this conversion
 
 app.directive 'chatWidget', ->
 	restrict: 'E'
@@ -102,51 +102,37 @@ app.directive 'usersOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/users-overview.html'
 	controller: ($scope, ioService, $log) ->
-		ioService.subscribe 'users', (data) ->
-			if !$scope.$$phase
-				$scope.$apply ->
-					$scope.users = data
-			else
-				$scope.users = data
+		$scope.users = ioService.subscribe 'users'
 
 app.directive 'contentGroupsOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/content-groups-overview.html'
 	controller: ($scope, ioService, $log) ->
-		ioService.subscribe 'contentGroups', (data) ->
-			if !$scope.$$phase
-				$scope.$apply ->
-					$scope.contentGroups = data
-			else
-				$scope.contentGroups = data
+		$scope.contentGroups = ioService.subscribe 'contentGroups'
 
 app.directive 'localesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/locales-overview.html'
-	controller: ($scope, ioService, $log) ->
-		ioService.subscribe 'locales', (data) ->
-			$scope.locales = data
+	controller: ($scope, ioService, $timeout, $log) ->
+		$scope.locales = ioService.subscribe 'locales'
 
 app.directive 'menusOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/menus-overview.html'
 	controller: ($scope, ioService, $log) ->
-		ioService.subscribe 'menus', (data) ->
-			$scope.menus = data
+		$scope.menus = ioService.subscribe 'menus'
 
 app.directive 'pagesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/pages-overview.html'
 	controller: ($scope, ioService, $log) ->
-		ioService.subscribe 'pages', (data) ->
-			$scope.pages = data
+		$scope.pages = ioService.subscribe 'pages'
 
 app.directive 'websitesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/websites-overview.html'
 	controller: ($scope, ioService, $log) ->
-		ioService.subscribe 'websites', (data) ->
-			$scope.websites = data
+		$scope.websites = ioService.subscribe 'websites'
 
 app.config ($routeProvider) ->
 	path = $routeProvider.when
