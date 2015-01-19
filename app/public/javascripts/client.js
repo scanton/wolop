@@ -1,45 +1,5 @@
 (function() {
-  var app, contentGroups, currentScope, locales, menus, pages, socket, users, websites;
-
-  socket = io();
-
-  currentScope = void 0;
-
-  websites = [];
-
-  contentGroups = [];
-
-  locales = [];
-
-  menus = [];
-
-  pages = [];
-
-  users = [];
-
-  socket.on('websites-update', function(data) {
-    return websites = data;
-  });
-
-  socket.on('content-groups-update', function(data) {
-    return contentGroups = data;
-  });
-
-  socket.on('locales-update', function(data) {
-    return locales = data;
-  });
-
-  socket.on('menus-update', function(data) {
-    return menus = data;
-  });
-
-  socket.on('pages-update', function(data) {
-    return pages = data;
-  });
-
-  socket.on('users-update', function(data) {
-    return users = data;
-  });
+  var app, socket;
 
   app = angular.module('wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']);
 
@@ -53,6 +13,65 @@
         return $scope.isLoggedIn = true;
       });
     });
+  });
+
+  socket = io();
+
+  app.factory('ioService', function() {
+    var broadcastUpdate, model, subscribers;
+    subscribers = [];
+    model = {
+      websites: [],
+      contentGroups: [],
+      locales: [],
+      menus: [],
+      pages: [],
+      users: [],
+      peers: [],
+      messages: []
+    };
+    broadcastUpdate = function(channel, data) {
+      var l, _results;
+      l = subscribers.length;
+      _results = [];
+      while (l--) {
+        _results.push(subscribers[l](data));
+      }
+      return _results;
+    };
+    socket.on('websites-update', function(data) {
+      model.websites = data;
+      return broadcastUpdate('websites', data);
+    });
+    socket.on('content-groups-update', function(data) {
+      model.contentGroups = data;
+      return broadcastUpdate('content-groups', data);
+    });
+    socket.on('locales-update', function(data) {
+      model.locales = data;
+      return broadcastUpdate('locales');
+    });
+    socket.on('menus-update', function(data) {
+      model.menus = data;
+      return broadcastUpdate('menus');
+    });
+    socket.on('pages-update', function(data) {
+      model.pages = data;
+      return broadcastUpdate('pages');
+    });
+    socket.on('users-update', function(data) {
+      model.users = data;
+      return broadcastUpdate('users');
+    });
+    return {
+      subscribe: function(channel, callback) {
+        if (!subscribers[channel]) {
+          subscribers[channel] = [];
+        }
+        subscribers[channel].push(callback);
+        return callback(model[channel === 'content-group' ? 'contentGroup' : channel]);
+      }
+    };
   });
 
   app.directive('chatWidget', function() {
@@ -144,8 +163,16 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/users-overview.html',
-      controller: function($scope, $log) {
-        return $scope.users = users;
+      controller: function($scope, ioService, $log) {
+        return ioService.subscribe('users', function(data) {
+          if (!$scope.$$phase) {
+            return $scope.$apply(function() {
+              return $scope.users = data;
+            });
+          } else {
+            return $scope.users = data;
+          }
+        });
       }
     };
   });
@@ -154,8 +181,16 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/content-groups-overview.html',
-      controller: function($scope, $log) {
-        return $scope.contentGroups = contentGroups;
+      controller: function($scope, ioService, $log) {
+        return ioService.subscribe('contentGroups', function(data) {
+          if (!$scope.$$phase) {
+            return $scope.$apply(function() {
+              return $scope.contentGroups = data;
+            });
+          } else {
+            return $scope.contentGroups = data;
+          }
+        });
       }
     };
   });
@@ -164,8 +199,10 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/locales-overview.html',
-      controller: function($scope, $log) {
-        return $scope.locales = locales;
+      controller: function($scope, ioService, $log) {
+        return ioService.subscribe('locales', function(data) {
+          return $scope.locales = data;
+        });
       }
     };
   });
@@ -174,8 +211,10 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/menus-overview.html',
-      controller: function($scope, $log) {
-        return $scope.menus = menus;
+      controller: function($scope, ioService, $log) {
+        return ioService.subscribe('menus', function(data) {
+          return $scope.menus = data;
+        });
       }
     };
   });
@@ -184,8 +223,10 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/pages-overview.html',
-      controller: function($scope, $log) {
-        return $scope.pages = pages;
+      controller: function($scope, ioService, $log) {
+        return ioService.subscribe('pages', function(data) {
+          return $scope.pages = data;
+        });
       }
     };
   });
@@ -194,8 +235,10 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/websites-overview.html',
-      controller: function($scope, $log) {
-        return $scope.websites = websites;
+      controller: function($scope, ioService, $log) {
+        return ioService.subscribe('websites', function(data) {
+          return $scope.websites = data;
+        });
       }
     };
   });

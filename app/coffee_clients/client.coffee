@@ -1,20 +1,3 @@
-socket = io()
-currentScope = undefined
-
-websites = []
-contentGroups = []
-locales = []
-menus = []
-pages = []
-users = []
-
-socket.on 'websites-update', (data) -> websites = data
-socket.on 'content-groups-update', (data) -> contentGroups = data
-socket.on 'locales-update', (data) -> locales = data
-socket.on 'menus-update', (data) -> menus = data
-socket.on 'pages-update', (data) -> pages = data
-socket.on 'users-update', (data) -> users = data
-
 app = angular.module 'wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']
 
 app.controller 'CmsController', ($scope, $log) ->
@@ -25,6 +8,47 @@ app.controller 'CmsController', ($scope, $log) ->
 		$scope.$apply ->
 			$scope.userData = data
 			$scope.isLoggedIn = true
+
+socket = io()
+app.factory 'ioService', ->
+	subscribers = []
+	model = 
+		websites: []
+		contentGroups: []
+		locales: []
+		menus: []
+		pages: []
+		users: []
+		peers: []
+		messages: []
+	broadcastUpdate = (channel, data) ->
+		l = subscribers.length
+		while l--
+			subscribers[l] data
+
+	socket.on 'websites-update', (data) -> 
+		model.websites = data
+		broadcastUpdate 'websites', data
+	socket.on 'content-groups-update', (data) -> 
+		model.contentGroups = data
+		broadcastUpdate 'content-groups', data
+	socket.on 'locales-update', (data) -> 
+		model.locales = data
+		broadcastUpdate 'locales'
+	socket.on 'menus-update', (data) -> 
+		model.menus = data
+		broadcastUpdate 'menus'
+	socket.on 'pages-update', (data) -> 
+		model.pages = data
+		broadcastUpdate 'pages'
+	socket.on 'users-update', (data) -> 
+		model.users = data
+		broadcastUpdate 'users'
+
+	subscribe: (channel, callback) ->
+		subscribers[channel] = [] if !subscribers[channel]
+		subscribers[channel].push callback
+		callback model[if channel == 'content-group' then 'contentGroup' else channel] #TODO write a function to manage this conversion
 
 app.directive 'chatWidget', ->
 	restrict: 'E'
@@ -77,38 +101,52 @@ app.directive 'navBar', ->
 app.directive 'usersOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/users-overview.html'
-	controller: ($scope, $log) ->
-		$scope.users = users
+	controller: ($scope, ioService, $log) ->
+		ioService.subscribe 'users', (data) ->
+			if !$scope.$$phase
+				$scope.$apply ->
+					$scope.users = data
+			else
+				$scope.users = data
 
 app.directive 'contentGroupsOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/content-groups-overview.html'
-	controller: ($scope, $log) ->
-		$scope.contentGroups = contentGroups
+	controller: ($scope, ioService, $log) ->
+		ioService.subscribe 'contentGroups', (data) ->
+			if !$scope.$$phase
+				$scope.$apply ->
+					$scope.contentGroups = data
+			else
+				$scope.contentGroups = data
 
 app.directive 'localesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/locales-overview.html'
-	controller: ($scope, $log) ->
-		$scope.locales = locales
+	controller: ($scope, ioService, $log) ->
+		ioService.subscribe 'locales', (data) ->
+			$scope.locales = data
 
 app.directive 'menusOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/menus-overview.html'
-	controller: ($scope, $log) ->
-		$scope.menus = menus
+	controller: ($scope, ioService, $log) ->
+		ioService.subscribe 'menus', (data) ->
+			$scope.menus = data
 
 app.directive 'pagesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/pages-overview.html'
-	controller: ($scope, $log) ->
-		$scope.pages = pages
+	controller: ($scope, ioService, $log) ->
+		ioService.subscribe 'pages', (data) ->
+			$scope.pages = data
 
 app.directive 'websitesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/websites-overview.html'
-	controller: ($scope, $log) ->
-		$scope.websites = websites
+	controller: ($scope, ioService, $log) ->
+		ioService.subscribe 'websites', (data) ->
+			$scope.websites = data
 
 app.config ($routeProvider) ->
 	path = $routeProvider.when

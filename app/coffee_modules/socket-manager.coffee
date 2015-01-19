@@ -39,36 +39,29 @@ module.exports = (io) ->
 
 		socket.on 'create-content-group', (data) ->
 			db.upsertContentGroup data, ->
-			socket.emit 'content-groups-update', contentGroups
+			io.to('auth-users').emit 'content-groups-update', contentGroups
 
 		socket.on 'create-locale', (data) ->
 			db.upsertLocale data, ->
-			socket.emit 'locales-update', locales
+			io.to('auth-users').emit 'locales-update', locales
 
 		socket.on 'create-menu', (data) ->
 			db.upsertMenu data, ->
-			socket.emit 'menus-update', menus
+			io.to('auth-users').emit 'menus-update', menus
 
 		socket.on 'create-page', (data) ->
 			db.upsertPage data, ->
-			socket.emit 'pages-update', pages
+			io.to('auth-users').emit 'pages-update', pages
 
 		socket.on 'create-website', (data) ->
 			db.upsertWebsite data, ->
-			socket.emit 'websites-update', websites
+			io.to('auth-users').emit 'websites-update', websites
 
 		socket.on 'user-login', (data) ->
 			if data
 				models.Admin.findOne({username: data.username, password: data.password}, (err, data) ->
 					if data
 						socket.join 'auth-users'
-						socket.join 'chat-message'
-						socket.join 'users'
-						socket.join 'content-groups'
-						socket.join 'locales'
-						socket.join 'menus'
-						socket.join 'page'
-						socket.join 'websites'
 						data.password = data.username = data.email = data.__v = undefined
 						data.socket = socket.id
 						socket.emit 'login-success', data
