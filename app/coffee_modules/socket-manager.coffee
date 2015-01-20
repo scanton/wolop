@@ -19,6 +19,11 @@ db.getAdmins (data) -> users = data
 
 module.exports = (io) ->
 
+	refreshWebsites = ->
+		db.getWebsites (data) -> 
+			websites = data
+			io.to('auth-users').emit 'websites-update', data
+
 	io.on 'connection', (socket) ->
 
 		socket.join 'all-users'
@@ -76,9 +81,16 @@ module.exports = (io) ->
 
 		socket.on 'create-website', (data) ->
 			db.upsertWebsite data, ->
-				db.getWebsites (data) -> 
-					websites = data
-					io.to('auth-users').emit 'websites-update', data
+				refreshWebsites()
+
+		socket.on 'add-content-group', (data) ->
+			if data && data.website
+				db.getWebsite {slug: data.website}, (site) ->
+					site.contentGroups.push
+						name: data.name
+						slug: data.slug
+					db.updateWebsiteContentGroups data.website, {contentGroups: site.contentGroups}, ->
+						refreshWebsites()
 
 		socket.on 'user-login', (data) ->
 			if data

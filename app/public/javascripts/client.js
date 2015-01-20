@@ -1,5 +1,15 @@
 (function() {
-  var app, socket;
+  var app, socket, sortByName;
+
+  sortByName = function(a, b) {
+    if (a.name > b.name) {
+      return 1;
+    }
+    if (a.name < b.name) {
+      return -1;
+    }
+    return 0;
+  };
 
   app = angular.module('wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']);
 
@@ -236,7 +246,7 @@
         $scope.websites = globalModel.getWebsites();
         return socket.on('websites-update', function(data) {
           return $scope.$apply(function() {
-            return $scope.websites = data;
+            return $scope.websites = data.sort(sortByName);
           });
         });
       }
@@ -283,6 +293,16 @@
   app.controller('HomeController', function($scope, $modal, $log) {});
 
   app.controller('WebsitesController', function($scope, $modal, $log) {
+    $scope.addContentGroup = function(slug) {
+      $scope.addContentGroupData = {
+        website: slug
+      };
+      return $modal.open({
+        templateUrl: '/partials/forms/add-content-group',
+        controller: 'AddContentGroupController',
+        scope: $scope
+      });
+    };
     return $scope.showCreateWebsite = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-website',
@@ -358,6 +378,16 @@
   app.controller('CreateContentGroupController', function($scope, $modalInstance, $log) {
     $scope.createContentGroup = function(data) {
       socket.emit('create-content-group', data);
+      return $modalInstance.dismiss('form-sumbit');
+    };
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
+  });
+
+  app.controller('AddContentGroupController', function($scope, $modalInstance, $log) {
+    $scope.addContentGroup = function(data) {
+      socket.emit('add-content-group', data);
       return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {

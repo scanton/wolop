@@ -1,3 +1,10 @@
+sortByName = (a, b) ->
+	if a.name > b.name
+		return 1
+	if a.name < b.name
+		return -1
+	0
+
 app = angular.module 'wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']
 
 app.controller 'CmsController', ($scope, $log) ->
@@ -140,7 +147,7 @@ app.directive 'websitesOverview', ->
 		$scope.websites = globalModel.getWebsites()
 		socket.on 'websites-update', (data) ->
 			$scope.$apply ->
-				$scope.websites = data
+				$scope.websites = data.sort sortByName
 
 app.config ($routeProvider) ->
 	path = $routeProvider.when
@@ -182,6 +189,13 @@ app.controller 'HomeController', ($scope, $modal, $log) ->
 
 #websites
 app.controller 'WebsitesController', ($scope, $modal, $log) ->
+	$scope.addContentGroup = (slug) ->
+		$scope.addContentGroupData = 
+			website: slug
+		$modal.open
+			templateUrl: '/partials/forms/add-content-group'
+			controller: 'AddContentGroupController'
+			scope: $scope
 	$scope.showCreateWebsite = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-website'
@@ -237,6 +251,13 @@ app.controller 'ContentGroupsController', ($scope, $modal, $log) ->
 app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
 	$scope.createContentGroup = (data) ->
 		socket.emit 'create-content-group', data
+		$modalInstance.dismiss 'form-sumbit'
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+
+app.controller 'AddContentGroupController', ($scope, $modalInstance, $log) ->
+	$scope.addContentGroup = (data) ->
+		socket.emit 'add-content-group', data
 		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'

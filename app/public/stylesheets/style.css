@@ -24,3 +24,6 @@
 .chat-widget {
   background: #fff;
 }
+a:hover {
+  cursor: pointer;
+}

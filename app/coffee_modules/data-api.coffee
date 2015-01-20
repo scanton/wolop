@@ -7,6 +7,14 @@ getAll = (model, query, callback) ->
 				console.log err if err
 				callback data if callback
 		).exec()
+getOne = (model, query, callback) ->
+	if model
+		model.findOne(
+			query
+			(err, data) ->
+				console.log err if err
+				callback data if callback
+		)
 upsert = (model, query, data, callback) ->
 	if model && data
 		model.findOneAndUpdate(
@@ -19,6 +27,11 @@ upsert = (model, query, data, callback) ->
 		)
 
 module.exports =
+	updateWebsiteContentGroups: (site, data, callback) ->
+		models.Website.update {slug: site}, data, null, callback
+		
+	getWebsite: (query, callback) ->
+		getOne models.Website, query, callback
 
 	getAdmins: (callback) ->
 		getAll models.Admin, {}, callback
