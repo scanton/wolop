@@ -1,2 +1,2 @@
 ul.pages-overview-list
-	li(ng-repeat="page in pages") {{page}}
+	li(ng-repeat="page in pages", data-id="{{page._id}}", data-slug="{{page.slug}}") {{page.name}}

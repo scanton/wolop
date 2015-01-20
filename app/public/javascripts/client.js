@@ -113,7 +113,6 @@
       controller: function($scope, $log) {
         $scope.createUserData = {};
         return $scope.createUser = function(data) {
-          $log.info(data);
           return socket.emit('create-user', data);
         };
       }
@@ -134,17 +133,17 @@
             label: 'Websites',
             link: '/websites'
           }, {
-            label: 'Pages',
-            link: '/pages'
-          }, {
-            label: 'Menus',
-            link: '/menus'
-          }, {
             label: 'Content Groups',
             link: '/content-groups'
           }, {
+            label: 'Pages',
+            link: '/pages'
+          }, {
             label: 'Locales',
             link: '/locales'
+          }, {
+            label: 'Menus',
+            link: '/menus'
           }, {
             label: 'Users',
             link: '/users'
@@ -255,6 +254,10 @@
       templateUrl: '/partials/websites.html',
       controller: 'WebsitesController'
     });
+    path('/website/:slug', {
+      templateUrl: '/partials/website-details.html',
+      controller: 'WebsiteDetailsController'
+    });
     path('/pages', {
       templateUrl: '/partials/pages.html',
       controller: 'PagesController'
@@ -280,13 +283,19 @@
   app.controller('HomeController', function($scope, $modal, $log) {});
 
   app.controller('WebsitesController', function($scope, $modal, $log) {
-    socket.emit('get-websites');
     return $scope.showCreateWebsite = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-website',
         controller: 'CreateWebsiteController'
       });
     };
+  });
+
+  app.controller('WebsiteDetailsController', function($scope, $routeParams, $log) {
+    var index;
+    index = $routeParams.slug;
+    $scope.index = index;
+    return socket.emit('working-on', index);
   });
 
   app.controller('CreateWebsiteController', function($scope, $modalInstance, $log) {
@@ -300,7 +309,6 @@
   });
 
   app.controller('PagesController', function($scope, $modal, $log) {
-    socket.emit('get-pages');
     return $scope.showCreatePage = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-page',
@@ -320,7 +328,6 @@
   });
 
   app.controller('MenusController', function($scope, $modal, $log) {
-    socket.emit('get-menus');
     return $scope.showCreateMenu = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-menu',
@@ -340,7 +347,6 @@
   });
 
   app.controller('ContentGroupsController', function($scope, $modal, $log) {
-    socket.emit('get-content-groups');
     return $scope.showCreateContentGroup = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-content-group',
@@ -360,7 +366,6 @@
   });
 
   app.controller('LocalesController', function($scope, $modal, $log) {
-    socket.emit('get-locales');
     return $scope.showCreateLocale = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-locale',
@@ -380,7 +385,6 @@
   });
 
   app.controller('UsersController', function($scope, $modal, $log) {
-    socket.emit('get-users');
     return $scope.showCreateUser = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-user',

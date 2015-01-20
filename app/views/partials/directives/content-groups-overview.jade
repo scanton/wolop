@@ -1,2 +1,2 @@
 ul.content-groups-overview-list
-	li(ng-repeat="group in contentGroups") {{group}}
+	li(ng-repeat="group in contentGroups", data-id="{{group._id}}", data-slug="{{group.slug}}") {{group.name}}

@@ -1,2 +1,8 @@
-ul.users-overview-list
-	li(ng-repeat="user in users") {{user}}
+.users-overview-list
+	.site.col-xs-12.col-sm-6.col-md-4.col-lg-3(ng-repeat="user in users") 
+		.panel.panel-default 
+			.panel-heading {{user.firstName}} {{user.lastName}}
+			.panel-body 
+			.panel-footer
+				a.pull-right(href="edit-user/{{user._id}}") {{user.email}}
+				.clearfix

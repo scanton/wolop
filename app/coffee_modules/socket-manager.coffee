@@ -33,6 +33,17 @@ module.exports = (io) ->
 			io.to('auth-users').emit 'auth-users-update', authenticatedUsers
 			console.log '- user ' + socket.id + ' disconnected - ' + domain + ' IP: ' + ip
 
+		socket.on 'working-on', (str) ->
+			if str && authenticatedUsers[socket.id]
+				x = authenticatedUsers[socket.id]
+				y =
+					_id: x._id
+					firstName: x.firstName
+					lastName: x.lastName
+					workingOn: str
+				authenticatedUsers[socket.id] = y
+				io.to('auth-users').emit 'auth-users-update', authenticatedUsers
+				console.log y
 		socket.on 'create-user', (data) ->
 			db.upsertAdmin data, ->
 				db.getAdmins (data) ->

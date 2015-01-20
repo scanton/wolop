@@ -1,2 +1,9 @@
-ul.websites-overview-list
-	li(ng-repeat="site in websites") {{site}}
+.websites-overview-list
+	.site.col-xs-12.col-sm-6.col-md-4.col-lg-3(ng-repeat="site in websites") 
+		.panel.panel-default 
+			.panel-heading 
+				a(ng-href="#/website/{{site.slug}}") {{site.name}}
+			.panel-body 
+			.panel-footer
+				.pull-right {{site.domain}}
+				.clearfix

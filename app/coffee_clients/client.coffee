@@ -70,7 +70,6 @@ app.directive 'createUser', ->
 	controller: ($scope, $log) ->
 		$scope.createUserData = {}
 		$scope.createUser = (data) ->
-			$log.info data
 			socket.emit 'create-user', data
 
 app.directive 'navBar', ->
@@ -82,10 +81,10 @@ app.directive 'navBar', ->
 			$scope.path = next.split('#')[1]
 		$scope.navData = [
 			{label: 'Websites', link: '/websites'}
-			{label: 'Pages', link: '/pages'}
-			{label: 'Menus', link: '/menus'}
 			{label: 'Content Groups', link: '/content-groups'}
+			{label: 'Pages', link: '/pages'}
 			{label: 'Locales', link: '/locales'}
+			{label: 'Menus', link: '/menus'}
 			{label: 'Users', link: '/users'}
 		]
 
@@ -154,6 +153,10 @@ app.config ($routeProvider) ->
 		templateUrl: '/partials/websites.html'
 		controller: 'WebsitesController'
 
+	path '/website/:slug',
+		templateUrl: '/partials/website-details.html'
+		controller: 'WebsiteDetailsController'
+
 	path '/pages',
 		templateUrl: '/partials/pages.html'
 		controller: 'PagesController'
@@ -177,12 +180,17 @@ app.config ($routeProvider) ->
 app.controller 'HomeController', ($scope, $modal, $log) ->
 	#$log.info 'home-controller'
 
+#websites
 app.controller 'WebsitesController', ($scope, $modal, $log) ->
-	socket.emit 'get-websites'
 	$scope.showCreateWebsite = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-website'
 			controller: 'CreateWebsiteController'
+
+app.controller 'WebsiteDetailsController', ($scope, $routeParams, $log) ->
+	index = $routeParams.slug
+	$scope.index = index
+	socket.emit 'working-on', index
 
 app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
 	$scope.createWebsite = (data) ->
@@ -191,8 +199,8 @@ app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
+#pages
 app.controller 'PagesController', ($scope, $modal, $log) ->
-	socket.emit 'get-pages'
 	$scope.showCreatePage = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-page'
@@ -205,8 +213,8 @@ app.controller 'CreatePageController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
+#menus
 app.controller 'MenusController', ($scope, $modal, $log) ->
-	socket.emit 'get-menus'
 	$scope.showCreateMenu = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-menu'
@@ -219,8 +227,8 @@ app.controller 'CreateMenuController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
+#content groups
 app.controller 'ContentGroupsController', ($scope, $modal, $log) ->
-	socket.emit 'get-content-groups'
 	$scope.showCreateContentGroup = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-content-group'
@@ -233,8 +241,8 @@ app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
+#locales
 app.controller 'LocalesController', ($scope, $modal, $log) ->
-	socket.emit 'get-locales'
 	$scope.showCreateLocale = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-locale'
@@ -247,8 +255,8 @@ app.controller 'CreateLocaleController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
+#users
 app.controller 'UsersController', ($scope, $modal, $log) ->
-	socket.emit 'get-users'
 	$scope.showCreateUser = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-user'
