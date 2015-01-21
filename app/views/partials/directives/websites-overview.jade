@@ -3,11 +3,19 @@
 		.panel.panel-default 
 			.panel-heading 
 				a(ng-href="#/website/{{site.slug}}") {{site.name}}
-			.panel-body 
-				a.pull-right(ng-click="addContentGroup(site.slug)") + new
-				ul.content-groups
-					li(ng-repeat="group in site.contentGroups") 
-						a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}"){{group.name}}
+			.panel-body.container-fluid
+				.row
+					a.pull-right(ng-click="addContentGroup(site.slug)") +&nbsp
+						span(ng-show="!site.contentGroups.length") add content group
+					ul.content-groups
+						li(ng-repeat="group in site.contentGroups") 
+							a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}"){{group.name}}
+				.row
+					a.pull-right(ng-click="addLocale(site.slug)") +&nbsp
+						span(ng-show="!site.locales.length") add locale
+					ul.content-groups
+						li(ng-repeat="locale in site.locales") 
+							a(ng-href="#/website/{{site.slug}}/locale/{{locale.slug}}"){{locale.slug}}
 			.panel-footer
 				.pull-right {{site.domain}}
 				.clearfix

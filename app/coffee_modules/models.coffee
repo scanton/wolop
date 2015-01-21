@@ -29,4 +29,5 @@ module.exports =
 		slug: {type: String, unique: true}
 		domain: String
 		contentGroups: Array
+		locales: Array
 	)

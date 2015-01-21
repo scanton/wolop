@@ -40,7 +40,7 @@
       messages: []
     };
     socket.on('websites-update', function(data) {
-      return model.websites = data;
+      return model.websites = data.sort(sortByName);
     });
     socket.on('content-groups-update', function(data) {
       return model.contentGroups = data;
@@ -142,18 +142,6 @@
           {
             label: 'Websites',
             link: '/websites'
-          }, {
-            label: 'Content Groups',
-            link: '/content-groups'
-          }, {
-            label: 'Pages',
-            link: '/pages'
-          }, {
-            label: 'Locales',
-            link: '/locales'
-          }, {
-            label: 'Menus',
-            link: '/menus'
           }, {
             label: 'Users',
             link: '/users'
@@ -268,6 +256,10 @@
       templateUrl: '/partials/website-details.html',
       controller: 'WebsiteDetailsController'
     });
+    path('/website/:site/content-group/:group', {
+      templateUrl: '/partials/website-content-group-details.html',
+      controller: 'WebsiteContentGroupDetailsController'
+    });
     path('/pages', {
       templateUrl: '/partials/pages.html',
       controller: 'PagesController'
@@ -303,6 +295,16 @@
         scope: $scope
       });
     };
+    $scope.addLocale = function(slug) {
+      $scope.addLocaleData = {
+        website: slug
+      };
+      return $modal.open({
+        templateUrl: '/partials/forms/add-locale',
+        controller: 'AddLocaleController',
+        scope: $scope
+      });
+    };
     return $scope.showCreateWebsite = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-website',
@@ -316,6 +318,14 @@
     index = $routeParams.slug;
     $scope.index = index;
     return socket.emit('working-on', index);
+  });
+
+  app.controller('WebsiteContentGroupDetailsController', function($scope, $routeParams, $log) {
+    var group, site;
+    site = $routeParams.site;
+    group = $routeParams.group;
+    socket.emit('working-on', site + ' (' + group + ')');
+    return $scope.params = $routeParams;
   });
 
   app.controller('CreateWebsiteController', function($scope, $modalInstance, $log) {
@@ -388,6 +398,16 @@
   app.controller('AddContentGroupController', function($scope, $modalInstance, $log) {
     $scope.addContentGroup = function(data) {
       socket.emit('add-content-group', data);
+      return $modalInstance.dismiss('form-sumbit');
+    };
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
+  });
+
+  app.controller('AddLocaleController', function($scope, $modalInstance, $log) {
+    $scope.addLocale = function(data) {
+      socket.emit('add-locale', data);
       return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {

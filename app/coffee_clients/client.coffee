@@ -29,7 +29,7 @@ app.factory 'globalModel', ->
 		messages: []
 
 	socket.on 'websites-update', (data) -> 
-		model.websites = data
+		model.websites = data.sort sortByName
 	socket.on 'content-groups-update', (data) -> 
 		model.contentGroups = data
 	socket.on 'locales-update', (data) -> 
@@ -88,10 +88,10 @@ app.directive 'navBar', ->
 			$scope.path = next.split('#')[1]
 		$scope.navData = [
 			{label: 'Websites', link: '/websites'}
-			{label: 'Content Groups', link: '/content-groups'}
-			{label: 'Pages', link: '/pages'}
-			{label: 'Locales', link: '/locales'}
-			{label: 'Menus', link: '/menus'}
+		#	{label: 'Content Groups', link: '/content-groups'}
+		#	{label: 'Pages', link: '/pages'}
+		#	{label: 'Locales', link: '/locales'}
+		#	{label: 'Menus', link: '/menus'}
 			{label: 'Users', link: '/users'}
 		]
 
@@ -164,6 +164,10 @@ app.config ($routeProvider) ->
 		templateUrl: '/partials/website-details.html'
 		controller: 'WebsiteDetailsController'
 
+	path '/website/:site/content-group/:group',
+		templateUrl: '/partials/website-content-group-details.html'
+		controller: 'WebsiteContentGroupDetailsController'
+
 	path '/pages',
 		templateUrl: '/partials/pages.html'
 		controller: 'PagesController'
@@ -196,6 +200,13 @@ app.controller 'WebsitesController', ($scope, $modal, $log) ->
 			templateUrl: '/partials/forms/add-content-group'
 			controller: 'AddContentGroupController'
 			scope: $scope
+	$scope.addLocale = (slug) ->
+		$scope.addLocaleData = 
+			website: slug
+		$modal.open
+			templateUrl: '/partials/forms/add-locale'
+			controller: 'AddLocaleController'
+			scope: $scope
 	$scope.showCreateWebsite = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-website'
@@ -205,6 +216,12 @@ app.controller 'WebsiteDetailsController', ($scope, $routeParams, $log) ->
 	index = $routeParams.slug
 	$scope.index = index
 	socket.emit 'working-on', index
+
+app.controller 'WebsiteContentGroupDetailsController', ($scope, $routeParams, $log) ->
+	site = $routeParams.site
+	group = $routeParams.group
+	socket.emit 'working-on', site + ' (' + group + ')'
+	$scope.params = $routeParams
 
 app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
 	$scope.createWebsite = (data) ->
@@ -262,6 +279,12 @@ app.controller 'AddContentGroupController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
+app.controller 'AddLocaleController', ($scope, $modalInstance, $log) ->
+	$scope.addLocale = (data) ->
+		socket.emit 'add-locale', data
+		$modalInstance.dismiss 'form-sumbit'
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
 #locales
 app.controller 'LocalesController', ($scope, $modal, $log) ->
 	$scope.showCreateLocale = ->

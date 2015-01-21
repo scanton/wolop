@@ -49,6 +49,7 @@ module.exports = (io) ->
 				authenticatedUsers[socket.id] = y
 				io.to('auth-users').emit 'auth-users-update', authenticatedUsers
 				console.log y
+
 		socket.on 'create-user', (data) ->
 			db.upsertAdmin data, ->
 				db.getAdmins (data) ->
@@ -90,6 +91,15 @@ module.exports = (io) ->
 						name: data.name
 						slug: data.slug
 					db.updateWebsiteContentGroups data.website, {contentGroups: site.contentGroups}, ->
+						refreshWebsites()
+
+		socket.on 'add-locale', (data) ->
+			if data && data.website
+				db.getWebsite {slug: data.website}, (site) ->
+					site.locales.push
+						name: data.name
+						slug: data.slug
+					db.updateWebsiteLocales data.website, {locales: site.locales}, ->
 						refreshWebsites()
 
 		socket.on 'user-login', (data) ->
