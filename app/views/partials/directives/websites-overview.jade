@@ -13,7 +13,7 @@
 				.row
 					a.pull-right(ng-click="addLocale(site.slug)") +&nbsp
 						span(ng-show="!site.locales.length") add locale
-					ul.content-groups
+					ul.locales
 						li(ng-repeat="locale in site.locales") 
 							a(ng-href="#/website/{{site.slug}}/locale/{{locale.slug}}"){{locale.slug}}
 			.panel-footer

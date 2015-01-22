@@ -16,6 +16,38 @@
 		width 100%
 		min-height 1em
 .chat-widget
-	background white
+	position absolute
+	bottom -10px
+	right 20px
+	max-width 300px
+	ul
+		padding 0
+		li
+			list-style none
+		li.is-self
+			text-align right
+			.username
+				display none
+		li.is-other
+			.message
+				display inline
+				color white
+				background #6cc24a
+				padding .5em
+				border-radius 13px
+			.username
+				font-weight bold
+				display inline
+	.username
+		font-weight bold
+	.chat-output
+		max-height 250px
+		overflow scroll
+.websites-overview-list
+	.panel-body
+		padding .5em 2em
+		ul
+			list-style none
+			padding-left 0
 a:hover
 	cursor pointer

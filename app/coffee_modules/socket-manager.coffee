@@ -38,6 +38,9 @@ module.exports = (io) ->
 			io.to('auth-users').emit 'auth-users-update', authenticatedUsers
 			console.log '- user ' + socket.id + ' disconnected - ' + domain + ' IP: ' + ip
 
+		socket.on 'chat-message', (message) ->
+			io.to('auth-users').emit 'chat-message-update', {user: authenticatedUsers[socket.id], message: message}
+
 		socket.on 'working-on', (str) ->
 			if str && authenticatedUsers[socket.id]
 				x = authenticatedUsers[socket.id]

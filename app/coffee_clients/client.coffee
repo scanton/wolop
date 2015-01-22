@@ -5,7 +5,14 @@ sortByName = (a, b) ->
 		return -1
 	0
 
-app = angular.module 'wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']
+socket = io()
+
+app = angular.module 'wolop-cms', [
+	'ngRoute'
+	'ui.bootstrap'
+	'ui.ace'
+	'chat'
+]
 
 app.controller 'CmsController', ($scope, $log) ->
 	$scope.isLoggedIn = false
@@ -16,7 +23,6 @@ app.controller 'CmsController', ($scope, $log) ->
 			$scope.userData = data
 			$scope.isLoggedIn = true
 
-socket = io()
 app.factory 'globalModel', ->
 	model = 
 		websites: []
@@ -47,21 +53,6 @@ app.factory 'globalModel', ->
 	getLocales: -> model.locales
 	getMenus: -> model.menus
 	getPages: -> model.pages
-
-app.directive 'chatWidget', ->
-	restrict: 'E'
-	templateUrl: '/partials/directives/chat-widget.html'
-	controller: ($scope, $log) ->
-		$scope.peers = {}
-		$scope.chatArray = []
-		$scope.sendMessage = (message) ->
-			socket.emit 'chat-message', message
-		socket.on 'chat-message-update', (data) ->
-			$scope.$apply ->
-				$scope.chatArray.push data
-		socket.on 'auth-users-update', (data) ->
-			$scope.$apply ->
-				$scope.peers = data
 
 app.directive 'userLogin', ->
 	restrict: 'E'

@@ -22,7 +22,47 @@
   min-height: 1em;
 }
 .chat-widget {
-  background: #fff;
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  max-width: 300px;
+}
+.chat-widget ul {
+  padding: 0;
+}
+.chat-widget ul li {
+  list-style: none;
+}
+.chat-widget ul li.is-self {
+  text-align: right;
+}
+.chat-widget ul li.is-self .username {
+  display: none;
+}
+.chat-widget ul li.is-other .message {
+  display: inline;
+  color: #fff;
+  background: #6cc24a;
+  padding: 0.5em;
+  border-radius: 13px;
+}
+.chat-widget ul li.is-other .username {
+  font-weight: bold;
+  display: inline;
+}
+.chat-widget .username {
+  font-weight: bold;
+}
+.chat-widget .chat-output {
+  max-height: 250px;
+  overflow: scroll;
+}
+.websites-overview-list .panel-body {
+  padding: 0.5em 2em;
+}
+.websites-overview-list .panel-body ul {
+  list-style: none;
+  padding-left: 0;
 }
 a:hover {
   cursor: pointer;

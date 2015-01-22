@@ -1,4 +1,5 @@
 mongoose = require 'mongoose'
+Schema = mongoose.Schema
 
 module.exports =
 	Admin: mongoose.model('Admin',
@@ -23,11 +24,14 @@ module.exports =
 	Page: mongoose.model('Page',
 		name: String
 		slug: {type: String, unique: true}
+		content: String
+		created: Date
 	)
 	Website: mongoose.model('Website',
 		name: String
 		slug: {type: String, unique: true}
 		domain: String
+		#contentGroups: [{ type: Schema.ObjectId, ref: 'ContentGroup' }]
 		contentGroups: Array
 		locales: Array
 	)

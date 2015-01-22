@@ -11,7 +11,9 @@
     return 0;
   };
 
-  app = angular.module('wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']);
+  socket = io();
+
+  app = angular.module('wolop-cms', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'chat']);
 
   app.controller('CmsController', function($scope, $log) {
     $scope.isLoggedIn = false;
@@ -24,8 +26,6 @@
       });
     });
   });
-
-  socket = io();
 
   app.factory('globalModel', function() {
     var model;
@@ -75,30 +75,6 @@
       },
       getPages: function() {
         return model.pages;
-      }
-    };
-  });
-
-  app.directive('chatWidget', function() {
-    return {
-      restrict: 'E',
-      templateUrl: '/partials/directives/chat-widget.html',
-      controller: function($scope, $log) {
-        $scope.peers = {};
-        $scope.chatArray = [];
-        $scope.sendMessage = function(message) {
-          return socket.emit('chat-message', message);
-        };
-        socket.on('chat-message-update', function(data) {
-          return $scope.$apply(function() {
-            return $scope.chatArray.push(data);
-          });
-        });
-        return socket.on('auth-users-update', function(data) {
-          return $scope.$apply(function() {
-            return $scope.peers = data;
-          });
-        });
       }
     };
   });
