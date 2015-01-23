@@ -27,7 +27,8 @@ app.factory 'globalModel', ->
 	model = 
 		websites: []
 		contentGroups: []
-		locales: []
+		regions: []
+		languages: []
 		menus: []
 		pages: []
 		users: []
@@ -35,22 +36,27 @@ app.factory 'globalModel', ->
 		messages: []
 
 	socket.on 'websites-update', (data) -> 
+		data.map (site)->
+			site.contentGroups.sort sortByName
 		model.websites = data.sort sortByName
 	socket.on 'content-groups-update', (data) -> 
-		model.contentGroups = data
-	socket.on 'locales-update', (data) -> 
-		model.locales = data
+		model.contentGroups = data.sort sortByName
+	socket.on 'regions-update', (data) -> 
+		model.regions = data.sort sortByName
+	socket.on 'languages-update', (data) -> 
+		model.languages = data.sort sortByName
 	socket.on 'menus-update', (data) -> 
-		model.menus = data
+		model.menus = data.sort sortByName
 	socket.on 'pages-update', (data) -> 
-		model.pages = data
+		model.pages = data.sort sortByName
 	socket.on 'users-update', (data) -> 
 		model.users = data
 
 	getUsers: -> model.users
 	getWebsites: -> model.websites
 	getContentGroups: -> model.contentGroups
-	getLocales: -> model.locales
+	getRegions: -> model.regions
+	getLanguages: -> model.languages
 	getMenus: -> model.menus
 	getPages: -> model.pages
 
@@ -79,11 +85,14 @@ app.directive 'navBar', ->
 			$scope.path = next.split('#')[1]
 		$scope.navData = [
 			{label: 'Websites', link: '/websites'}
-		#	{label: 'Content Groups', link: '/content-groups'}
+			{label: 'Products', link: '/products'}
 		#	{label: 'Pages', link: '/pages'}
-		#	{label: 'Locales', link: '/locales'}
 		#	{label: 'Menus', link: '/menus'}
+			{label: 'Static Text', link: '/static-text'}
+			{label: 'Regions', link: '/regions'}
+			{label: 'Languages', link: '/languages'}
 			{label: 'Users', link: '/users'}
+			{label: 'Notices', link: '/notices'}
 		]
 
 app.directive 'usersOverview', ->
@@ -102,16 +111,25 @@ app.directive 'contentGroupsOverview', ->
 		$scope.contentGroups = globalModel.getContentGroups()
 		socket.on 'content-groups-update', (data) ->
 			$scope.$apply ->
-				$scope.contentGroups = data
+				$scope.contentGroups = data.sort sortByName
 
-app.directive 'localesOverview', ->
+app.directive 'regionsOverview', ->
 	restrict: 'E'
-	templateUrl: '/partials/directives/locales-overview.html'
+	templateUrl: '/partials/directives/regions-overview.html'
 	controller: ($scope, globalModel, $log) ->
-		$scope.locales = globalModel.getLocales()
-		socket.on 'locales-update', (data) ->
+		$scope.regions = globalModel.getRegions()
+		socket.on 'regions-update', (data) ->
 			$scope.$apply ->
-				$scope.locales = data
+				$scope.regions = data.sort sortByName
+
+app.directive 'languagesOverview', ->
+	restrict: 'E'
+	templateUrl: '/partials/directives/languages-overview.html'
+	controller: ($scope, globalModel, $log) ->
+		$scope.languages = globalModel.getLanguages()
+		socket.on 'languages-update', (data) ->
+			$scope.$apply ->
+				$scope.languages = data.sort sortByName
 
 app.directive 'menusOverview', ->
 	restrict: 'E'
@@ -120,7 +138,7 @@ app.directive 'menusOverview', ->
 		$scope.menus = globalModel.getMenus()
 		socket.on 'menus-update', (data) ->
 			$scope.$apply ->
-				$scope.menus = data
+				$scope.menus = data.sort sortByName
 
 app.directive 'pagesOverview', ->
 	restrict: 'E'
@@ -129,7 +147,7 @@ app.directive 'pagesOverview', ->
 		$scope.pages = globalModel.getPages()
 		socket.on 'pages-update', (data) ->
 			$scope.$apply ->
-				$scope.pages = data
+				$scope.pages = data.sort sortByName
 
 app.directive 'websitesOverview', ->
 	restrict: 'E'
@@ -138,6 +156,8 @@ app.directive 'websitesOverview', ->
 		$scope.websites = globalModel.getWebsites()
 		socket.on 'websites-update', (data) ->
 			$scope.$apply ->
+				data.map (site)->
+					site.contentGroups.sort sortByName
 				$scope.websites = data.sort sortByName
 
 app.config ($routeProvider) ->
@@ -171,9 +191,13 @@ app.config ($routeProvider) ->
 		templateUrl: '/partials/content-groups.html'
 		controller: 'ContentGroupsController'
 
-	path '/locales',
-		templateUrl: '/partials/locales.html'
-		controller: 'LocalesController'
+	path '/regions',
+		templateUrl: '/partials/regions.html'
+		controller: 'RegionsController'
+
+	path '/languages',
+		templateUrl: '/partials/languages.html'
+		controller: 'LanguagesController'
 
 	path '/users',
 		templateUrl: '/partials/users.html'
@@ -191,12 +215,12 @@ app.controller 'WebsitesController', ($scope, $modal, $log) ->
 			templateUrl: '/partials/forms/add-content-group'
 			controller: 'AddContentGroupController'
 			scope: $scope
-	$scope.addLocale = (slug) ->
-		$scope.addLocaleData = 
+	$scope.addRegion = (slug) ->
+		$scope.addRegionData = 
 			website: slug
 		$modal.open
-			templateUrl: '/partials/forms/add-locale'
-			controller: 'AddLocaleController'
+			templateUrl: '/partials/forms/add-region'
+			controller: 'AddRegionController'
 			scope: $scope
 	$scope.showCreateWebsite = ->
 		$modal.open
@@ -270,22 +294,44 @@ app.controller 'AddContentGroupController', ($scope, $modalInstance, $log) ->
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
-app.controller 'AddLocaleController', ($scope, $modalInstance, $log) ->
-	$scope.addLocale = (data) ->
-		socket.emit 'add-locale', data
+#regions
+app.controller 'AddRegionController', ($scope, $modalInstance, $log) ->
+	$scope.addRegion = (data) ->
+		socket.emit 'add-region', data
 		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
-#locales
-app.controller 'LocalesController', ($scope, $modal, $log) ->
-	$scope.showCreateLocale = ->
-		$modal.open
-			templateUrl: '/partials/forms/create-locale'
-			controller: 'CreateLocaleController'
 
-app.controller 'CreateLocaleController', ($scope, $modalInstance, $log) ->
-	$scope.createLocale = (data) ->
-		socket.emit 'create-locale', data
+app.controller 'RegionsController', ($scope, $modal, $log) ->
+	$scope.showCreateRegion = ->
+		$modal.open
+			templateUrl: '/partials/forms/create-region'
+			controller: 'CreateRegionController'
+
+app.controller 'CreateRegionController', ($scope, $modalInstance, $log) ->
+	$scope.createRegion = (data) ->
+		socket.emit 'create-region', data
+		$modalInstance.dismiss 'form-sumbit'
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+
+#languages
+app.controller 'AddLanguageController', ($scope, $modalInstance, $log) ->
+	$scope.addLanguage = (data) ->
+		socket.emit 'add-language', data
+		$modalInstance.dismiss 'form-sumbit'
+	$scope.cancel = ->
+		$modalInstance.dismiss 'cancel'
+
+app.controller 'LanguagesController', ($scope, $modal, $log) ->
+	$scope.showCreateLanguage = ->
+		$modal.open
+			templateUrl: '/partials/forms/create-language'
+			controller: 'CreateLanguageController'
+
+app.controller 'CreateLanguageController', ($scope, $modalInstance, $log) ->
+	$scope.createLanguage = (data) ->
+		socket.emit 'create-language', data
 		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'

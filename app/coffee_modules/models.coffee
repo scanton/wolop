@@ -10,10 +10,18 @@ module.exports =
 		password: String
 	)
 	ContentGroup: mongoose.model('ContentGroup',
-		name: {type: String, unique: true}
+		name: String
 		slug: {type: String, unique: true}
 	)
-	Locale: mongoose.model('Locale',
+	Region: mongoose.model('Region',
+		name: String
+		slug: {type: String, unique: true}
+		languages: [
+			type: Schema.ObjectId
+			ref: 'Language'
+		]
+	)
+	Language: mongoose.model('Language',
 		name: String
 		slug: {type: String, unique: true}
 	)

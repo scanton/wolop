@@ -39,8 +39,10 @@ module.exports =
 		getAll models.Admin, {}, callback
 	getContentGroups: (callback) ->
 		getAll models.ContentGroup, {}, callback
-	getLocales: (callback) ->
-		getAll models.Locale, {}, callback
+	getRegions: (callback) ->
+		getAll models.Region, {}, callback
+	getLanguages: (callback) ->
+		getAll models.Language, {}, callback
 	getMenus: (callback) ->
 		getAll models.Menu, {}, callback
 	getPages: (callback) ->
@@ -52,8 +54,10 @@ module.exports =
 		upsert models.Admin, {username: data.username}, data, callback
 	upsertContentGroup: (data, callback) ->
 		upsert models.ContentGroup, {slug: data.slug}, data, callback
-	upsertLocale: (data, callback) ->
-		upsert models.Locale, {slug: data.slug}, data, callback
+	upsertRegion: (data, callback) ->
+		upsert models.Region, {slug: data.slug}, data, callback
+	upsertLanguage: (data, callback) ->
+		upsert models.Language, {slug: data.slug}, data, callback
 	upsertMenu: (data, callback) ->
 		upsert models.Menu, {slug: data.slug}, data, callback
 	upsertPage: (data, callback) ->
