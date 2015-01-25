@@ -98,6 +98,7 @@ module.exports = (io) ->
 		socket.on 'add-content-group', (data) ->
 			if data && data.website
 				db.getWebsite {slug: data.website}, (site) ->
+					site.contentGroups = [] if !site.contentGroups
 					site.contentGroups.push
 						name: data.name
 						slug: data.slug
@@ -107,6 +108,7 @@ module.exports = (io) ->
 		socket.on 'add-region', (data) ->
 			if data && data.website
 				db.getWebsite {slug: data.website}, (site) ->
+					site.regions = [] if !site.regions
 					site.regions.push
 						name: data.name
 						slug: data.slug
@@ -116,6 +118,7 @@ module.exports = (io) ->
 		socket.on 'add-language', (data) ->
 			if data && data.website
 				db.getWebsite {slug: data.website}, (site) ->
+					site.languages = [] if !site.languages
 					site.languages.push
 						name: data.name
 						slug: data.slug

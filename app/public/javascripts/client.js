@@ -42,7 +42,8 @@
     };
     socket.on('websites-update', function(data) {
       data.map(function(site) {
-        return site.contentGroups.sort(sortByName);
+        site.contentGroups.sort(sortByName);
+        return site.regions.sort(sortByName);
       });
       return model.websites = data.sort(sortByName);
     });
@@ -251,7 +252,8 @@
         return socket.on('websites-update', function(data) {
           return $scope.$apply(function() {
             data.map(function(site) {
-              return site.contentGroups.sort(sortByName);
+              site.contentGroups.sort(sortByName);
+              return site.regions.sort(sortByName);
             });
             return $scope.websites = data.sort(sortByName);
           });

@@ -38,6 +38,7 @@ app.factory 'globalModel', ->
 	socket.on 'websites-update', (data) -> 
 		data.map (site)->
 			site.contentGroups.sort sortByName
+			site.regions.sort sortByName
 		model.websites = data.sort sortByName
 	socket.on 'content-groups-update', (data) -> 
 		model.contentGroups = data.sort sortByName
@@ -158,6 +159,7 @@ app.directive 'websitesOverview', ->
 			$scope.$apply ->
 				data.map (site)->
 					site.contentGroups.sort sortByName
+					site.regions.sort sortByName
 				$scope.websites = data.sort sortByName
 
 app.config ($routeProvider) ->

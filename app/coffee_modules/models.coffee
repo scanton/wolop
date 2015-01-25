@@ -33,7 +33,7 @@ module.exports =
 		name: String
 		slug: {type: String, unique: true}
 		content: String
-		created: Date
+		created: {type: Date, default: Date.now}
 	)
 	Website: mongoose.model('Website',
 		name: String
@@ -41,5 +41,6 @@ module.exports =
 		domain: String
 		#contentGroups: [{ type: Schema.ObjectId, ref: 'ContentGroup' }]
 		contentGroups: Array
-		locales: Array
+		languages: Array
+		regions: Array
 	)

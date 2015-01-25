@@ -12,7 +12,7 @@
 						li(ng-repeat="group in site.contentGroups")
 							a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}"){{group.name}}
 			.panel-footer
-				a.pull-right(ng-click="addLocale(site.slug)") +&nbsp;
-					span(ng-show="!site.locales.length") add locale
+				a.pull-right(ng-click="addRegion(site.slug)") +&nbsp;
+					span(ng-show="!site.regions.length") add region
 				ul.locales
-					li(ng-repeat="locale in site.locales") {{locale.slug}}
+					li(ng-repeat="region in site.regions") {{region.slug}}

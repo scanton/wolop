@@ -29,7 +29,8 @@ upsert = (model, query, data, callback) ->
 module.exports =
 	updateWebsiteContentGroups: (site, data, callback) ->
 		models.Website.update {slug: site}, data, null, callback
-	updateWebsiteLocales: (site, data, callback) ->
+	updateWebsiteRegions: (site, data, callback) ->
+		console.log data
 		models.Website.update {slug: site}, data, null, callback
 
 	getWebsite: (query, callback) ->
