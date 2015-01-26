@@ -5,11 +5,9 @@
 		.modal-body
 			form
 				.col-xs-12
-					.form-group
-						input.form-control(ng-model="addContentGroupData.name", name='name', type='text', placeholder='Name')
+					.form-group Select Content Group: &nbsp;
+						select(ng-model="addContentGroupId")
+							option(ng-repeat="group in contentGroups", value="{{group._id}}") {{group.name}}
 				.col-xs-12
-					.form-group
-						input.form-control(ng-model="addContentGroupData.slug", name='slug', type='text', placeholder='slug')
-				.col-xs-12
-					button.btn.btn-default.pull-right(ng-click='addContentGroup(addContentGroupData)') Create Content Group
+					button.btn.btn-default.pull-right(ng-click='addContentGroup(addContentGroupData.website, addContentGroupId)') Add Content Group
 					button.btn.btn-default.pull-right(ng-click='cancel()') Cancel

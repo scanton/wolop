@@ -6,7 +6,7 @@ getAll = (model, query, callback) ->
 			(err, data) ->
 				console.log err if err
 				callback data if callback
-		).exec()
+		)
 getOne = (model, query, callback) ->
 	if model
 		model.findOne(
@@ -49,7 +49,14 @@ module.exports =
 	getPages: (callback) ->
 		getAll models.Page, {}, callback
 	getWebsites: (callback) ->
-		getAll models.Website, {}, callback
+		console.log '** get websites **'
+		models.Website.find {}
+			.populate 'contentGroups'
+			.populate 'regions'
+			.exec (err, rows)->
+				console.log rows
+				console.log err if err
+				callback rows if callback
 
 	upsertAdmin: (data, callback) ->
 		upsert models.Admin, {username: data.username}, data, callback

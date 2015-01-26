@@ -87,6 +87,7 @@ app.directive 'navBar', ->
 		$scope.navData = [
 			{label: 'Websites', link: '/websites'}
 			{label: 'Products', link: '/products'}
+			{label: 'Content Groups', link: '/content-groups'}
 		#	{label: 'Pages', link: '/pages'}
 		#	{label: 'Menus', link: '/menus'}
 			{label: 'Static Text', link: '/static-text'}
@@ -209,7 +210,18 @@ app.controller 'HomeController', ($scope, $modal, $log) ->
 	#$log.info 'home-controller'
 
 #websites
-app.controller 'WebsitesController', ($scope, $modal, $log) ->
+app.controller 'WebsitesController', ($scope, $modal, globalModel, $log) ->
+	
+	$scope.contentGroups = globalModel.getContentGroups()
+	socket.on 'content-groups-update', (data) ->
+		$scope.$apply ->
+			$scope.contentGroups = data.sort sortByName
+
+	$scope.regions = globalModel.getRegions()
+	socket.on 'regions-update', (data) ->
+		$scope.$apply ->
+			$scope.regions = data.sort sortByName
+
 	$scope.addContentGroup = (slug) ->
 		$scope.addContentGroupData = 
 			website: slug
@@ -217,9 +229,10 @@ app.controller 'WebsitesController', ($scope, $modal, $log) ->
 			templateUrl: '/partials/forms/add-content-group'
 			controller: 'AddContentGroupController'
 			scope: $scope
-	$scope.addRegion = (slug) ->
+	$scope.addRegion = (slug, regionId) ->
 		$scope.addRegionData = 
 			website: slug
+			regionId: regionId
 		$modal.open
 			templateUrl: '/partials/forms/add-region'
 			controller: 'AddRegionController'
@@ -290,16 +303,16 @@ app.controller 'CreateContentGroupController', ($scope, $modalInstance, $log) ->
 		$modalInstance.dismiss 'cancel'
 
 app.controller 'AddContentGroupController', ($scope, $modalInstance, $log) ->
-	$scope.addContentGroup = (data) ->
-		socket.emit 'add-content-group', data
+	$scope.addContentGroup = (site, contentGroupId) ->
+		socket.emit 'add-content-group', {website: site, contentGroupId: contentGroupId}
 		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'
 
 #regions
 app.controller 'AddRegionController', ($scope, $modalInstance, $log) ->
-	$scope.addRegion = (data) ->
-		socket.emit 'add-region', data
+	$scope.addRegion = (site, regionId) ->
+		socket.emit 'add-region', {website: site, regionId: regionId}
 		$modalInstance.dismiss 'form-sumbit'
 	$scope.cancel = ->
 		$modalInstance.dismiss 'cancel'

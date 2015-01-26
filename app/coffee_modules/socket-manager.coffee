@@ -7,16 +7,12 @@ websites = []
 contentGroups = []
 regions = []
 languages = []
-menus = []
-pages = []
 users = []
 
 db.getWebsites (data) -> websites = data
 db.getContentGroups (data) -> contentGroups = data
 db.getRegions (data) -> regions = data
 db.getLanguages (data) -> languages = data
-db.getMenus (data) -> menus = data
-db.getPages (data) -> pages = data
 db.getAdmins (data) -> users = data
 
 module.exports = (io) ->
@@ -96,33 +92,19 @@ module.exports = (io) ->
 				refreshWebsites()
 
 		socket.on 'add-content-group', (data) ->
-			if data && data.website
+			if data && data.website && data.contentGroupId
 				db.getWebsite {slug: data.website}, (site) ->
 					site.contentGroups = [] if !site.contentGroups
-					site.contentGroups.push
-						name: data.name
-						slug: data.slug
+					site.contentGroups.push data.contentGroupId
 					db.updateWebsiteContentGroups data.website, {contentGroups: site.contentGroups}, ->
 						refreshWebsites()
 
 		socket.on 'add-region', (data) ->
-			if data && data.website
+			if data && data.website && data.regionId
 				db.getWebsite {slug: data.website}, (site) ->
 					site.regions = [] if !site.regions
-					site.regions.push
-						name: data.name
-						slug: data.slug
+					site.regions.push data.regionId
 					db.updateWebsiteRegions data.website, {regions: site.regions}, ->
-						refreshWebsites()
-
-		socket.on 'add-language', (data) ->
-			if data && data.website
-				db.getWebsite {slug: data.website}, (site) ->
-					site.languages = [] if !site.languages
-					site.languages.push
-						name: data.name
-						slug: data.slug
-					db.updateWebsiteLanguages data.website, {languages: site.languages}, ->
 						refreshWebsites()
 
 		socket.on 'user-login', (data) ->
@@ -139,7 +121,5 @@ module.exports = (io) ->
 						socket.emit 'content-groups-update', contentGroups
 						socket.emit 'regions-update', regions
 						socket.emit 'languages-update', languages
-						socket.emit 'menus-update', menus
-						socket.emit 'pages-update', pages
 						socket.emit 'users-update', users
 				)

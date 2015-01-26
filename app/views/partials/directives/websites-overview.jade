@@ -10,7 +10,7 @@
 						span(ng-show="!site.contentGroups.length") add content group
 					ul.content-groups
 						li(ng-repeat="group in site.contentGroups")
-							a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}"){{group.name}}
+							a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}") {{group.name}}
 			.panel-footer
 				a.pull-right(ng-click="addRegion(site.slug)") +&nbsp;
 					span(ng-show="!site.regions.length") add region

@@ -133,6 +133,9 @@
             label: 'Products',
             link: '/products'
           }, {
+            label: 'Content Groups',
+            link: '/content-groups'
+          }, {
             label: 'Static Text',
             link: '/static-text'
           }, {
@@ -309,7 +312,19 @@
 
   app.controller('HomeController', function($scope, $modal, $log) {});
 
-  app.controller('WebsitesController', function($scope, $modal, $log) {
+  app.controller('WebsitesController', function($scope, $modal, globalModel, $log) {
+    $scope.contentGroups = globalModel.getContentGroups();
+    socket.on('content-groups-update', function(data) {
+      return $scope.$apply(function() {
+        return $scope.contentGroups = data.sort(sortByName);
+      });
+    });
+    $scope.regions = globalModel.getRegions();
+    socket.on('regions-update', function(data) {
+      return $scope.$apply(function() {
+        return $scope.regions = data.sort(sortByName);
+      });
+    });
     $scope.addContentGroup = function(slug) {
       $scope.addContentGroupData = {
         website: slug
@@ -320,9 +335,10 @@
         scope: $scope
       });
     };
-    $scope.addRegion = function(slug) {
+    $scope.addRegion = function(slug, regionId) {
       $scope.addRegionData = {
-        website: slug
+        website: slug,
+        regionId: regionId
       };
       return $modal.open({
         templateUrl: '/partials/forms/add-region',
@@ -421,8 +437,11 @@
   });
 
   app.controller('AddContentGroupController', function($scope, $modalInstance, $log) {
-    $scope.addContentGroup = function(data) {
-      socket.emit('add-content-group', data);
+    $scope.addContentGroup = function(site, contentGroupId) {
+      socket.emit('add-content-group', {
+        website: site,
+        contentGroupId: contentGroupId
+      });
       return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
@@ -431,8 +450,11 @@
   });
 
   app.controller('AddRegionController', function($scope, $modalInstance, $log) {
-    $scope.addRegion = function(data) {
-      socket.emit('add-region', data);
+    $scope.addRegion = function(site, regionId) {
+      socket.emit('add-region', {
+        website: site,
+        regionId: regionId
+      });
       return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
