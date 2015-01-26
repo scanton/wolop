@@ -1,4 +1,5 @@
 mongoose = require 'mongoose'
+Schema = mongoose.Schema
 
 module.exports =
 	Admin: mongoose.model('Admin',
@@ -9,10 +10,18 @@ module.exports =
 		password: String
 	)
 	ContentGroup: mongoose.model('ContentGroup',
-		name: {type: String, unique: true}
+		name: String
 		slug: {type: String, unique: true}
 	)
-	Locale: mongoose.model('Locale',
+	Region: mongoose.model('Region',
+		name: String
+		slug: {type: String, unique: true}
+		languages: [
+			type: Schema.ObjectId
+			ref: 'Language'
+		]
+	)
+	Language: mongoose.model('Language',
 		name: String
 		slug: {type: String, unique: true}
 	)
@@ -23,11 +32,15 @@ module.exports =
 	Page: mongoose.model('Page',
 		name: String
 		slug: {type: String, unique: true}
+		content: String
+		created: {type: Date, default: Date.now}
 	)
 	Website: mongoose.model('Website',
 		name: String
 		slug: {type: String, unique: true}
 		domain: String
+		#contentGroups: [{ type: Schema.ObjectId, ref: 'ContentGroup' }]
 		contentGroups: Array
-		locales: Array
+		languages: Array
+		regions: Array
 	)

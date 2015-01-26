@@ -11,7 +11,9 @@
     return 0;
   };
 
-  app = angular.module('wolop-cms', ['ui.bootstrap', 'ngRoute', 'ui.ace']);
+  socket = io();
+
+  app = angular.module('wolop-cms', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'chat']);
 
   app.controller('CmsController', function($scope, $log) {
     $scope.isLoggedIn = false;
@@ -25,14 +27,13 @@
     });
   });
 
-  socket = io();
-
   app.factory('globalModel', function() {
     var model;
     model = {
       websites: [],
       contentGroups: [],
-      locales: [],
+      regions: [],
+      languages: [],
       menus: [],
       pages: [],
       users: [],
@@ -40,19 +41,26 @@
       messages: []
     };
     socket.on('websites-update', function(data) {
+      data.map(function(site) {
+        site.contentGroups.sort(sortByName);
+        return site.regions.sort(sortByName);
+      });
       return model.websites = data.sort(sortByName);
     });
     socket.on('content-groups-update', function(data) {
-      return model.contentGroups = data;
+      return model.contentGroups = data.sort(sortByName);
     });
-    socket.on('locales-update', function(data) {
-      return model.locales = data;
+    socket.on('regions-update', function(data) {
+      return model.regions = data.sort(sortByName);
+    });
+    socket.on('languages-update', function(data) {
+      return model.languages = data.sort(sortByName);
     });
     socket.on('menus-update', function(data) {
-      return model.menus = data;
+      return model.menus = data.sort(sortByName);
     });
     socket.on('pages-update', function(data) {
-      return model.pages = data;
+      return model.pages = data.sort(sortByName);
     });
     socket.on('users-update', function(data) {
       return model.users = data;
@@ -67,38 +75,17 @@
       getContentGroups: function() {
         return model.contentGroups;
       },
-      getLocales: function() {
-        return model.locales;
+      getRegions: function() {
+        return model.regions;
+      },
+      getLanguages: function() {
+        return model.languages;
       },
       getMenus: function() {
         return model.menus;
       },
       getPages: function() {
         return model.pages;
-      }
-    };
-  });
-
-  app.directive('chatWidget', function() {
-    return {
-      restrict: 'E',
-      templateUrl: '/partials/directives/chat-widget.html',
-      controller: function($scope, $log) {
-        $scope.peers = {};
-        $scope.chatArray = [];
-        $scope.sendMessage = function(message) {
-          return socket.emit('chat-message', message);
-        };
-        socket.on('chat-message-update', function(data) {
-          return $scope.$apply(function() {
-            return $scope.chatArray.push(data);
-          });
-        });
-        return socket.on('auth-users-update', function(data) {
-          return $scope.$apply(function() {
-            return $scope.peers = data;
-          });
-        });
       }
     };
   });
@@ -143,8 +130,23 @@
             label: 'Websites',
             link: '/websites'
           }, {
+            label: 'Products',
+            link: '/products'
+          }, {
+            label: 'Static Text',
+            link: '/static-text'
+          }, {
+            label: 'Regions',
+            link: '/regions'
+          }, {
+            label: 'Languages',
+            link: '/languages'
+          }, {
             label: 'Users',
             link: '/users'
+          }, {
+            label: 'Notices',
+            link: '/notices'
           }
         ];
       }
@@ -174,22 +176,37 @@
         $scope.contentGroups = globalModel.getContentGroups();
         return socket.on('content-groups-update', function(data) {
           return $scope.$apply(function() {
-            return $scope.contentGroups = data;
+            return $scope.contentGroups = data.sort(sortByName);
           });
         });
       }
     };
   });
 
-  app.directive('localesOverview', function() {
+  app.directive('regionsOverview', function() {
     return {
       restrict: 'E',
-      templateUrl: '/partials/directives/locales-overview.html',
+      templateUrl: '/partials/directives/regions-overview.html',
       controller: function($scope, globalModel, $log) {
-        $scope.locales = globalModel.getLocales();
-        return socket.on('locales-update', function(data) {
+        $scope.regions = globalModel.getRegions();
+        return socket.on('regions-update', function(data) {
           return $scope.$apply(function() {
-            return $scope.locales = data;
+            return $scope.regions = data.sort(sortByName);
+          });
+        });
+      }
+    };
+  });
+
+  app.directive('languagesOverview', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/partials/directives/languages-overview.html',
+      controller: function($scope, globalModel, $log) {
+        $scope.languages = globalModel.getLanguages();
+        return socket.on('languages-update', function(data) {
+          return $scope.$apply(function() {
+            return $scope.languages = data.sort(sortByName);
           });
         });
       }
@@ -204,7 +221,7 @@
         $scope.menus = globalModel.getMenus();
         return socket.on('menus-update', function(data) {
           return $scope.$apply(function() {
-            return $scope.menus = data;
+            return $scope.menus = data.sort(sortByName);
           });
         });
       }
@@ -219,7 +236,7 @@
         $scope.pages = globalModel.getPages();
         return socket.on('pages-update', function(data) {
           return $scope.$apply(function() {
-            return $scope.pages = data;
+            return $scope.pages = data.sort(sortByName);
           });
         });
       }
@@ -234,6 +251,10 @@
         $scope.websites = globalModel.getWebsites();
         return socket.on('websites-update', function(data) {
           return $scope.$apply(function() {
+            data.map(function(site) {
+              site.contentGroups.sort(sortByName);
+              return site.regions.sort(sortByName);
+            });
             return $scope.websites = data.sort(sortByName);
           });
         });
@@ -272,9 +293,13 @@
       templateUrl: '/partials/content-groups.html',
       controller: 'ContentGroupsController'
     });
-    path('/locales', {
-      templateUrl: '/partials/locales.html',
-      controller: 'LocalesController'
+    path('/regions', {
+      templateUrl: '/partials/regions.html',
+      controller: 'RegionsController'
+    });
+    path('/languages', {
+      templateUrl: '/partials/languages.html',
+      controller: 'LanguagesController'
     });
     return path('/users', {
       templateUrl: '/partials/users.html',
@@ -295,13 +320,13 @@
         scope: $scope
       });
     };
-    $scope.addLocale = function(slug) {
-      $scope.addLocaleData = {
+    $scope.addRegion = function(slug) {
+      $scope.addRegionData = {
         website: slug
       };
       return $modal.open({
-        templateUrl: '/partials/forms/add-locale',
-        controller: 'AddLocaleController',
+        templateUrl: '/partials/forms/add-region',
+        controller: 'AddRegionController',
         scope: $scope
       });
     };
@@ -405,9 +430,9 @@
     };
   });
 
-  app.controller('AddLocaleController', function($scope, $modalInstance, $log) {
-    $scope.addLocale = function(data) {
-      socket.emit('add-locale', data);
+  app.controller('AddRegionController', function($scope, $modalInstance, $log) {
+    $scope.addRegion = function(data) {
+      socket.emit('add-region', data);
       return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {
@@ -415,18 +440,47 @@
     };
   });
 
-  app.controller('LocalesController', function($scope, $modal, $log) {
-    return $scope.showCreateLocale = function() {
+  app.controller('RegionsController', function($scope, $modal, $log) {
+    return $scope.showCreateRegion = function() {
       return $modal.open({
-        templateUrl: '/partials/forms/create-locale',
-        controller: 'CreateLocaleController'
+        templateUrl: '/partials/forms/create-region',
+        controller: 'CreateRegionController'
       });
     };
   });
 
-  app.controller('CreateLocaleController', function($scope, $modalInstance, $log) {
-    $scope.createLocale = function(data) {
-      socket.emit('create-locale', data);
+  app.controller('CreateRegionController', function($scope, $modalInstance, $log) {
+    $scope.createRegion = function(data) {
+      socket.emit('create-region', data);
+      return $modalInstance.dismiss('form-sumbit');
+    };
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
+  });
+
+  app.controller('AddLanguageController', function($scope, $modalInstance, $log) {
+    $scope.addLanguage = function(data) {
+      socket.emit('add-language', data);
+      return $modalInstance.dismiss('form-sumbit');
+    };
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
+  });
+
+  app.controller('LanguagesController', function($scope, $modal, $log) {
+    return $scope.showCreateLanguage = function() {
+      return $modal.open({
+        templateUrl: '/partials/forms/create-language',
+        controller: 'CreateLanguageController'
+      });
+    };
+  });
+
+  app.controller('CreateLanguageController', function($scope, $modalInstance, $log) {
+    $scope.createLanguage = function(data) {
+      socket.emit('create-language', data);
       return $modalInstance.dismiss('form-sumbit');
     };
     return $scope.cancel = function() {

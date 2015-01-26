@@ -5,14 +5,16 @@ authenticatedUsers = {}
 
 websites = []
 contentGroups = []
-locales = []
+regions = []
+languages = []
 menus = []
 pages = []
 users = []
 
 db.getWebsites (data) -> websites = data
 db.getContentGroups (data) -> contentGroups = data
-db.getLocales (data) -> locales = data
+db.getRegions (data) -> regions = data
+db.getLanguages (data) -> languages = data
 db.getMenus (data) -> menus = data
 db.getPages (data) -> pages = data
 db.getAdmins (data) -> users = data
@@ -38,6 +40,9 @@ module.exports = (io) ->
 			io.to('auth-users').emit 'auth-users-update', authenticatedUsers
 			console.log '- user ' + socket.id + ' disconnected - ' + domain + ' IP: ' + ip
 
+		socket.on 'chat-message', (message) ->
+			io.to('auth-users').emit 'chat-message-update', {user: authenticatedUsers[socket.id], message: message}
+
 		socket.on 'working-on', (str) ->
 			if str && authenticatedUsers[socket.id]
 				x = authenticatedUsers[socket.id]
@@ -62,11 +67,17 @@ module.exports = (io) ->
 					contentGroups = data
 					io.to('auth-users').emit 'content-groups-update', data
 
-		socket.on 'create-locale', (data) ->
-			db.upsertLocale data, ->
-				db.getLocales (data) ->
-					locales = data
-					io.to('auth-users').emit 'locales-update', data
+		socket.on 'create-region', (data) ->
+			db.upsertRegion data, ->
+				db.getRegions (data) ->
+					regions = data
+					io.to('auth-users').emit 'regions-update', data
+
+		socket.on 'create-language', (data) ->
+			db.upsertLanguage data, ->
+				db.getLanguages (data) ->
+					languages = data
+					io.to('auth-users').emit 'languages-update', data
 
 		socket.on 'create-menu', (data) ->
 			db.upsertMenu data, ->
@@ -87,19 +98,31 @@ module.exports = (io) ->
 		socket.on 'add-content-group', (data) ->
 			if data && data.website
 				db.getWebsite {slug: data.website}, (site) ->
+					site.contentGroups = [] if !site.contentGroups
 					site.contentGroups.push
 						name: data.name
 						slug: data.slug
 					db.updateWebsiteContentGroups data.website, {contentGroups: site.contentGroups}, ->
 						refreshWebsites()
 
-		socket.on 'add-locale', (data) ->
+		socket.on 'add-region', (data) ->
 			if data && data.website
 				db.getWebsite {slug: data.website}, (site) ->
-					site.locales.push
+					site.regions = [] if !site.regions
+					site.regions.push
 						name: data.name
 						slug: data.slug
-					db.updateWebsiteLocales data.website, {locales: site.locales}, ->
+					db.updateWebsiteRegions data.website, {regions: site.regions}, ->
+						refreshWebsites()
+
+		socket.on 'add-language', (data) ->
+			if data && data.website
+				db.getWebsite {slug: data.website}, (site) ->
+					site.languages = [] if !site.languages
+					site.languages.push
+						name: data.name
+						slug: data.slug
+					db.updateWebsiteLanguages data.website, {languages: site.languages}, ->
 						refreshWebsites()
 
 		socket.on 'user-login', (data) ->
@@ -114,7 +137,8 @@ module.exports = (io) ->
 						io.to('auth-users').emit 'auth-users-update', authenticatedUsers
 						socket.emit 'websites-update', websites
 						socket.emit 'content-groups-update', contentGroups
-						socket.emit 'locales-update', locales
+						socket.emit 'regions-update', regions
+						socket.emit 'languages-update', languages
 						socket.emit 'menus-update', menus
 						socket.emit 'pages-update', pages
 						socket.emit 'users-update', users

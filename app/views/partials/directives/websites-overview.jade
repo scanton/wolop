@@ -2,6 +2,7 @@
 	.site.col-xs-12.col-sm-6.col-md-4.col-lg-3(ng-repeat="site in websites") 
 		.panel.panel-default 
 			.panel-heading 
+				a.pull-right.small-note(href="http://{{site.domain}}") {{site.domain}}
 				a(ng-href="#/website/{{site.slug}}") {{site.name}}
 			.panel-body.container-fluid
 				.row
@@ -9,14 +10,10 @@
 					a.pull-right(ng-click="addContentGroup(site.slug)") +&nbsp
 						span(ng-show="!site.contentGroups.length") add content group
 					ul.content-groups
-						li(ng-repeat="group in site.contentGroups") 
-							a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}") {{group.name}}
-				.row
-					.title Locales
-					a.pull-right(ng-click="addLocale(site.slug)") +&nbsp
-						span(ng-show="!site.locales.length") add locale
-					ul.content-groups
-						li(ng-repeat="locale in site.locales") {{locale.slug}}
+						li(ng-repeat="group in site.contentGroups")
+							a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}"){{group.name}}
 			.panel-footer
-				.pull-right {{site.domain}}
-				.clearfix
+				a.pull-right(ng-click="addRegion(site.slug)") +&nbsp;
+					span(ng-show="!site.regions.length") add region
+				ul.locales
+					li(ng-repeat="region in site.regions") {{region.slug}}
