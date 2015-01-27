@@ -1,6 +1,7 @@
 _und = require 'underscore'
 models = require '../coffee_modules/models'
-db = require '../coffee_modules/data-api'
+db = require '../coffee_modules/data-api'	
+
 authenticatedUsers = {}
 
 websites = []
@@ -21,6 +22,10 @@ module.exports = (io) ->
 		db.getWebsites (data) -> 
 			websites = data
 			io.to('auth-users').emit 'websites-update', data
+	refreshRegions = ->
+		db.getRegions (data) ->
+			regions = data
+			io.to('auth-users').emit 'regions-update', data
 
 	io.on 'connection', (socket) ->
 
@@ -54,37 +59,33 @@ module.exports = (io) ->
 		socket.on 'create-user', (data) ->
 			db.upsertAdmin data, ->
 				db.getAdmins (data) ->
-					users = data
 					io.to('auth-users').emit 'users-update', data
 
 		socket.on 'create-content-group', (data) ->
 			db.upsertContentGroup data, ->
 				db.getContentGroups (data) ->
-					contentGroups = data
 					io.to('auth-users').emit 'content-groups-update', data
 
-		socket.on 'create-region', (data) ->
+		putRegion = (data) ->
 			db.upsertRegion data, ->
 				db.getRegions (data) ->
-					regions = data
 					io.to('auth-users').emit 'regions-update', data
+		socket.on 'create-region', putRegion
+		socket.on 'update-region', putRegion
 
 		socket.on 'create-language', (data) ->
 			db.upsertLanguage data, ->
 				db.getLanguages (data) ->
-					languages = data
 					io.to('auth-users').emit 'languages-update', data
 
 		socket.on 'create-menu', (data) ->
 			db.upsertMenu data, ->
-				db.getMenus (data) -> 
-					menus = data
+				db.getMenus (data) ->
 					io.to('auth-users').emit 'menus-update', data
 
 		socket.on 'create-page', (data) ->
 			db.upsertPage data, ->
-				db.getPages (data) -> 
-					pages = data
+				db.getPages (data) ->
 					io.to('auth-users').emit 'pages-update', data
 
 		socket.on 'create-website', (data) ->
@@ -94,7 +95,6 @@ module.exports = (io) ->
 		socket.on 'add-content-group', (data) ->
 			if data && data.website && data.contentGroupId
 				db.getWebsite {slug: data.website}, (site) ->
-					site.contentGroups = [] if !site.contentGroups
 					site.contentGroups.push data.contentGroupId
 					db.updateWebsiteContentGroups data.website, {contentGroups: site.contentGroups}, ->
 						refreshWebsites()
@@ -102,10 +102,16 @@ module.exports = (io) ->
 		socket.on 'add-region', (data) ->
 			if data && data.website && data.regionId
 				db.getWebsite {slug: data.website}, (site) ->
-					site.regions = [] if !site.regions
 					site.regions.push data.regionId
 					db.updateWebsiteRegions data.website, {regions: site.regions}, ->
 						refreshWebsites()
+
+		socket.on 'add-language-to-region', (data) ->
+			if data && data.regionId && data.languageId
+				db.getRegion {_id: data.regionId}, (region) ->
+					region.languages.push data.languageId
+					db.updateRegionLanguages data.regionId, {languages: region.languages}, ->
+						refreshRegions()
 
 		socket.on 'user-login', (data) ->
 			if data

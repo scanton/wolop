@@ -45,6 +45,7 @@ module.exports =
 			type: Schema.Types.ObjectId
 			ref: 'Language'
 		]
+		icon: String
 	)
 	Language: mongoose.model('Language',
 		name: String

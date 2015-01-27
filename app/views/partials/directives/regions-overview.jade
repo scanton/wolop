@@ -1,2 +1,11 @@
-ul.regions-overview-list
-	li(ng-repeat="region in regions", data-id="{{region._id}}", data-slug="{{region.slug}}") {{region.name}}
+.region.col-xs-12.col-sm-6.col-md-4.col-lg-3(ng-repeat="region in regions") 
+	.panel.panel-default 
+		.panel-heading 
+			a(ng-click="editRegion(region._id)") {{region.name}}
+		.panel-body.container-fluid
+			.row 
+				h1 Supported Languages:
+				a.pull-right(ng-click="addLanguage(region._id)") [+]&nbsp
+					span(ng-show="!region.languages.length") add language
+				ul.languages
+					li(ng-repeat="language in region.languages") {{language.name}} - {{language.slug | uppercase}}

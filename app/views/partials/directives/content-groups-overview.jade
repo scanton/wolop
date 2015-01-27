@@ -1,2 +1,14 @@
-ul.content-groups-overview-list
-	li(ng-repeat="group in contentGroups", data-id="{{group._id}}", data-slug="{{group.slug}}") {{group.name}}
+.content-groups-list
+	.site.col-xs-12.col-sm-6.col-md-4.col-lg-3(ng-repeat="group in contentGroups") 
+		.panel.panel-default 
+			.panel-heading
+				a(ng-href="#/content-group/{{group._id}}") {{group.name}}
+			.panel-body.container-fluid
+				.row
+					h1 Pages:
+					a.pull-right(ng-click="addPage(group._id)") [+]&nbsp
+						span(ng-show="!group.pages.length") add page
+					ul.content-groups
+						li(ng-repeat="page in group.pages")
+							a(ng-href="#/edit-page/{{page._id}}") {{page.name}}
+			//.panel-footer

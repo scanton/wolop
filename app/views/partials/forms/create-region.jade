@@ -11,5 +11,9 @@
 					.form-group
 						input.form-control(ng-model="createRegionData.slug", name='slug', type='text', placeholder='slug')
 				.col-xs-12
+					.form-group
+						input.form-control(ng-model="createRegionData.icon", name='icon', type='text', placeholder='icon')
+						
+				.col-xs-12
 					button.btn.btn-default.pull-right(ng-click='createRegion(createRegionData)') Create Region
 					button.btn.btn-default.pull-right(ng-click='cancel()') Cancel

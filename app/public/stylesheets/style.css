@@ -8,6 +8,10 @@ a:hover {
 .modal-content {
   padding-bottom: 25px;
 }
+.modal-content select,
+.modal-content input {
+  font-size: 14pt;
+}
 .modal-content .btn {
   margin-left: 1em;
 }
@@ -63,14 +67,18 @@ a:hover {
 .small-note {
   font-size: 9pt;
 }
-.websites-overview-list .panel ul {
+.panel ul {
   list-style: none;
-  padding-left: 0;
+  padding-left: 0.5em;
 }
-.websites-overview-list .panel .panel-body {
+.panel .panel-body {
   padding: 0.5em 2em;
 }
-.websites-overview-list .panel .panel-footer li {
+.panel .panel-body h1 {
+  font-size: 12pt;
+  color: #434c54;
+}
+.panel .panel-footer li {
   display: inline;
   margin: 0.25em;
 }
