@@ -1,5 +1,9 @@
 .panel-body.container-fluid {
   padding: 0.5em 2em;
+}
+a:hover {
+  cursor: pointer;
+}
 .ace_editor {
   min-height: 300px;
   height: 100%;
@@ -65,6 +69,10 @@
 }
 .small-note {
   font-size: 9pt;
+}
+.region .panel,
+.site .panel {
+  min-height: 300px;
 }
 .panel ul {
   list-style: none;
