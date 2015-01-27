@@ -6,7 +6,7 @@ getAll = (model, query, callback) ->
 			(err, data) ->
 				console.log err if err
 				callback data if callback
-		).exec()
+		)
 getOne = (model, query, callback) ->
 	if model
 		model.findOne(
@@ -30,18 +30,27 @@ module.exports =
 	updateWebsiteContentGroups: (site, data, callback) ->
 		models.Website.update {slug: site}, data, null, callback
 	updateWebsiteRegions: (site, data, callback) ->
-		console.log data
 		models.Website.update {slug: site}, data, null, callback
+
+	updateRegionLanguages: (regionId, data, callback) ->
+		models.Region.update {_id: regionId}, data, null, callback
 
 	getWebsite: (query, callback) ->
 		getOne models.Website, query, callback
-		
+	getRegion: (query, callback) ->
+		getOne models.Region, query, callback
+
 	getAdmins: (callback) ->
 		getAll models.Admin, {}, callback
 	getContentGroups: (callback) ->
 		getAll models.ContentGroup, {}, callback
 	getRegions: (callback) ->
-		getAll models.Region, {}, callback
+		models.Region.find {}
+			.populate 'languages'
+			.exec (err, rows) ->
+				console.log err if err
+				callback rows if callback
+
 	getLanguages: (callback) ->
 		getAll models.Language, {}, callback
 	getMenus: (callback) ->
@@ -49,7 +58,12 @@ module.exports =
 	getPages: (callback) ->
 		getAll models.Page, {}, callback
 	getWebsites: (callback) ->
-		getAll models.Website, {}, callback
+		models.Website.find {}
+			.populate 'contentGroups'
+			.populate 'regions'
+			.exec (err, rows) ->
+				console.log err if err
+				callback rows if callback
 
 	upsertAdmin: (data, callback) ->
 		upsert models.Admin, {username: data.username}, data, callback
