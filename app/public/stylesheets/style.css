@@ -74,8 +74,8 @@ a:hover {
   display: inline;
   color: #fff;
   background: #6cc24a;
-  padding: 0.5em;
-  border-radius: 13px;
+  padding: 0.2em 0.5em;
+  border-radius: 7px;
 }
 .chat-widget ul li.is-other .username {
   font-weight: bold;

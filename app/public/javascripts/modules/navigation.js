@@ -19,6 +19,9 @@
             label: 'Websites',
             link: '/websites'
           }, {
+            label: 'Products',
+            link: '/products'
+          }, {
             label: 'Content Groups',
             link: '/content-groups'
           }, {
@@ -28,8 +31,14 @@
             label: 'Languages',
             link: '/languages'
           }, {
+            label: 'Static Text',
+            link: '/static-text'
+          }, {
             label: 'Users',
             link: '/users'
+          }, {
+            label: 'Notices',
+            link: '/notices'
           }
         ];
       }
