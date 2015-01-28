@@ -5,7 +5,14 @@
 				a(ng-href="#/content-group/{{group._id}}") {{group.name}}
 			.panel-body.container-fluid
 				.row
-					h1 Pages:
+					h1 Menus ({{group.menus.length}}):
+					a.pull-right(ng-click="addMenu(group._id)") [+]&nbsp
+						span(ng-show="!group.menus.length") add menu
+					ul.content-groups
+						li(ng-repeat="menu in group.menus")
+							a(ng-href="#/edit-menu/{{menu._id}}") {{menu.name}}
+				.row
+					h1 Pages ({{group.pages.length}}):
 					a.pull-right(ng-click="addPage(group._id)") [+]&nbsp
 						span(ng-show="!group.pages.length") add page
 					ul.content-groups

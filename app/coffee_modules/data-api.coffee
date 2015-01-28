@@ -70,6 +70,16 @@ module.exports =
 	upsertContentGroup: (data, callback) ->
 		upsert models.ContentGroup, {slug: data.slug}, data, callback
 	upsertRegion: (data, callback) ->
+		#this is to change populated language data with ObjectIds instead
+		if data.languages
+			l = data.languages.length
+			while l--
+				d = data.languages[l]
+				if d._id
+					data.languages[l] = d._id
+		delete data._id
+		delete data.__v
+		delete data['$$hashKey']
 		upsert models.Region, {slug: data.slug}, data, callback
 	upsertLanguage: (data, callback) ->
 		upsert models.Language, {slug: data.slug}, data, callback

@@ -1,5 +1,6 @@
 mongoose = require 'mongoose'
 Schema = mongoose.Schema
+MongoId = Schema.Types.ObjectId
 
 module.exports =
 	Admin: mongoose.model('Admin',
@@ -10,31 +11,31 @@ module.exports =
 		password: String
 	)
 	Content: mongoose.model('Content',
-		page: {type: Schema.Types.ObjectId, ref: 'Page'}
-		region: {type: Schema.Types.ObjectId, ref: 'Region'}
-		language: {type: Schema.Types.ObjectId, ref: 'Language'}
+		page: {type: MongoId, ref: 'Page'}
+		region: {type: MongoId, ref: 'Region'}
+		language: {type: MongoId, ref: 'Language'}
 		content: String
-		creator: {type: Schema.Types.ObjectId, ref: 'Admin'}
+		creator: {type: MongoId, ref: 'Admin'}
 		created: {type: Date, default: Date.now}
 	)
 	ContentHistory: mongoose.model('ContentHistory',
-		page: {type: Schema.Types.ObjectId, ref: 'Page'}
-		region: {type: Schema.Types.ObjectId, ref: 'Region'}
-		language: {type: Schema.Types.ObjectId, ref: 'Language'}
+		page: {type: MongoId, ref: 'Page'}
+		region: {type: MongoId, ref: 'Region'}
+		language: {type: MongoId, ref: 'Language'}
 		content: String
-		creator: {type: Schema.Types.ObjectId, ref: 'Admin'}
+		creator: {type: MongoId, ref: 'Admin'}
 		created: {type: Date}
 	)
 	ContentGroup: mongoose.model('ContentGroup',
 		name: String
 		slug: {type: String, unique: true}
-		parent: {type: Schema.Types.ObjectId, ref: 'ContentGroup'}
+		parent: {type: MongoId, ref: 'ContentGroup'}
 		menus: [
-			type: Schema.Types.ObjectId
+			type: MongoId
 			ref: 'Menu'
 		]
 		pages: [
-			type: Schema.Types.ObjectId
+			type: MongoId
 			ref: 'Page'
 		]
 	)
@@ -42,7 +43,7 @@ module.exports =
 		name: String
 		slug: {type: String, unique: true}
 		languages: [
-			type: Schema.Types.ObjectId
+			type: MongoId
 			ref: 'Language'
 		]
 		icon: String
@@ -55,7 +56,7 @@ module.exports =
 		name: String
 		slug: {type: String, unique: true}
 		pages: [
-			type: Schema.Types.ObjectId
+			type: MongoId
 			ref: 'Page'
 		]
 	)
@@ -63,20 +64,18 @@ module.exports =
 		name: String
 		slug: {type: String, unique: true}
 		created: {type: Date, default: Date.now}
-		creator: {type: Schema.Types.ObjectId, ref: 'Admin'}
+		creator: {type: MongoId, ref: 'Admin'}
 	)
 	Website: mongoose.model('Website',
 		name: String
 		slug: {type: String, unique: true}
 		domain: String
 		contentGroups: [
-			type: Schema.ObjectId
+			type: MongoId
 			ref: 'ContentGroup'
-			unique: true
 		]
 		regions: [
-			type: Schema.ObjectId
+			type: MongoId
 			ref: 'Region'
-			unique: true
 		]
 	)

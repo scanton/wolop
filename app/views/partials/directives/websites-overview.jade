@@ -6,16 +6,18 @@
 				a(ng-href="#/website/{{site.slug}}") {{site.name}}
 			.panel-body.container-fluid
 				.row
-					h1 Content Groups:
+					h1 Content Groups ({{site.contentGroups.length}}):
 					a.pull-right(ng-click="addContentGroup(site.slug)") [+]&nbsp
 						span(ng-show="!site.contentGroups.length") add content group
 					ul.content-groups
 						li(ng-repeat="group in site.contentGroups")
 							a(ng-href="#/website/{{site.slug}}/content-group/{{group.slug}}") {{group.name}}
 				.row
-					h1 Supported Regions:
+					h1 Supported Regions ({{site.regions.length}}):
 					a.pull-right(ng-click="addRegion(site.slug)") [+]&nbsp;
 						span(ng-show="!site.regions.length") add region
 					ul.locales
-						li(ng-repeat="region in site.regions") {{region.name}} - {{region.slug | uppercase}}
+						li(ng-repeat="region in site.regions") 
+							img(ng-src="{{region.icon}}")
+							| &nbsp;{{region.name}} - {{region.slug | uppercase}}
 			//.panel-footer

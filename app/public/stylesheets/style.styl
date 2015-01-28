@@ -1,5 +1,21 @@
+
+darkBase = #0C0D0E
+cremeCenter = #F7F7F2
+linkColor = #C2A54A
+goldenVoyage = #FCD55A
+
+stdRadius = 7px
+
 .panel-body.container-fluid
     padding .5em 2em
+a
+	color linkColor
+a:hover
+	color goldenVoyage
+h1
+	color darkBase
+body
+	background cremeCenter
 a:hover
 	cursor pointer
 .ace_editor
@@ -7,6 +23,9 @@ a:hover
 	height 100%
 .modal-content
 	padding-bottom 25px
+	background-color cremeCenter
+	h1, h2, h3, h4, h5, h6
+		color darkBase
 	select, input
 		font-size 14pt
 	.btn
@@ -53,17 +72,76 @@ a:hover
 	font-size 9pt
 .region, .site
 	.panel
-		min-height 300px
+		min-height 320px
 .panel
+	background #F5F3E9
+	box-shadow 1px 1px 10px 0px rgba(0,0,0,0.25)
+	border-radius stdRadius
 	ul
 		list-style none
 		padding-left .5em
+	.panel-heading
+		border-top-right-radius stdRadius
+		border-top-left-radius stdRadius
+		background-image none
+		background-color darkBase
+		color #E5E1C7
 	.panel-body
-		padding .5em 2em
+		padding .25em
+		height 100%
 		h1
+			margin-top 5px
 			font-size 12pt
-			color #434C54
+			color darkBase
+		.row
+			border 1px solid #EEE
+			padding .5em
+			border-radius 5px
+			background white
+			margin .25em
 	.panel-footer
+		background #E7E3CB
 		li
 			display inline
 			margin .25em
+.user-login-form
+	.panel-body
+		padding-top 20px
+
+.navbar
+	min-height 0
+	.navbar-brand
+		padding 10px 15px
+		height 100%
+	.navbar-nav > li > a
+		padding 5px 15px 10px
+		margin-top 5px
+
+.navbar-default
+	border none
+	border-radius 0
+	background-image none
+	background-color darkBase
+	box-shadow none
+	.navbar-nav > li > a, .navbar-brand, .navbar-brand a
+		color linkColor
+	.navbar-nav > li > a:hover, .navbar-brand:hover
+		color goldenVoyage
+	.navbar-nav > .open > a, .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus
+		background-image none
+		background-color cremeCenter
+		border-top-right-radius stdRadius
+		border-top-left-radius stdRadius
+
+.btn-default
+	background-color darkBase
+	background-image none
+	border none
+	color linkColor
+	text-shadow none
+	border-radius stdRadius
+.btn-default:hover
+		color goldenVoyage
+		background-color darkBase
+
+

@@ -9,6 +9,8 @@ contentGroups = []
 regions = []
 languages = []
 users = []
+menus = []
+pages = []
 
 db.getWebsites (data) -> websites = data
 db.getContentGroups (data) -> contentGroups = data
@@ -64,28 +66,34 @@ module.exports = (io) ->
 		socket.on 'create-content-group', (data) ->
 			db.upsertContentGroup data, ->
 				db.getContentGroups (data) ->
+					contentGroups = data
 					io.to('auth-users').emit 'content-groups-update', data
 
 		putRegion = (data) ->
 			db.upsertRegion data, ->
 				db.getRegions (data) ->
+					regions = data
 					io.to('auth-users').emit 'regions-update', data
+					refreshWebsites()
 		socket.on 'create-region', putRegion
 		socket.on 'update-region', putRegion
 
 		socket.on 'create-language', (data) ->
 			db.upsertLanguage data, ->
 				db.getLanguages (data) ->
+					languages = data
 					io.to('auth-users').emit 'languages-update', data
 
 		socket.on 'create-menu', (data) ->
 			db.upsertMenu data, ->
 				db.getMenus (data) ->
+					menus = data
 					io.to('auth-users').emit 'menus-update', data
 
 		socket.on 'create-page', (data) ->
 			db.upsertPage data, ->
 				db.getPages (data) ->
+					pages = data
 					io.to('auth-users').emit 'pages-update', data
 
 		socket.on 'create-website', (data) ->
