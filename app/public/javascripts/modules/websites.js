@@ -130,11 +130,12 @@
     return socket.emit('working-on', index);
   });
 
-  app.controller('WebsiteContentGroupDetailsController', function($scope, $routeParams, $log) {
-    var group, site;
-    site = $routeParams.site;
-    group = $routeParams.group;
-    socket.emit('working-on', site + ' (' + group + ')');
+  app.controller('WebsiteContentGroupDetailsController', function($scope, $routeParams, globalModel, $log) {
+    $scope.site = globalModel.getWebsiteBySlug($routeParams.site);
+    $scope.group = globalModel.getContentGroupBySlug($routeParams.group);
+    if ($scope.site && $scope.site.slug && $scope.group && $scope.group.slug) {
+      socket.emit('working-on', $scope.site.slug + ' (' + $scope.group.slug + ')');
+    }
     return $scope.params = $routeParams;
   });
 

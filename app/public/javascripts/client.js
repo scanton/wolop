@@ -77,7 +77,7 @@
   });
 
   app.factory('globalModel', function() {
-    var model;
+    var getFromSlug, model;
     model = {
       websites: [],
       contentGroups: [],
@@ -88,6 +88,15 @@
       users: [],
       peers: [],
       messages: []
+    };
+    getFromSlug = function(arr, slug) {
+      var l;
+      l = arr.length;
+      while (l--) {
+        if (arr[l].slug === slug) {
+          return arr[l];
+        }
+      }
     };
     socket.on('websites-update', function(data) {
       data.map(function(site) {
@@ -134,6 +143,15 @@
       return model.users = data;
     });
     return {
+      getWebsiteBySlug: function(slug) {
+        return getFromSlug(model.websites, slug);
+      },
+      getContentGroupBySlug: function(slug) {
+        return getFromSlug(model.contentGroups, slug);
+      },
+      getRegionBySug: function(slug) {
+        return getFromSlug(model.region, slug);
+      },
       getUsers: function() {
         return model.users;
       },

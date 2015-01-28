@@ -10,6 +10,10 @@ a:hover {
 h1 {
   color: #0c0d0e;
 }
+h1 .group-name {
+  color: #aaa;
+  font-size: 0.8em;
+}
 body {
   background: #f7f7f2;
 }
@@ -143,6 +147,9 @@ a:hover {
 .navbar .navbar-brand {
   padding: 10px 15px;
   height: 100%;
+}
+.navbar .navbar-brand:focus {
+  color: #fcd55a;
 }
 .navbar .navbar-nav > li > a {
   padding: 5px 15px 10px;

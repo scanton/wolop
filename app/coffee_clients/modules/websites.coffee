@@ -81,8 +81,9 @@ app.controller 'WebsiteDetailsController', ($scope, $routeParams, $log) ->
 	$scope.index = index
 	socket.emit 'working-on', index
 
-app.controller 'WebsiteContentGroupDetailsController', ($scope, $routeParams, $log) ->
-	site = $routeParams.site
-	group = $routeParams.group
-	socket.emit 'working-on', site + ' (' + group + ')'
+app.controller 'WebsiteContentGroupDetailsController', ($scope, $routeParams, globalModel, $log) ->
+	$scope.site = globalModel.getWebsiteBySlug $routeParams.site
+	$scope.group = globalModel.getContentGroupBySlug $routeParams.group
+	if $scope.site && $scope.site.slug && $scope.group && $scope.group.slug
+		socket.emit 'working-on', $scope.site.slug + ' (' + $scope.group.slug + ')'
 	$scope.params = $routeParams

@@ -1,10 +1,14 @@
-h1 Website
-p {{params}}
-
-h2 Region
-
-h2 Language
-
-h3 Pages
-
-h4 menus
+.container-fluid.website-content-group-details
+	.row
+		h1 {{site.name}}
+			span.group-name &nbsp;- {{group.name}}
+	.row
+		h2 Content Regions:
+		.region-list.btn-group.center-block
+			buttton(type="button", class="btn btn-default", ng-repeat="region in site.regions") 
+				img(ng-src="{{region.icon}}")
+				span.name &nbsp;{{region.name}}
+	.row
+		h3 Pages
+	.row
+		h4 menus

@@ -89,6 +89,12 @@ app.factory 'globalModel', ->
 		peers: []
 		messages: []
 
+	getFromSlug = (arr, slug) ->
+		l = arr.length
+		while l--
+			if arr[l].slug == slug
+				return arr[l]
+
 	socket.on 'websites-update', (data) -> 
 		data.map (site)->
 			site.contentGroups.sort sortByName if site.contentGroups
@@ -109,6 +115,12 @@ app.factory 'globalModel', ->
 	socket.on 'users-update', (data) -> 
 		model.users = data
 
+	getWebsiteBySlug: (slug) ->
+		getFromSlug model.websites, slug
+	getContentGroupBySlug: (slug) ->
+		getFromSlug model.contentGroups, slug
+	getRegionBySug: (slug) ->
+		getFromSlug model.region, slug
 	getUsers: -> model.users
 	getWebsites: -> model.websites
 	getContentGroups: -> model.contentGroups
