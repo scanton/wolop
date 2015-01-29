@@ -26,7 +26,10 @@ a:hover {
 }
 .right-nav-bar {
   width: 350px;
-  float: right;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  top: 57px;
 }
 .main-container {
   margin-right: 355px;
@@ -59,6 +62,7 @@ a:hover {
 }
 .main-container {
   height: 100%;
+  padding: 0 2em;
 }
 .main-container .main-footer {
   position: absolute;
