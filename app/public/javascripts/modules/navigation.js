@@ -19,9 +19,6 @@
             label: 'Websites',
             link: '/websites'
           }, {
-            label: 'Products',
-            link: '/products'
-          }, {
             label: 'Content Groups',
             link: '/content-groups'
           }, {
@@ -36,6 +33,9 @@
           }, {
             label: 'Users',
             link: '/users'
+          }, {
+            label: 'Products',
+            link: '/products'
           }, {
             label: 'Notices',
             link: '/notices'

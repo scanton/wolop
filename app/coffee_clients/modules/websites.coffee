@@ -1,14 +1,7 @@
 socket = io()
 app = angular.module 'websites', []
 
-sortByName = (a, b) ->
-	if a.name > b.name
-		return 1
-	if a.name < b.name
-		return -1
-	0
-
-app.directive 'websitesOverview', ->
+app.directive 'websitesOverview', (sortByName) ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/websites-overview.html'
 	controller: ($scope, globalModel, $log) ->
@@ -20,7 +13,7 @@ app.directive 'websitesOverview', ->
 					site.regions.sort sortByName if site.regions
 				$scope.websites = data.sort sortByName if data
 
-app.controller 'WebsitesController', ($scope, $modal, globalModel, $log) ->
+app.controller 'WebsitesController', ($scope, $modal, globalModel, sortByName, $log) ->
 	
 	$scope.contentGroups = globalModel.getContentGroups()
 	socket.on 'content-groups-update', (data) ->

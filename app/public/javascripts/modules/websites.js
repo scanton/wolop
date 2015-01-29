@@ -1,21 +1,11 @@
 (function() {
-  var app, socket, sortByName;
+  var app, socket;
 
   socket = io();
 
   app = angular.module('websites', []);
 
-  sortByName = function(a, b) {
-    if (a.name > b.name) {
-      return 1;
-    }
-    if (a.name < b.name) {
-      return -1;
-    }
-    return 0;
-  };
-
-  app.directive('websitesOverview', function() {
+  app.directive('websitesOverview', function(sortByName) {
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/websites-overview.html',
@@ -40,7 +30,7 @@
     };
   });
 
-  app.controller('WebsitesController', function($scope, $modal, globalModel, $log) {
+  app.controller('WebsitesController', function($scope, $modal, globalModel, sortByName, $log) {
     $scope.contentGroups = globalModel.getContentGroups();
     socket.on('content-groups-update', function(data) {
       return $scope.$apply(function() {

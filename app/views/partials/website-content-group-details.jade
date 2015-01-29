@@ -1,14 +1,33 @@
 .container-fluid.website-content-group-details
 	.row
 		h1 {{site.name}}
-			span.group-name &nbsp;- {{group.name}}
-	.row
-		h2 Content Regions:
-		.region-list.btn-group.center-block
-			buttton(type="button", class="btn btn-default", ng-repeat="region in site.regions") 
-				img(ng-src="{{region.icon}}")
-				span.name &nbsp;{{region.name}}
-	.row
-		h3 Pages
-	.row
-		h4 menus
+			span.name.group-name &nbsp;- {{group.name}}
+			span.name.region-name(ng-show="currentRegionName") &nbsp;- {{currentRegionName}}
+			span.name.language-name(ng-show="currentLanguageName") &nbsp;- {{currentLanguageName}}
+	.row(ng-show="site.regions.length > 1")
+		.col-xs-2
+			h4 Content Regions:
+		.col-xs-10
+			.region-list.btn-group.center-block
+				button(type="button", class="btn btn-default", ng-click="setRegion(region.slug)", ng-class="currentRegion == region.slug ? 'active' : ''", ng-repeat="region in site.regions") 
+					img(ng-src="{{region.icon}}")
+					span.name &nbsp;{{region.name}}
+	.row(ng-show="currentRegion")
+		.col-xs-2
+			h4 Languages:
+		.col-xs-10
+			.languages-list.btn-group.center-block
+				button(type="button", class="btn btn-default", ng-click="setLanguage(lang.slug)", ng-class="currentLanguage == lang.slug ? 'active' : ''", ng-repeat="lang in currentLanguages")
+					span.name {{lang.name}}
+	.row(ng-show="currentLanguage")
+		buttton.pull-right(type="button", class="btn btn-default", ng-click="addMenu(group._id)") add menu
+		h4 Menus ({{group.menus.length}}):
+		ul.content-groups
+			li(ng-repeat="menu in group.menus")
+				a(ng-href="#/edit-menu/{{menu._id}}") {{menu.name}}
+	.row(ng-show="currentLanguage")
+		buttton.pull-right(type="button", class="btn btn-default", ng-click="addPage(group._id)") add page
+		h4 Pages ({{group.pages.length}}):
+		ul.content-groups
+			li(ng-repeat="page in group.pages")
+				a(ng-href="#/edit-page/{{page._id}}") {{page.name}}

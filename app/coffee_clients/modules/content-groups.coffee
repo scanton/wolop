@@ -1,17 +1,10 @@
 socket = io()
 app = angular.module 'content-groups', []
 
-sortByName = (a, b) ->
-	if a.name > b.name
-		return 1
-	if a.name < b.name
-		return -1
-	0
-
 app.directive 'contentGroupsOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/content-groups-overview.html'
-	controller: ($scope, globalModel, $log) ->
+	controller: ($scope, globalModel, sortByName, $log) ->
 		$scope.contentGroups = globalModel.getContentGroups()
 		socket.on 'content-groups-update', (data) ->
 			$scope.$apply ->

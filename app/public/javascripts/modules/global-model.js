@@ -1,82 +1,11 @@
 (function() {
-  var app, socket, sortByName;
-
-  sortByName = function(a, b) {
-    if (a.name > b.name) {
-      return 1;
-    }
-    if (a.name < b.name) {
-      return -1;
-    }
-    return 0;
-  };
+  var app, socket;
 
   socket = io();
 
-  app = angular.module('wolop-cms', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'content-groups', 'pages', 'menus', 'regions-languages', 'websites', 'users', 'navigation', 'chat']);
+  app = angular.module('global-model', []);
 
-  app.config(function($routeProvider) {
-    var path;
-    path = $routeProvider.when;
-    path('/', {
-      templateUrl: '/partials/home.html',
-      controller: 'HomeController'
-    });
-    path('/websites', {
-      templateUrl: '/partials/websites.html',
-      controller: 'WebsitesController'
-    });
-    path('/website/:slug', {
-      templateUrl: '/partials/website-details.html',
-      controller: 'WebsiteDetailsController'
-    });
-    path('/website/:site/content-group/:group', {
-      templateUrl: '/partials/website-content-group-details.html',
-      controller: 'WebsiteContentGroupDetailsController'
-    });
-    path('/pages', {
-      templateUrl: '/partials/pages.html',
-      controller: 'PagesController'
-    });
-    path('/menus', {
-      templateUrl: '/partials/menus.html',
-      controller: 'MenusController'
-    });
-    path('/content-groups', {
-      templateUrl: '/partials/content-groups.html',
-      controller: 'ContentGroupsController'
-    });
-    path('/regions', {
-      templateUrl: '/partials/regions.html',
-      controller: 'RegionsController'
-    });
-    path('/languages', {
-      templateUrl: '/partials/languages.html',
-      controller: 'LanguagesController'
-    });
-    return path('/users', {
-      templateUrl: '/partials/users.html',
-      controller: 'UsersController'
-    });
-  });
-
-  app.controller('CmsController', function($scope, $log) {
-    $scope.isLoggedIn = false;
-    $scope.userData = {};
-    $scope.newUser = {};
-    return socket.on('login-success', function(data) {
-      return $scope.$apply(function() {
-        $scope.userData = data;
-        return $scope.isLoggedIn = true;
-      });
-    });
-  });
-
-  app.controller('HomeController', function($scope, $modal, $log) {
-    return $scope.site = 'wolop';
-  });
-
-  app.factory('globalModel', function() {
+  app.factory('globalModel', function(sortByName) {
     var getFromSlug, model;
     model = {
       websites: [],
@@ -149,8 +78,11 @@
       getContentGroupBySlug: function(slug) {
         return getFromSlug(model.contentGroups, slug);
       },
-      getRegionBySug: function(slug) {
-        return getFromSlug(model.region, slug);
+      getRegionBySlug: function(slug) {
+        return getFromSlug(model.regions, slug);
+      },
+      getLanguageBySlug: function(slug) {
+        return getFromSlug(model.languages, slug);
       },
       getUsers: function() {
         return model.users;

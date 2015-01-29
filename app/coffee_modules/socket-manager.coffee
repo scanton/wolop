@@ -56,7 +56,6 @@ module.exports = (io) ->
 					workingOn: str
 				authenticatedUsers[socket.id] = y
 				io.to('auth-users').emit 'auth-users-update', authenticatedUsers
-				console.log y
 
 		socket.on 'create-user', (data) ->
 			db.upsertAdmin data, ->

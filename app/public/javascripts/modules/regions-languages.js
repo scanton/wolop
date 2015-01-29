@@ -1,25 +1,15 @@
 (function() {
-  var app, socket, sortByName;
+  var app, socket;
 
   socket = io();
 
   app = angular.module('regions-languages', []);
 
-  sortByName = function(a, b) {
-    if (a.name > b.name) {
-      return 1;
-    }
-    if (a.name < b.name) {
-      return -1;
-    }
-    return 0;
-  };
-
   app.directive('regionsOverview', function() {
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/regions-overview.html',
-      controller: function($scope, globalModel, $log) {
+      controller: function($scope, globalModel, sortByName, $log) {
         $scope.regions = globalModel.getRegions();
         return socket.on('regions-update', function(data) {
           data.map(function(region) {
@@ -41,7 +31,7 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/languages-overview.html',
-      controller: function($scope, globalModel, $log) {
+      controller: function($scope, globalModel, sortByName, $log) {
         $scope.languages = globalModel.getLanguages();
         return socket.on('languages-update', function(data) {
           return $scope.$apply(function() {
@@ -54,7 +44,7 @@
     };
   });
 
-  app.controller('RegionsController', function($scope, $modal, globalModel, $log) {
+  app.controller('RegionsController', function($scope, $modal, globalModel, sortByName, $log) {
     $scope.languages = globalModel.getLanguages();
     socket.on('languages-update', function(data) {
       return $scope.$apply(function() {

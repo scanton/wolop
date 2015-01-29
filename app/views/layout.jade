@@ -14,18 +14,22 @@ html
 		script(src='/javascripts/bootstrap.js')
 		script(src='/javascripts/angular-bootstrap/ui-bootstrap-tpls.js')
 		script(src='/javascripts/client.js')
+		script(src='/javascripts/config.js')
 		script(src='/javascripts/modules/regions-languages.js')
 		script(src='/javascripts/modules/content-groups.js')
+		script(src='/javascripts/modules/home.js')
 		script(src='/javascripts/modules/pages.js')
 		script(src='/javascripts/modules/menus.js')
 		script(src='/javascripts/modules/websites.js')
 		script(src='/javascripts/modules/users.js')
 		script(src='/javascripts/modules/navigation.js')
 		script(src='/javascripts/modules/chat.js')
+		script(src='/javascripts/modules/global-model.js')
+		script(src='/javascripts/modules/utils.js')
 	body.angular-app(ng-app="wolop-cms", ng-controller="CmsController as mainController")
-		nav-bar(ng-show="isLoggedIn")
-		.container.main-container
+		nav-bar
+		.right-nav-bar
+			chat-widget(ng-show="isLoggedIn")
+		.container-fluid.main-container
 			.row.main-row
 				block content
-			.row.main-footer
-				chat-widget(ng-show="isLoggedIn")

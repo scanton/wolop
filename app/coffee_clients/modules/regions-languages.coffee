@@ -1,17 +1,10 @@
 socket = io()
 app = angular.module 'regions-languages', []
 
-sortByName = (a, b) ->
-	if a.name > b.name
-		return 1
-	if a.name < b.name
-		return -1
-	0
-
 app.directive 'regionsOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/regions-overview.html'
-	controller: ($scope, globalModel, $log) ->
+	controller: ($scope, globalModel, sortByName, $log) ->
 		$scope.regions = globalModel.getRegions()
 		socket.on 'regions-update', (data) ->
 			data.map (region) ->
@@ -23,13 +16,13 @@ app.directive 'regionsOverview', ->
 app.directive 'languagesOverview', ->
 	restrict: 'E'
 	templateUrl: '/partials/directives/languages-overview.html'
-	controller: ($scope, globalModel, $log) ->
+	controller: ($scope, globalModel, sortByName, $log) ->
 		$scope.languages = globalModel.getLanguages()
 		socket.on 'languages-update', (data) ->
 			$scope.$apply ->
 				$scope.languages = data.sort sortByName if data
 
-app.controller 'RegionsController', ($scope, $modal, globalModel, $log) ->
+app.controller 'RegionsController', ($scope, $modal, globalModel, sortByName, $log) ->
 
 	$scope.languages = globalModel.getLanguages()
 	socket.on 'languages-update', (data) ->

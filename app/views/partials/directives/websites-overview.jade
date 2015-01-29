@@ -1,9 +1,10 @@
 .websites-overview-list
-	.site.col-xs-12.col-sm-6.col-md-4.col-lg-3(ng-repeat="site in websites") 
+	.site.col-xs-12.col-sm-6.col-md-4(ng-repeat="site in websites") 
 		.panel.panel-default 
 			.panel-heading 
 				a.pull-right.small-note(href="http://{{site.domain}}", target="_blank") {{site.domain}}
-				a(ng-href="#/website/{{site.slug}}") {{site.name}}
+				//a(ng-href="#/website/{{site.slug}}") {{site.name}}
+				p {{site.name}}
 			.panel-body.container-fluid
 				.row
 					h1 Content Groups ({{site.contentGroups.length}}):

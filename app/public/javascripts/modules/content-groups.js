@@ -1,25 +1,15 @@
 (function() {
-  var app, socket, sortByName;
+  var app, socket;
 
   socket = io();
 
   app = angular.module('content-groups', []);
 
-  sortByName = function(a, b) {
-    if (a.name > b.name) {
-      return 1;
-    }
-    if (a.name < b.name) {
-      return -1;
-    }
-    return 0;
-  };
-
   app.directive('contentGroupsOverview', function() {
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/content-groups-overview.html',
-      controller: function($scope, globalModel, $log) {
+      controller: function($scope, globalModel, sortByName, $log) {
         $scope.contentGroups = globalModel.getContentGroups();
         return socket.on('content-groups-update', function(data) {
           return $scope.$apply(function() {

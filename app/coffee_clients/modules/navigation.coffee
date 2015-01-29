@@ -10,7 +10,6 @@ app.directive 'navBar', ->
 			$scope.path = next.split('#')[1]
 		$scope.navData = [
 			{label: 'Websites', link: '/websites'}
-			{label: 'Products', link: '/products'}
 			{label: 'Content Groups', link: '/content-groups'}
 		#	{label: 'Pages', link: '/pages'}
 		#	{label: 'Menus', link: '/menus'}
@@ -18,5 +17,6 @@ app.directive 'navBar', ->
 			{label: 'Languages', link: '/languages'}
 			{label: 'Static Text', link: '/static-text'}
 			{label: 'Users', link: '/users'}
+			{label: 'Products', link: '/products'}
 			{label: 'Notices', link: '/notices'}
 		]

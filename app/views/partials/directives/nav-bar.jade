@@ -6,8 +6,8 @@ nav.navbar.navbar-default
 			span.icon-bar
 			span.icon-bar
 			span.icon-bar
-		a.navbar-brand(href='#/') Wolop
+		a.navbar-brand(href='#/') WOLOP
 	.collapse.navbar-collapse
-		ul.nav.navbar-nav
+		ul.nav.navbar-nav(ng-show="isLoggedIn")
 			li(ng-class="item.link == path ? 'active' : ''", ng-repeat="item in navData")
 				a(href="#{{item.link}}") {{item.label}}
