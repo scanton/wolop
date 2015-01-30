@@ -6,7 +6,7 @@
   app = angular.module('global-model', []);
 
   app.factory('globalModel', function(sortByName) {
-    var getFromSlug, model;
+    var getFromId, getFromSlug, model;
     model = {
       websites: [],
       contentGroups: [],
@@ -23,6 +23,15 @@
       l = arr.length;
       while (l--) {
         if (arr[l].slug === slug) {
+          return arr[l];
+        }
+      }
+    };
+    getFromId = function(arr, id) {
+      var l;
+      l = arr.length;
+      while (l--) {
+        if (arr[l]._id === id) {
           return arr[l];
         }
       }
@@ -72,14 +81,34 @@
       return model.users = data;
     });
     return {
+      getRecentActivity: function() {
+        return [
+          {
+            name: 'test',
+            slug: 'test'
+          }
+        ];
+      },
+      getWebsite: function(id) {
+        return getFromId(model.websites, id);
+      },
       getWebsiteBySlug: function(slug) {
         return getFromSlug(model.websites, slug);
+      },
+      getContentGroup: function(id) {
+        return getFromId(model.contentGroups, id);
       },
       getContentGroupBySlug: function(slug) {
         return getFromSlug(model.contentGroups, slug);
       },
+      getRegion: function(id) {
+        return getFromId(model.regions, id);
+      },
       getRegionBySlug: function(slug) {
         return getFromSlug(model.regions, slug);
+      },
+      getLanguage: function(id) {
+        return getFromId(model.languages, id);
       },
       getLanguageBySlug: function(slug) {
         return getFromSlug(model.languages, slug);
@@ -104,15 +133,6 @@
       },
       getPages: function() {
         return model.pages;
-      },
-      getRegion: function(id) {
-        var l;
-        l = model.regions.length;
-        while (l--) {
-          if (model.regions[l]._id === id) {
-            return model.regions[l];
-          }
-        }
       }
     };
   });

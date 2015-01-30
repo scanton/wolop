@@ -9,7 +9,7 @@
     return {
       restrict: 'E',
       templateUrl: '/partials/directives/pages-overview.html',
-      controller: function($scope, globalModel, $log) {
+      controller: function($scope, globalModel, sortByName, $log) {
         $scope.pages = globalModel.getPages();
         return socket.on('pages-update', function(data) {
           return $scope.$apply(function() {
@@ -26,18 +26,16 @@
     return $scope.showCreatePage = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-page',
-        controller: 'CreatePageController'
+        controller: function($scope, $modalInstance, $log) {
+          $scope.createPage = function(data) {
+            socket.emit('create-page', data);
+            return $modalInstance.dismiss('form-sumbit');
+          };
+          return $scope.cancel = function() {
+            return $modalInstance.dismiss('cancel');
+          };
+        }
       });
-    };
-  });
-
-  app.controller('CreatePageController', function($scope, $modalInstance, $log) {
-    $scope.createPage = function(data) {
-      socket.emit('create-page', data);
-      return $modalInstance.dismiss('form-sumbit');
-    };
-    return $scope.cancel = function() {
-      return $modalInstance.dismiss('cancel');
     };
   });
 

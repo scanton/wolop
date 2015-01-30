@@ -3,7 +3,7 @@
 
   socket = io();
 
-  app = angular.module('wolop-cms', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'config', 'home', 'content-groups', 'pages', 'menus', 'regions-languages', 'websites', 'users', 'navigation', 'chat', 'global-model', 'utils']);
+  app = angular.module('wolop-cms', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'config', 'home', 'content-groups', 'pages', 'menus', 'regions-languages', 'websites', 'users', 'navigation', 'chat', 'global-model', 'utils', 'recent-activity']);
 
   app.controller('CmsController', function($scope, globalModel, $log) {
     $scope.isLoggedIn = false;

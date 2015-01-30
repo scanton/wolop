@@ -28,6 +28,10 @@ module.exports = (io) ->
 		db.getRegions (data) ->
 			regions = data
 			io.to('auth-users').emit 'regions-update', data
+	refreshContentGroups = ->
+		db.getContentGroups (data) ->
+			contentGroups = data
+			io.to('auth-users').emit 'content-groups-update', data
 
 	io.on 'connection', (socket) ->
 
@@ -119,6 +123,25 @@ module.exports = (io) ->
 					region.languages.push data.languageId
 					db.updateRegionLanguages data.regionId, {languages: region.languages}, ->
 						refreshRegions()
+
+		socket.on 'add-menu-to-content-group', (data) ->
+			if data && data.contentGroupId && data.slug
+				db.upsertMenu data, (menu) ->
+					db.getContentGroup data.contentGroupId, (group) ->
+						group.menus.push menu._id
+						db.updateContentGroup data.contentGroupId, {menus: group.menus}, ->
+							refreshContentGroups()
+		
+		socket.on 'add-page-to-content-group', (data) ->
+			console.log data
+			if data && data.contentGroupId && data.slug
+				db.upsertPage data, (page) ->
+					console.log page
+					db.getContentGroup data.contentGroupId, (group) ->
+						console.log group
+						group.pages.push page._id
+						db.updateContentGroup data.contentGroupId, {pages: group.pages}, ->
+							refreshContentGroups()
 
 		socket.on 'user-login', (data) ->
 			if data

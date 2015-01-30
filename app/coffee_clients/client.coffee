@@ -16,6 +16,7 @@ app = angular.module 'wolop-cms', [
 	'chat'
 	'global-model'
 	'utils'
+	'recent-activity'
 ]
 
 app.controller 'CmsController', ($scope, globalModel, $log) ->

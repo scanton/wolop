@@ -34,16 +34,30 @@ module.exports =
 
 	updateRegionLanguages: (regionId, data, callback) ->
 		models.Region.update {_id: regionId}, data, null, callback
-
+	updateContentGroup: (contentGroupId, data, callback) ->
+		models.ContentGroup.update {_id: contentGroupId}, data, callback
 	getWebsite: (query, callback) ->
 		getOne models.Website, query, callback
 	getRegion: (query, callback) ->
 		getOne models.Region, query, callback
-
 	getAdmins: (callback) ->
 		getAll models.Admin, {}, callback
+
+	getContentGroup: (id, callback) ->
+		models.ContentGroup.findOne {_id: id}
+			.populate 'menus'
+			.populate 'pages'
+			.exec (err, rows) ->
+				console.log err if err
+				callback rows if callback
 	getContentGroups: (callback) ->
-		getAll models.ContentGroup, {}, callback
+		models.ContentGroup.find {}
+			.populate 'menus'
+			.populate 'pages'
+			.exec (err, rows) ->
+				console.log err if err
+				callback rows if callback
+
 	getRegions: (callback) ->
 		models.Region.find {}
 			.populate 'languages'

@@ -33,50 +33,67 @@ app.controller 'WebsitesController', ($scope, $modal, globalModel, sortByName, $
 			website: slug
 		$modal.open
 			templateUrl: '/partials/forms/add-content-group'
-			controller: 'AddContentGroupController'
 			scope: $scope
+			controller: ($scope, $modalInstance, $log) ->
+				$scope.addContentGroup = (site, contentGroupId) ->
+					socket.emit 'add-content-group', {website: site, contentGroupId: contentGroupId}
+					$modalInstance.dismiss 'form-sumbit'
+				$scope.cancel = ->
+					$modalInstance.dismiss 'cancel'
 	$scope.addRegion = (slug, regionId) ->
 		$scope.addRegionData = 
 			website: slug
 			regionId: regionId
 		$modal.open
 			templateUrl: '/partials/forms/add-region'
-			controller: 'AddRegionController'
 			scope: $scope
+			controller: ($scope, $modalInstance, $log) ->
+				$scope.addRegion = (site, regionId) ->
+					socket.emit 'add-region', {website: site, regionId: regionId}
+					$modalInstance.dismiss 'form-sumbit'
+				$scope.cancel = ->
+					$modalInstance.dismiss 'cancel'
 	$scope.showCreateWebsite = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-website'
-			controller: 'CreateWebsiteController'
-
-app.controller 'AddContentGroupController', ($scope, $modalInstance, $log) ->
-	$scope.addContentGroup = (site, contentGroupId) ->
-		socket.emit 'add-content-group', {website: site, contentGroupId: contentGroupId}
-		$modalInstance.dismiss 'form-sumbit'
-	$scope.cancel = ->
-		$modalInstance.dismiss 'cancel'
-		
-app.controller 'AddRegionController', ($scope, $modalInstance, $log) ->
-	$scope.addRegion = (site, regionId) ->
-		socket.emit 'add-region', {website: site, regionId: regionId}
-		$modalInstance.dismiss 'form-sumbit'
-	$scope.cancel = ->
-		$modalInstance.dismiss 'cancel'
-
-app.controller 'CreateWebsiteController', ($scope, $modalInstance, $log) ->
-	$scope.createWebsite = (data) ->
-		socket.emit 'create-website', data
-		$modalInstance.dismiss 'form-sumbit'
-	$scope.cancel = ->
-		$modalInstance.dismiss 'cancel'
+			controller: ($scope, $modalInstance, $log) ->
+				$scope.createWebsite = (data) ->
+					socket.emit 'create-website', data
+					$modalInstance.dismiss 'form-sumbit'
+				$scope.cancel = ->
+					$modalInstance.dismiss 'cancel'
 
 app.controller 'WebsiteDetailsController', ($scope, $routeParams, $log) ->
 	index = $routeParams.slug
 	$scope.index = index
 	socket.emit 'working-on', index
 
-app.controller 'WebsiteContentGroupDetailsController', ($scope, $routeParams, globalModel, $log) ->
+app.controller 'WebsiteContentGroupDetailsController', ($scope, $routeParams, $modal, globalModel, $log) ->
 	$scope.site = globalModel.getWebsiteBySlug $routeParams.site
 	$scope.group = globalModel.getContentGroupBySlug $routeParams.group
 	if $scope.site && $scope.site.slug && $scope.group && $scope.group.slug
 		socket.emit 'working-on', $scope.site.slug + ' (' + $scope.group.slug + ')'
 	$scope.params = $routeParams
+	$scope.showAddMenu = (contentGroupId) ->
+		$modal.open
+			templateUrl: '/partials/forms/add-menu-to-content-group'
+			controller: ($scope, $modalInstance, $log) ->
+				$scope.groupData = globalModel.getContentGroup contentGroupId
+				$scope.addMenuToGroup = (data, contentGroupId) ->
+					data.contentGroupId = contentGroupId
+					socket.emit 'add-menu-to-content-group', data
+					$modalInstance.dismiss 'form-submit'
+				$scope.cancel = ->
+					$modalInstance.dismiss 'cancel'
+	$scope.showAddPage = (contentGroupId) ->
+		$modal.open
+			templateUrl: '/partials/forms/add-page-to-content-group'
+			controller: ($scope, $modalInstance, $log) ->
+				$scope.groupData = globalModel.getContentGroup contentGroupId
+				$scope.addPageToGroup = (data, contentGroupId) ->
+					data.contentGroupId = contentGroupId
+					socket.emit 'add-page-to-content-group', data
+					$modalInstance.dismiss 'form-submit'
+				$scope.cancel = ->
+					$modalInstance.dismiss 'cancel'
+

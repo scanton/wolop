@@ -18,6 +18,11 @@ app.factory 'globalModel', (sortByName) ->
 		while l--
 			if arr[l].slug == slug
 				return arr[l]
+	getFromId = (arr, id) ->
+		l = arr.length
+		while l--
+			if arr[l]._id == id
+				return arr[l]
 
 	socket.on 'websites-update', (data) -> 
 		data.map (site)->
@@ -39,12 +44,23 @@ app.factory 'globalModel', (sortByName) ->
 	socket.on 'users-update', (data) -> 
 		model.users = data
 
+	getRecentActivity: ->
+		[{name: 'test', slug: 'test'}]
+		
+	getWebsite: (id) ->
+		getFromId model.websites, id
 	getWebsiteBySlug: (slug) ->
 		getFromSlug model.websites, slug
+	getContentGroup: (id) ->
+		getFromId model.contentGroups, id
 	getContentGroupBySlug: (slug) ->
 		getFromSlug model.contentGroups, slug
+	getRegion: (id) ->
+		getFromId model.regions, id
 	getRegionBySlug: (slug) ->
 		getFromSlug model.regions, slug
+	getLanguage: (id) ->
+		getFromId model.languages, id
 	getLanguageBySlug: (slug) ->
 		getFromSlug model.languages, slug
 	getUsers: -> model.users
@@ -54,8 +70,3 @@ app.factory 'globalModel', (sortByName) ->
 	getLanguages: -> model.languages
 	getMenus: -> model.menus
 	getPages: -> model.pages
-	getRegion: (id) ->
-		l = model.regions.length
-		while l--
-			if model.regions[l]._id == id
-				return model.regions[l]
