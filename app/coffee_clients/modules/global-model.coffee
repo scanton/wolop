@@ -63,6 +63,15 @@ app.factory 'globalModel', (sortByName) ->
 		getFromId model.languages, id
 	getLanguageBySlug: (slug) ->
 		getFromSlug model.languages, slug
+	getMenu: (id) ->
+		getFromId model.menus, id
+	getMenuBySlug: (slug) ->
+		getFromSlug model.menus, slug
+	getPage: (id) ->
+		getFromId model.pages, id
+	getPageBySlug: (slug) ->
+		console.log model.pages
+		getFromSlug model.pages, slug
 	getUsers: -> model.users
 	getWebsites: -> model.websites
 	getContentGroups: -> model.contentGroups

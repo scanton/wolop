@@ -26,19 +26,21 @@
     return $scope.showCreateMenu = function() {
       return $modal.open({
         templateUrl: '/partials/forms/create-menu',
-        controller: 'CreateMenuController'
+        controller: function($scope, $modalInstance, $log) {
+          $scope.createMenu = function(data) {
+            socket.emit('create-menu', data);
+            return $modalInstance.dismiss('form-sumbit');
+          };
+          return $scope.cancel = function() {
+            return $modalInstance.dismiss('cancel');
+          };
+        }
       });
     };
   });
 
-  app.controller('CreateMenuController', function($scope, $modalInstance, $log) {
-    $scope.createMenu = function(data) {
-      socket.emit('create-menu', data);
-      return $modalInstance.dismiss('form-sumbit');
-    };
-    return $scope.cancel = function() {
-      return $modalInstance.dismiss('cancel');
-    };
+  app.controller('EditMenuController', function($scope, $routeParams, globalModel, $log) {
+    return $scope.menuData = globalModel.getMenuBySlug($routeParams.menu);
   });
 
 }).call(this);

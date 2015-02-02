@@ -11,8 +11,8 @@ app.directive 'navBar', ->
 		$scope.navData = [
 			{label: 'Websites', link: '/websites'}
 			{label: 'Content Groups', link: '/content-groups'}
-		#	{label: 'Pages', link: '/pages'}
-		#	{label: 'Menus', link: '/menus'}
+			{label: 'Pages', link: '/pages'}
+			{label: 'Menus', link: '/menus'}
 			{label: 'Regions', link: '/regions'}
 			{label: 'Languages', link: '/languages'}
 			{label: 'Static Text', link: '/static-text'}

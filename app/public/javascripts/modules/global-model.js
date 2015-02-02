@@ -113,6 +113,19 @@
       getLanguageBySlug: function(slug) {
         return getFromSlug(model.languages, slug);
       },
+      getMenu: function(id) {
+        return getFromId(model.menus, id);
+      },
+      getMenuBySlug: function(slug) {
+        return getFromSlug(model.menus, slug);
+      },
+      getPage: function(id) {
+        return getFromId(model.pages, id);
+      },
+      getPageBySlug: function(slug) {
+        console.log(model.pages);
+        return getFromSlug(model.pages, slug);
+      },
       getUsers: function() {
         return model.users;
       },

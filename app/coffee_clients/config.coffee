@@ -1,6 +1,7 @@
 app = angular.module 'config', []
 
-app.config ($routeProvider) ->
+app.config ($routeProvider, $locationProvider) ->
+	#$locationProvider.html5Mode true
 	path = $routeProvider.when
 
 	path '/',
@@ -23,9 +24,17 @@ app.config ($routeProvider) ->
 		templateUrl: '/partials/pages.html'
 		controller: 'PagesController'
 
+	path '/edit-page/:page',
+		templateUrl: '/partials/edit-page.html'
+		controller: 'EditPageController'
+
 	path '/menus',
 		templateUrl: '/partials/menus.html'
 		controller: 'MenusController'
+
+	path '/edit-menu/:menu',
+		templateUrl: '/partials/edit-menu.html'
+		controller: 'EditMenuController'
 
 	path '/content-groups',
 		templateUrl: '/partials/content-groups.html'

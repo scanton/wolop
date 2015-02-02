@@ -22,6 +22,12 @@
             label: 'Content Groups',
             link: '/content-groups'
           }, {
+            label: 'Pages',
+            link: '/pages'
+          }, {
+            label: 'Menus',
+            link: '/menus'
+          }, {
             label: 'Regions',
             link: '/regions'
           }, {

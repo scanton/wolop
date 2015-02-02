@@ -39,4 +39,8 @@
     };
   });
 
+  app.controller('EditPageController', function($scope, $routeParams, globalModel, $log) {
+    return $scope.pageData = globalModel.getPageBySlug($routeParams.page);
+  });
+
 }).call(this);

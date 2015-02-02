@@ -20,3 +20,6 @@ app.controller 'PagesController', ($scope, $modal, $log) ->
 					$modalInstance.dismiss 'form-sumbit'
 				$scope.cancel = ->
 					$modalInstance.dismiss 'cancel'
+
+app.controller 'EditPageController', ($scope, $routeParams, globalModel, $log) ->
+	$scope.pageData = globalModel.getPageBySlug $routeParams.page

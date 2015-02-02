@@ -14,11 +14,12 @@ app.controller 'MenusController', ($scope, $modal, $log) ->
 	$scope.showCreateMenu = ->
 		$modal.open
 			templateUrl: '/partials/forms/create-menu'
-			controller: 'CreateMenuController'
+			controller: ($scope, $modalInstance, $log) ->
+				$scope.createMenu = (data) ->
+					socket.emit 'create-menu', data
+					$modalInstance.dismiss 'form-sumbit'
+				$scope.cancel = ->
+					$modalInstance.dismiss 'cancel'
 
-app.controller 'CreateMenuController', ($scope, $modalInstance, $log) ->
-	$scope.createMenu = (data) ->
-		socket.emit 'create-menu', data
-		$modalInstance.dismiss 'form-sumbit'
-	$scope.cancel = ->
-		$modalInstance.dismiss 'cancel'
+app.controller 'EditMenuController', ($scope, $routeParams, globalModel, $log) ->
+	$scope.menuData = globalModel.getMenuBySlug $routeParams.menu

@@ -17,6 +17,8 @@ db.getContentGroups (data) -> contentGroups = data
 db.getRegions (data) -> regions = data
 db.getLanguages (data) -> languages = data
 db.getAdmins (data) -> users = data
+db.getMenus (data) -> menus = data
+db.getPages (data) -> pages = data
 
 module.exports = (io) ->
 
@@ -158,4 +160,5 @@ module.exports = (io) ->
 						socket.emit 'regions-update', regions
 						socket.emit 'languages-update', languages
 						socket.emit 'users-update', users
+						socket.emit 'menus-update', menus
 				)
