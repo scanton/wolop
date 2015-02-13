@@ -13,22 +13,18 @@
 					img(ng-src="{{region.icon}}")
 					span.name &nbsp;{{region.name}}
 	.row(ng-show="currentRegion")
-		.col-xs-2
-			h4 Languages:
-		.col-xs-10
-			.languages-list.btn-group.center-block
-				button(type="button", class="btn btn-default", ng-click="setLanguage(lang.slug)", ng-class="currentLanguage == lang.slug ? 'active' : ''", ng-repeat="lang in currentLanguages")
-					span.name {{lang.name}}
-	.row(ng-show="currentLanguage")
 		buttton.pull-right(type="button", class="btn btn-default", ng-click="showAddMenu(group._id)") add menu
 		h4 Menus ({{group.menus.length}}):
-		ul.content-groups
-			li(ng-repeat="menu in group.menus")
+		.container-fluid.menus
+			.row.menu(ng-repeat="menu in group.menus")
 				a(ng-href="#/edit-menu/{{menu.slug}}") 
-					h3 {{menu.name}}
-	.row(ng-show="currentLanguage")
+					span.name {{menu.name}}
+	.row(ng-show="currentRegion")
 		buttton.pull-right(type="button", class="btn btn-default", ng-click="showAddPage(group._id)") add page
 		h4 Pages ({{group.pages.length}}):
-		ul.content-groups
-			li(ng-repeat="page in group.pages")
+		.container-fluid.pages
+			.row.page(ng-repeat="page in group.pages")
 				a(ng-href="#/edit-page/{{page.slug}}") {{page.name}}
+				.languages-list.btn-group.pull-right
+					a(ng-href="#/edit-page-by-locale/{{page.slug}}/region/{{currentRegion}}/language/{{lang.slug}}", class="btn btn-default", ng-repeat="lang in currentLanguages")
+						span.name {{lang.name}}

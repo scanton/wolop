@@ -34,6 +34,23 @@ module.exports = (io) ->
 		db.getContentGroups (data) ->
 			contentGroups = data
 			io.to('auth-users').emit 'content-groups-update', data
+	refreshLanguages = ->
+		db.getLanguages (data) ->
+			languages = data
+			io.to('auth-users').emit 'languages-update', data
+	refreshUsers = ->
+		db.getAdmins (data) ->
+			users = data
+			io.to('auth-users').emit 'users-update', data
+	refreshMenus = ->
+		db.getMenus (data) ->
+			menus = data
+			io.to('auth-users').emit 'menus-update', data
+	refreshPages = ->
+		db.getPages (data) ->
+			pages = data
+			io.to('auth-users').emit 'pages-update', data
+
 
 	io.on 'connection', (socket) ->
 
@@ -161,4 +178,5 @@ module.exports = (io) ->
 						socket.emit 'languages-update', languages
 						socket.emit 'users-update', users
 						socket.emit 'menus-update', menus
+						socket.emit 'pages-update', pages
 				)

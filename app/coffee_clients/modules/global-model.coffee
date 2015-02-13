@@ -5,6 +5,7 @@ app.factory 'globalModel', (sortByName) ->
 	model = 
 		websites: []
 		contentGroups: []
+		contentDetails: []
 		regions: []
 		languages: []
 		menus: []
@@ -46,6 +47,8 @@ app.factory 'globalModel', (sortByName) ->
 
 	getRecentActivity: ->
 		[{name: 'test', slug: 'test'}]
+	getContentDetail: (page, region, language) ->
+		#model.contentdetails.findOne {page: page, region:region, language: language}
 		
 	getWebsite: (id) ->
 		getFromId model.websites, id

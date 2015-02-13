@@ -10,7 +10,7 @@ module.exports =
 		username: {type: String, unique: true}
 		password: String
 	)
-	Content: mongoose.model('Content',
+	ContentDetail: mongoose.model('ContentDetail',
 		page: {type: MongoId, ref: 'Page'}
 		region: {type: MongoId, ref: 'Region'}
 		language: {type: MongoId, ref: 'Language'}

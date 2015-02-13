@@ -43,4 +43,6 @@
     return $scope.pageData = globalModel.getPageBySlug($routeParams.page);
   });
 
+  app.controller('EditPageByLocaleController', function($scope, $routeParams, globalModel, $log) {});
+
 }).call(this);

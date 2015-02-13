@@ -23,3 +23,10 @@ app.controller 'PagesController', ($scope, $modal, $log) ->
 
 app.controller 'EditPageController', ($scope, $routeParams, globalModel, $log) ->
 	$scope.pageData = globalModel.getPageBySlug $routeParams.page
+
+app.controller 'EditPageByLocaleController', ($scope, $routeParams, globalModel, $log) ->
+	#page = $scope.page = $routeParams.page
+	#region = $scope.region = $routeParams.region
+	#language = $scope.language = $routeParams.language
+	#$scope.pageDetail = globalModel.getPageDetail page, region, language
+

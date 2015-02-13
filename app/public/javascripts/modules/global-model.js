@@ -10,6 +10,7 @@
     model = {
       websites: [],
       contentGroups: [],
+      contentDetails: [],
       regions: [],
       languages: [],
       menus: [],
@@ -89,6 +90,7 @@
           }
         ];
       },
+      getContentDetail: function(page, region, language) {},
       getWebsite: function(id) {
         return getFromId(model.websites, id);
       },

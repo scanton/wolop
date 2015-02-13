@@ -28,6 +28,10 @@ app.config ($routeProvider, $locationProvider) ->
 		templateUrl: '/partials/edit-page.html'
 		controller: 'EditPageController'
 
+	path '/edit-page-by-locale/:page/region/:region/language/:language',
+		templateUrl: '/partials/edit-page-by-locale'
+		controller: 'EditPageByLocaleController'
+
 	path '/menus',
 		templateUrl: '/partials/menus.html'
 		controller: 'MenusController'
