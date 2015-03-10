@@ -1,0 +1,177 @@
+template(name='layout')
+	.container-fluid
+		header
+			.login-options.pull-right
+				if currentUser
+					a(href='/logout') Logout
+			h1 
+				a(href='/') Wolop
+	if currentUser
+		.main-nav.pull-left
+			ul
+				each navData
+					li
+						a(href="/{{ link }}") 
+							.glyphicon(class="glyphicon-{{ icon }}")
+							| {{ name }}
+	.container-fluid.main-container
+		.row
+			main
+				+yield
+
+template(name='contentGroups')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Content Group
+				h1 Content Groups
+
+template(name='home')
+	h1 The Global CMS
+
+template(name='languages')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Language
+				h1 Languages
+				.modal.fade.add-item-modal
+					.modal-dialog
+						.modal-content
+							form.add-item-form
+								.modal-header
+									h4.modal-title Add Language
+								.modal-body
+									.col-xs-6
+										input(name='name', placeholder='name')
+									.col-xs-6
+										input(name='slug', placeholder='slug')
+									.clearfix
+								.modal-footer
+									button.btn.btn-warning Cancel
+									button.btn.btn-success(type='submit') Add Language
+			.col-xs-12
+				ul.languages
+					each languages
+						li
+							span.slug= slug
+							| - {{name}}
+
+template(name='loading')
+	.center
+		h1 Loading...
+
+template(name='loginRequired')
+	.login-form
+		h1 Login Required
+		form
+			table
+				tr
+					td
+						input(name='username', placeholder='email')
+				tr
+					td
+						input(name='password', type='password', placeholder='password')
+				tr
+					td
+						input.btn.btn-primary.submit-button(type='submit', value='Login')
+
+template(name='logout')
+	.center
+		h1 Logout
+		h2 Y'all come back now, ya hear?
+
+template(name='menus')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Menu
+				h1 Menus
+
+template(name='notFound')
+	.center
+		h1 Nothing here
+		h2 You hit a page which doesn't exist!
+
+template(name='notices')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Notice
+				h1 Notices
+
+template(name='pages')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Page
+				h1 Pages
+
+template(name='products')
+	h1 Products
+
+template(name='regions')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Region
+				h1 Regions
+				.modal.fade.add-item-modal
+					.modal-dialog
+						.modal-content
+							form.add-item-form
+								.modal-header
+									h4.modal-title Add Region
+								.modal-body
+									.col-xs-6
+										input(name='name', placeholder='name')
+									.col-xs-6
+										input(name='slug', placeholder='slug')
+									.clearfix
+								.modal-footer
+									button.btn.btn-warning Cancel
+									button.btn.btn-success(type='submit') Add Region
+			.col-xs-12
+				ul.regions
+					each regions
+						li
+							.dropdown.pull-right
+								button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add language
+									span.glyphicon.glyphicon-triangle-bottom
+								ul.dropdown-menu(role='menu', data-region-slug='{{ slug }}')
+									each languages
+										li(role='presentation')
+											a.add-language-to-region(href='#', data-language-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+							span.slug= slug
+							| - {{ name }}
+							.supported-languages
+								if supportedLanguages
+									small supported languages:
+									ul
+										each supportedLanguages
+											li
+												span.slug= slug
+												| - {{ name }}
+								else
+									small (no languages in this region)
+
+template(name='staticText')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Static Text
+				h1 Static Text
+
+template(name='users')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add User
+				h1 Users
+
+template(name='websites')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Website
+				h1 Websites

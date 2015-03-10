@@ -1,0 +1,72 @@
+*
+	transition all 0.3s ease
+body
+	font-family 'Helvetica', 'Arial', sans
+
+h1, h2, h3, h4, h5
+	font-weight 300
+	letter-spacing -.05em
+	-webkit-font-smoothing antialiased
+	-moz-osx-font-smoothing grayscale
+	
+.center
+	text-align center
+	
+.main-nav
+	width 250px
+	height 100%
+	ul
+		list-style none
+		padding .5ex .5em
+		font-size 14pt
+		li
+			padding .25ex .5em
+			a
+				.glyphicon
+					transition all 0.6s ease
+					margin-right -6px
+					font-size 10pt
+					border 3px solid white
+					border-color rgba(255, 255, 255, 0)
+					padding 4px
+					border-radius 50%
+			a:hover
+				text-decoration none
+				.glyphicon
+					margin-right 0
+					border 3px solid #337ab7
+.main-container
+	height 100%
+	margin-left 250px
+
+.login-form, .modal-body
+	font-size 14pt
+	label
+		font-weight 300
+		letter-spacing -.01em
+	input
+		width 100%
+		border 1px solid #EEE
+		border-radius 5px
+		padding .5em
+		margin .25em
+
+ul.languages, ul.regions
+	list-style none
+	padding 0
+	li
+		border 1px solid #EEE
+		border-radius 5px
+		padding .5em
+		margin .25em
+		min-height 50px
+		ul.dropdown-menu
+			li
+				border 0
+				border-radius 0
+				padding 0
+				margin 0
+				min-height 0
+	.slug
+		font-family monospace
+		font-size 14pt
