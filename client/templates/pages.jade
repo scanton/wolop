@@ -1,0 +1,26 @@
+template(name='pages')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Page
+				h1 Pages
+				.modal.fade.add-item-modal
+					.modal-dialog
+						.modal-content
+							form.add-item-form
+								.modal-header
+									h4.modal-title Add Page
+								.modal-body
+									.col-xs-6
+										input(name='name', placeholder='name')
+									.col-xs-6
+										input(name='slug', placeholder='slug')
+									.clearfix
+								.modal-footer
+									button.btn.btn-warning Cancel
+									button.btn.btn-success(type='submit') Add Page
+			.col-xs-12
+				ul.pages
+					each pages
+						li 
+							h4 {{name}}

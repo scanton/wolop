@@ -15,12 +15,14 @@ h1, h2, h3, h4, h5
 .main-nav
 	width 250px
 	height 100%
+	padding .5em
 	ul
 		list-style none
-		padding .5ex .5em
+		padding 0 0 .5ex 0
 		font-size 14pt
 		li
 			padding .25ex .5em
+			font-weight 200
 			a
 				.glyphicon
 					transition all 0.6s ease
@@ -35,6 +37,24 @@ h1, h2, h3, h4, h5
 				.glyphicon
 					margin-right 0
 					border 3px solid #337ab7
+	ul.admin-history
+		font-size 11pt
+		li
+			border 1px solid #EEE
+			border-radius 5px
+			margin .25em 0
+		.name
+			font-weight bold
+		.options
+			font-size 10pt
+			color purple
+		.query
+			font-size 8pt
+		.data
+			font-size 6pt
+		.created 
+			font-size 8pt
+		
 .main-container
 	height 100%
 	margin-left 250px
@@ -51,7 +71,7 @@ h1, h2, h3, h4, h5
 		padding .5em
 		margin .25em
 
-ul.languages, ul.regions
+ul.languages, ul.regions, ul.websites, ul.pages, ul.menus
 	list-style none
 	padding 0
 	li
@@ -70,3 +90,15 @@ ul.languages, ul.regions
 	.slug
 		font-family monospace
 		font-size 14pt
+
+.supported-languages
+	ul
+		list-style none
+		padding 0
+		li
+			display inline
+			border-radius 5px
+			box-shadow 0 1px 3px rgba(34,25,25,0.4)
+			background -moz-linear-gradient(top,#FFFFFF, #F0EDED)
+			background -o-linear-gradient(#FFFFFF, #F0EDED)
+			background -webkit-linear-gradient(#FFFFFF, #F0EDED)

@@ -1,0 +1,36 @@
+template(name='websites')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Website
+				h1 Websites
+				.modal.fade.add-item-modal
+					.modal-dialog
+						.modal-content
+							form.add-item-form
+								.modal-header
+									h4.modal-title Add Website
+								.modal-body
+									.col-xs-6
+										input(name='name', placeholder='name')
+									.col-xs-6
+										input(name='slug', placeholder='slug')
+									.col-xs-12
+										input(name='url', placeholder='url')
+									.clearfix
+								.modal-footer
+									button.btn.btn-warning Cancel
+									button.btn.btn-success(type='submit') Add Website
+			.col-xs-12
+				ul.websites
+					each websites
+						li
+							a.pull-right(href='http://{{url}}').url= url
+							h4.name= name
+							
+			//.col-xs-12
+				ul.regions
+					each regions
+						li
+							span.slug= slug
+							| - {{name}}

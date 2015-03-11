@@ -1,0 +1,30 @@
+template(name='layout')
+	.container-fluid
+		header
+			.login-options.pull-right
+				if currentUser
+					a(href='/logout') Logout
+			h1 
+				a(href='/') Wolop
+	if currentUser
+		.main-nav.pull-left
+			ul
+				each navData
+					li
+						a(href="/{{ link }}") 
+							.glyphicon(class="glyphicon-{{ icon }}")
+							| {{ name }}
+			h4 Change History
+			ul.admin-history 
+				each adminHistory
+					li 
+						span.name {{user}}
+						span.description - {{description}}
+						.options {{options}} 
+						.query {{query}}
+						.data {{data}}
+						.created {{created}}
+	.container-fluid.main-container
+		.row
+			main
+				+yield

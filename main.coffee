@@ -5,6 +5,11 @@ if Meteor.isClient
 	Meteor.subscribe 'user-roles'
 	Meteor.subscribe 'languages'
 	Meteor.subscribe 'regions'
+	Meteor.subscribe 'websites'
+	Meteor.subscribe 'content-groups'
+	Meteor.subscribe 'pages'
+	Meteor.subscribe 'menus'
+	Meteor.subscribe 'admin-history'
 	window.Wolop = Meteor
 	window.objectify = (arr) ->
 		a = []

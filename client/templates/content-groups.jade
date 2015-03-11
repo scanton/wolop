@@ -1,0 +1,26 @@
+template(name='contentGroups')
+	.container-fluid
+		.row
+			.col-xs-12
+				button.btn.btn-primary.pull-right.add-item-button Add Content Group
+				h1 Content Groups
+				.modal.fade.add-item-modal
+					.modal-dialog
+						.modal-content
+							form.add-item-form
+								.modal-header
+									h4.modal-title Add Content Group
+								.modal-body
+									.col-xs-6
+										input(name='name', placeholder='name')
+									.col-xs-6
+										input(name='slug', placeholder='slug')
+									.clearfix
+								.modal-footer
+									button.btn.btn-warning Cancel
+									button.btn.btn-success(type='submit') Add Content Group
+			.col-xs-12
+				ul.websites
+					each contentGroups
+						li
+							h4.name= name
