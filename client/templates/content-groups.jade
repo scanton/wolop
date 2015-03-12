@@ -20,7 +20,61 @@ template(name='contentGroups')
 									button.btn.btn-warning Cancel
 									button.btn.btn-success(type='submit') Add Content Group
 			.col-xs-12
-				ul.websites
+				ul.content-groups
 					each contentGroups
-						li
-							h4.name= name
+						li.content-group(data-slug='{{ slug }}')
+							h3.name= name
+							.supported-regions.well
+								.dropdown.pull-right
+									button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add region
+										span.glyphicon.glyphicon-triangle-bottom
+									ul.dropdown-menu(role='menu')
+										each regions
+											li(role='presentation')
+												a.add-region-to-content-group(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+								if supportedRegions
+									h4 regions:
+									ul
+										each supportedRegions
+											li
+												a.delete-button.remove-region-from-content-group(href='#', data-slug='{{.}}') 
+													span.glyphicon.glyphicon-remove
+												span.slug {{.}}
+								else
+									h4 (no regions in this content group)
+							.supported-menus.well
+								.dropdown.pull-right
+									button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add menu
+										span.glyphicon.glyphicon-triangle-bottom
+									ul.dropdown-menu(role='menu')
+										each menus
+											li(role='presentation')
+												a.add-menu-to-content-group(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+								if supportedMenus
+									h4 menus:
+									ul.button-container
+										each supportedMenus
+											li
+												a.delete-button.remove-menu-from-content-group(href='#', data-slug='{{.}}')
+													span.glyphicon.glyphicon-remove
+												button.btn.btn-primary.slug {{.}}
+								else
+									h4 (no menus in this content group)
+							.supported-pages.well
+								.dropdown.pull-right
+									button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add page
+										span.glyphicon.glyphicon-triangle-bottom
+									ul.dropdown-menu(role='menu')
+										each pages
+											li(role='presentation')
+												a.add-page-to-content-group(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+								if supportedPages
+									h4 pages:
+									ul.button-container
+										each supportedPages
+											li
+												a.delete-button.remove-page-from-content-group(href='#', data-slug='{{.}}')
+													span.glyphicon.glyphicon-remove
+												button.btn.btn-primary.slug {{.}}
+								else
+									h4 (no pages in this content group)

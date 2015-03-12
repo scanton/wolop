@@ -1,17 +1,29 @@
 *
 	transition all 0.3s ease
+html
+	height 100%
 body
 	font-family 'Helvetica', 'Arial', sans
-
+	height 100%
+	
 h1, h2, h3, h4, h5
 	font-weight 300
 	letter-spacing -.05em
 	-webkit-font-smoothing antialiased
 	-moz-osx-font-smoothing grayscale
+
+.well
+	padding .75em
 	
 .center
 	text-align center
+
+.danger
+	color red
 	
+.login-options
+	a
+		margin 0 0 0 1em
 .main-nav
 	width 250px
 	height 100%
@@ -59,6 +71,10 @@ h1, h2, h3, h4, h5
 	height 100%
 	margin-left 250px
 
+.login-options
+	.name
+		font-weight bold
+		
 .login-form, .modal-body
 	font-size 14pt
 	label
@@ -71,7 +87,7 @@ h1, h2, h3, h4, h5
 		padding .5em
 		margin .25em
 
-ul.languages, ul.regions, ul.websites, ul.pages, ul.menus
+ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	list-style none
 	padding 0
 	li
@@ -79,9 +95,14 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus
 		border-radius 5px
 		padding .5em
 		margin .25em
-		min-height 50px
+		box-shadow 0 1px 3px rgba(34,25,25,0.4)
+		background -moz-linear-gradient(top,#FFFFFF, #F0EDED)
+		background -o-linear-gradient(#FFFFFF, #F0EDED)
+		background -webkit-linear-gradient(#FFFFFF, #F0EDED)
 		ul.dropdown-menu
 			li
+				display inline
+				background white
 				border 0
 				border-radius 0
 				padding 0
@@ -89,16 +110,54 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus
 				min-height 0
 	.slug
 		font-family monospace
-		font-size 14pt
 
-.supported-languages
+.supported-languages, .supported-regions, .supported-content-groups, .supported-menus, .supported-pages
 	ul
 		list-style none
 		padding 0
 		li
-			display inline
+			margin-right 10px
+			position relative
+			display inline-block
 			border-radius 5px
+			box-shadow 0 1px 3px rgba(34,25,25,0.4)
+			background white
+	.button-container
+		li
+			background none
+			padding 0
+			box-shadow none
+
+.delete-disabled
+	.supported-languages, .supported-regions, .supported-content-groups, .supported-menus, .supported-pages
+		ul
+			li
+				margin-right 3px
+
+.main-nav
+	.admin-history
+		li
 			box-shadow 0 1px 3px rgba(34,25,25,0.4)
 			background -moz-linear-gradient(top,#FFFFFF, #F0EDED)
 			background -o-linear-gradient(#FFFFFF, #F0EDED)
 			background -webkit-linear-gradient(#FFFFFF, #F0EDED)
+
+.delete-button
+	position absolute
+	right -10px
+	top -3px
+	background red
+	color white
+	box-shadow 1px 2px 2px rgba(34,25,25,0.7)
+	font-size 8pt
+	padding 2px 2px 0px 2px
+	border-radius 50%
+	opacity .25
+	
+.delete-button:hover
+	opacity 1
+	color white
+	
+.delete-disabled
+	.delete-button
+		display none

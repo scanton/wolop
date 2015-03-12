@@ -24,13 +24,25 @@ template(name='websites')
 			.col-xs-12
 				ul.websites
 					each websites
-						li
-							a.pull-right(href='http://{{url}}').url= url
-							h4.name= name
-							
-			//.col-xs-12
-				ul.regions
-					each regions
-						li
-							span.slug= slug
-							| - {{name}}
+						li.website(data-slug='{{ slug }}')
+							h4.name {{ name }}
+								small -
+									a(href='http://{{ url }}').url= url
+							.supported-content-groups.well
+								.dropdown.pull-right
+									button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add content group
+										span.glyphicon.glyphicon-triangle-bottom
+									ul.dropdown-menu(role='menu')
+										each contentGroups
+											li(role='presentation')
+												a.add-content-group-to-website(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+								if supportedContentGroups
+									h4 content groups:
+									ul
+										each supportedContentGroups
+											li
+												a.delete-button.remove-content-group-from-website(href='#', data-slug='{{.}}') 
+													span.glyphicon.glyphicon-remove
+												span.slug {{.}}
+								else
+									h4 (no content groups in this website)

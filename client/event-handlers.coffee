@@ -21,6 +21,11 @@ t.home.helpers
 	exampleHelper: ->
 		new Spacebars.SafeString 'This text came from a helper with some <strong>HTML</strong>.'
 
+t.layout.events
+	
+	'click .allow-delete-toggle': (e) ->
+		Session.set 'delete-enabled', !Session.get('delete-enabled')
+
 t.loginRequired.events
 
 	'submit': (e) ->
@@ -40,6 +45,54 @@ t.contentGroups.events
 
 	'click .modal button': (e) ->
 		$('.add-item-modal').modal 'hide'
+
+	'click .add-region-to-content-group': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		region = $this.attr 'data-slug'
+		group = $this.closest('.content-group').attr 'data-slug'
+		if region && group
+			collections.addRegionToContentGroup region, group
+
+	'click .remove-region-from-content-group': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		region = $this.closest('.delete-button').attr 'data-slug'
+		group = $this.closest('.content-group').attr 'data-slug'
+		if region && group
+			collections.removeRegionFromContentGroup region, group
+
+	'click .add-menu-to-content-group': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		menu = $this.attr 'data-slug'
+		group = $this.closest('.content-group').attr 'data-slug'
+		if menu && group
+			collections.addMenuToContentGroup menu, group
+
+	'click .remove-menu-from-content-group': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		menu = $this.closest('.delete-button').attr 'data-slug'
+		group = $this.closest('.content-group').attr 'data-slug'
+		if menu && group
+			collections.removeMenuFromContentGroup menu, group
+
+	'click .add-page-to-content-group': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		page = $this.attr 'data-slug'
+		group = $this.closest('.content-group').attr 'data-slug'
+		if page && group
+			collections.addPageToContentGroup page, group
+
+	'click .remove-page-from-content-group': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		page = $this.closest('.delete-button').attr 'data-slug'
+		group = $this.closest('.content-group').attr 'data-slug'
+		if page && group
+			collections.removePageFromContentGroup page, group
 
 	'submit .add-item-form': (e) ->
 		e.preventDefault()
@@ -110,7 +163,7 @@ t.regions.events
 
 	'click .remove-language-from-region': (e) ->
 		$this = $ e.target
-		lang = $this.attr 'data-slug'
+		lang = $this.closest('.delete-button').attr 'data-slug'
 		region = $this.closest('.region').attr 'data-slug'
 		if lang && region
 			collections.removeLanguageFromRegion region, lang
@@ -154,6 +207,20 @@ t.websites.events
 
 	'click .modal button': (e) ->
 		$('.add-item-modal').modal 'hide'
+
+	'click .add-content-group-to-website': (e) ->
+		$this = $ e.target
+		group = $this.attr 'data-slug'
+		website = $this.closest('.website').attr 'data-slug'
+		if website && group
+			collections.addContentGroupToWebsite group, website
+
+	'click .remove-content-group-from-website': (e) ->
+		$this = $ e.target
+		group = $this.closest('.delete-button').attr 'data-slug'
+		website = $this.closest('.website').attr 'data-slug'
+		if group && website
+			collections.removeContentGroupFromWebsite group, website
 
 	'submit .add-item-form': (e) ->
 		e.preventDefault()

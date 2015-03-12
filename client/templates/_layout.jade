@@ -3,7 +3,12 @@ template(name='layout')
 		header
 			.login-options.pull-right
 				if currentUser
-					a(href='/logout') Logout
+					if deleteEnabled
+						a.allow-delete-toggle.danger(href='#') Disable Delete
+					else
+						a.allow-delete-toggle.danger(href='#') Enable Delete
+					a(href='/logout') Logout 
+						span.name {{currentUser.profile.name}}
 			h1 
 				a(href='/') Wolop
 	if currentUser
@@ -20,11 +25,12 @@ template(name='layout')
 					li 
 						span.name {{user}}
 						span.description - {{description}}
-						.options {{options}} 
-						.query {{query}}
-						.data {{data}}
+						.well
+							.options {{options}} 
+							.query {{query}}
+							.data {{data}}
 						.created {{created}}
-	.container-fluid.main-container
+	.container-fluid.main-container(class="{{ deleteEnabledClass }}")
 		.row
 			main
 				+yield

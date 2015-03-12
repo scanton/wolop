@@ -23,22 +23,25 @@ template(name='regions')
 				ul.regions
 					each regions
 						li.region(data-slug='{{ slug }}')
-							.dropdown.pull-right
-								button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add language
-									span.glyphicon.glyphicon-triangle-bottom
-								ul.dropdown-menu(role='menu')
-									each languages
-										li(role='presentation')
-											a.add-language-to-region(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
-							span.slug= slug
-							| - {{ name }}
-							.supported-languages
+							h3
+								span.name= name
+								span.slug - {{ slug }}
+							.supported-languages.well
+								.dropdown.pull-right
+									button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add language
+										span.glyphicon.glyphicon-triangle-bottom
+									ul.dropdown-menu(role='menu')
+										each languages
+											li(role='presentation')
+												a.add-language-to-region(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+								
 								if supportedLanguages
-									small supported languages:
+									h4 languages:
 									ul
 										each supportedLanguages
 											li
-												a.remove-language-from-region(href='#', data-slug='{{.}}') -
+												a.delete-button.remove-language-from-region(href='#', data-slug='{{.}}') 
+													span.glyphicon.glyphicon-remove
 												span.slug {{.}}
 								else
-									small (no languages in this region)
+									h4 (no languages in this region)
