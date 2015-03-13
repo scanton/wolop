@@ -94,6 +94,20 @@ t.contentGroups.events
 		if page && group
 			collections.removePageFromContentGroup page, group
 
+	'click .edit-menu-button': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		group = $this.closest('.content-group').attr 'data-slug'
+		menu = $this.attr 'data-slug'
+		Router.go '/edit-menu-details/' + menu + '/' + group
+
+	'click .edit-page-button': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		group = $this.closest('.content-group').attr 'data-slug'
+		page = $this.attr 'data-slug'
+		Router.go '/edit-page-details/' + page + '/' + group
+
 	'submit .add-item-form': (e) ->
 		e.preventDefault()
 		$('.add-item-modal').modal 'hide'

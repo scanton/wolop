@@ -29,6 +29,22 @@ t.contentGroups.helpers
 	pages: ->
 		Pages.find {}
 
+t.editMenuDetails.helpers
+	contentGroup: ->
+		ContentGroups.findOne { slug: @group }
+	getRegion: (region) ->
+		Regions.findOne { slug: region }
+	getLanguage: (language) ->
+		Languages.findOne { slug: language }
+
+t.editPageDetails.helpers
+	contentGroup: ->
+		ContentGroups.findOne { slug: @group }
+	getRegion: (region) ->
+		Regions.findOne { slug: region }
+	getLanguage: (language) ->
+		Languages.findOne { slug: language }
+
 t.languages.helpers
 	languages: ->
 		Languages.find {}
@@ -49,6 +65,6 @@ t.regions.helpers
 
 t.websites.helpers
 	websites: ->
-		Websites.find {}, {sort: {name: 1}}
+		Websites.find {}, { sort: { name: 1 } }
 	contentGroups: ->
 		ContentGroups.find {}

@@ -57,7 +57,7 @@ template(name='contentGroups')
 											li
 												a.delete-button.remove-menu-from-content-group(href='#', data-slug='{{.}}')
 													span.glyphicon.glyphicon-remove
-												button.btn.btn-primary.slug {{.}}
+												button.btn.btn-primary.edit-menu-button.slug(data-slug='{{.}}') {{.}}
 								else
 									h4 (no menus in this content group)
 							.supported-pages.well
@@ -75,6 +75,6 @@ template(name='contentGroups')
 											li
 												a.delete-button.remove-page-from-content-group(href='#', data-slug='{{.}}')
 													span.glyphicon.glyphicon-remove
-												button.btn.btn-primary.slug {{.}}
+												button.btn.btn-primary.edit-page-button.slug(data-slug='{{.}}') {{.}}
 								else
 									h4 (no pages in this content group)

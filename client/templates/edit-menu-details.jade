@@ -1,0 +1,15 @@
+template(name='editMenuDetails')
+	h1 Edit Menu Details
+	h2= contentGroup.name
+	.region-language-selector
+		ul.regions
+		each contentGroup.supportedRegions
+			li.region(data-slug='{{ slug }}')
+				with getRegion this 
+					span.name= name
+					if supportedLanguages
+						ul.supported-languages
+							each supportedLanguages
+								li.language
+									with getLanguage this
+										span.name= name

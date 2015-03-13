@@ -49,6 +49,22 @@ Router.map ->
 			Meteor.logout()
 			Router.go '/'
 
+	@route 'edit-menu-details',
+		routeNames.push 'edit-menu-details'
+		path: '/edit-menu-details/:menu/:contentGroup'
+		template: 'edit-menu-details'
+		data: ->
+			menu: @params.menu
+			group: @params.contentGroup
+
+	@route 'edit-page-details',
+		routeNames.push 'edit-page-details'
+		path: '/edit-page-details/:page/:contentGroup'
+		template: 'edit-page-details'
+		data: ->
+			page: @params.page
+			group: @params.contentGroup
+
 requiresLogin = ->
 	if !Meteor.user() or !Meteor.user().roles || !Meteor.user().roles.admin
 		@render 'loginRequired'
