@@ -1,2 +1,17 @@
 template(name='home')
-	h1 The Global CMS
+	h1.section-header Websites
+	ul.websites-overview.list-overview
+		each websites
+			li.list-item(style='border-color: #{{hashColor slug}}')
+				a.glyphicon.glyphicon-cog.setting-button.pull-right(href='#')
+				h2
+					a(href='website-details/{{slug}}')= name
+					| -
+					small
+						a(href='http://{{url}}')= url
+						span.glyphicon.glyphicon-share
+				ul
+					each supportedContentGroups
+						with getContentGroupDetails this
+							li.content-group
+								button.btn(class='{{ getRiskAsBSClass riskLevel }}')= name

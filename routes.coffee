@@ -65,6 +65,12 @@ Router.map ->
 			page: @params.page
 			group: @params.contentGroup
 
+	@route 'website-details',
+		routeNames.push 'website-details'
+		path: 'website-details/:slug'
+		template: 'website-details'
+		data: ->
+			slug: @params.slug
 requiresLogin = ->
 	if !Meteor.user() or !Meteor.user().roles || !Meteor.user().roles.admin
 		@render 'loginRequired'

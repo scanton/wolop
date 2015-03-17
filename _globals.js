@@ -3,6 +3,7 @@ Languages = new Mongo.Collection('languages');
 Menus = new Mongo.Collection('menus');
 Notices = new Mongo.Collection('notices');
 Pages = new Mongo.Collection('pages');
+PageDetails = new Mongo.Collection('page_details');
 Products = new Mongo.Collection('products');
 Regions = new Mongo.Collection('regions');
 StaticText = new Mongo.Collection('static_text');
@@ -61,6 +62,14 @@ var updatePage = function(query, options) {
 		Pages.update(query, options)
 	);
 };
+var updatePageDetail = function(query, options) {
+	actionLogger(
+		'PageDetails.update', 
+		query, 
+		options, 
+		PageDetails.update(query, options)
+	);
+};
 var updateMenu = function(query, options) {
 	actionLogger(
 		'Menus.update', 
@@ -109,6 +118,14 @@ var insertPage = function(data) {
 		Pages.insert(data)
 	);
 };
+var insertPageDetail = function(data) {
+	actionLogger(
+		'PageDetails.insert',
+		'',
+		data,
+		PageDetails.insert(data)
+	);
+};
 var insertMenu = function(data) {
 	actionLogger(
 		'Menus.insert',
@@ -126,12 +143,14 @@ collections = {
 	updateLanguage: updateLanguage,
 	updateMenu: updateMenu,
 	updatePage: updatePage,
+	updatePageDetail: updatePageDetail,
 	insertWebsite: insertWebsite,
 	insertContentGroup: insertContentGroup,
 	insertRegion: insertRegion,
 	insertLanguage: insertLanguage,
 	insertMenu: insertMenu,
 	insertPage: insertPage,
+	insertPageDetail: insertPageDetail,
 	addRegionToContentGroup: function(region, group) {
 		var g = ContentGroups.findOne({slug: group});
 		if(g) {

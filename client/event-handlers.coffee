@@ -26,6 +26,11 @@ t.layout.events
 	'click .allow-delete-toggle': (e) ->
 		Session.set 'delete-enabled', !Session.get('delete-enabled')
 
+	'change .select-admin-history-limit input': (e) ->
+		val = Number $(e.target).val()
+		if val > 0
+			Session.set 'admin-history-limit', val
+
 t.loginRequired.events
 
 	'submit': (e) ->
@@ -117,6 +122,20 @@ t.contentGroups.events
 		if o.name && o.slug
 			collections.insertContentGroup o
 
+setRegionLanguageHandler = (e) ->
+	e.preventDefault()
+	$this = $ e.target
+	lang = $this.attr 'data-slug'
+	region = $this.closest('.region').attr 'data-slug'
+	Session.set 'current-region', region
+	Session.set 'current-language', lang
+	
+t.editMenuDetails.events
+	'click .set-region-and-language': setRegionLanguageHandler
+
+t.editPageDetails.events
+	'click .set-region-and-language': setRegionLanguageHandler
+		
 t.menus.events
 
 	'click .add-item-button': (e) ->

@@ -1,20 +1,67 @@
+backgroundColor = #2c2e2f
+bodyColor = #AAA
+linkColor = #DDD
+hoverColor = #F90
+borderColor = darken(backgroundColor, 7)
+copyColor = #eee
+
 *
 	transition all 0.3s ease
+	border-radius 0 !important
+	
 html
 	height 100%
 body
 	font-family 'Helvetica', 'Arial', sans
 	height 100%
+	background backgroundColor
+	color bodyColor
 	
 h1, h2, h3, h4, h5
 	font-weight 300
 	letter-spacing -.05em
 	-webkit-font-smoothing antialiased
 	-moz-osx-font-smoothing grayscale
+	
+form
+	input, textarea
+		font-size 14pt !important
+		padding .5em
+		letter-spacing .067em
+a
+	color linkColor
+	
+a:hover
+	color hoverColor
 
+h1.section-header
+	margin-left 10px
+
+.dropdown-menu > li > a
+	background backgroundColor
+	color white
+	font-weight 200
+
+.dropdown-menu
+	background backgroundColor
+	color copyColor
+
+
+.navbar
+	margin-bottom 0
+	border-color borderColor
+	background darken(backgroundColor, 5)
+	
 .well
 	padding .5em
 	margin-bottom .5em
+	background darken(backgroundColor, 7)
+	border 1px solid darken(backgroundColor, 10)
+	border-right-color light(backgroundColor, 5)
+	border-bottom-color light(backgroundColor, 5)
+	.btn-default
+		background bodyColor
+		border-color borderColor
 	
 .center
 	text-align center
@@ -26,16 +73,28 @@ h1, h2, h3, h4, h5
 	a
 		margin 0 0 0 1em
 .main-nav
+	background darken(backgroundColor, 3.3)
 	width 250px
 	height 100%
-	padding .5em
+	padding 0
+	h4
+		margin-left 7px
+	input
+		background backgroundColor
+		border 1px solid darken(backgroundColor, 5)
+		border-right-color lighten(backgroundColor, 5)
+		border-bottom-color lighten(backgroundColor, 5)
 	ul
 		list-style none
-		padding 0 0 .5ex 0
+		padding 0
 		font-size 14pt
 		li
 			padding .25ex .5em
 			font-weight 200
+			border-bottom 1px solid lighten(backgroundColor, 3)
+			border-right 1px solid lighten(backgroundColor, 3)
+			border-top 1px solid black
+			border-left 1px solid black
 			a
 				.glyphicon
 					transition all 0.6s ease
@@ -49,24 +108,42 @@ h1, h2, h3, h4, h5
 				text-decoration none
 				.glyphicon
 					margin-right 0
-					border 3px solid #337ab7
+					border 3px solid hoverColor
 	ul.admin-history
 		font-size 11pt
 		li
-			border 1px solid #EEE
-			border-radius 5px
+			border 1px solid borderColor
+			border-right-color lighten(backgroundColor, 5)
+			border-bottom-color lighten(backgroundColor, 5)
 			margin .25em 0
+			.well
+				max-height 0
+				overflow hidden
+				padding 0
+				background darken(backgroundColor, 7)
+				border 1px solid darken(backgroundColor, 10)
+				border-right-color light(backgroundColor, 5)
+				border-bottom-color light(backgroundColor, 5)
+		li:hover
+			.well
+				max-height 100%
+				padding inherit
 		.name
 			font-weight bold
 		.options
 			font-size 10pt
-			color purple
 		.query
 			font-size 8pt
 		.data
 			font-size 6pt
 		.created 
 			font-size 8pt
+	.select-admin-history-limit
+		input
+			max-width 47px
+			text-align right
+		.instruction
+			color #BBB
 		
 .main-container
 	height 100%
@@ -92,19 +169,18 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	list-style none
 	padding 0
 	li
-		border 1px solid #EEE
+		border 1px solid borderColor
+		border-bottom-color lighten(backgroundColor, 10)
+		border-right-color lighten(backgroundColor, 10)
 		border-radius 5px
 		padding .5em
 		margin .25em
 		margin-bottom .5em
-		box-shadow 0 1px 3px rgba(34,25,25,0.4)
-		background -moz-linear-gradient(top,#FFFFFF, #F0EDED)
-		background -o-linear-gradient(#FFFFFF, #F0EDED)
-		background -webkit-linear-gradient(#FFFFFF, #F0EDED)
+		background lighten(backgroundColor, 5)
 		ul.dropdown-menu
 			li
 				display inline
-				background white
+				background lighten(backgroundColor, 5)
 				border 0
 				border-radius 0
 				padding 0
@@ -123,26 +199,12 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 			display inline-block
 			border-radius 5px
 			box-shadow 0 1px 3px rgba(34,25,25,0.4)
-			background white
+			background backgroundColor
 	.button-container
 		li
 			background none
 			padding 0
 			box-shadow none
-
-.delete-disabled
-	.supported-languages, .supported-regions, .supported-content-groups, .supported-menus, .supported-pages
-		ul
-			li
-				margin-right 3px
-
-.main-nav
-	.admin-history
-		li
-			box-shadow 0 1px 3px rgba(34,25,25,0.4)
-			background -moz-linear-gradient(top,#FFFFFF, #F0EDED)
-			background -o-linear-gradient(#FFFFFF, #F0EDED)
-			background -webkit-linear-gradient(#FFFFFF, #F0EDED)
 
 .delete-button
 	position absolute
@@ -163,3 +225,76 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 .delete-disabled
 	.delete-button
 		display none
+	.supported-languages, .supported-regions, .supported-content-groups, .supported-menus, .supported-pages
+		ul
+			li
+				margin-right 3px
+
+.region-language-selector
+	width 100%
+	padding 0 1em
+	float left
+	ul
+		padding 0 .75em
+	li
+		list-style none
+	.active-region
+		background darken(backgroundColor, 5)
+		border 1px solid borderColor
+		border-bottom-color lighten(backgroundColor, 5)
+		border-right-color lighten(backgroundColor, 5)
+		border-radius 10px
+		font-size 14pt
+		padding .5em
+		display inline-block
+		width 100%
+		margin-bottom 1em
+		font-weight bold
+		color hoverColor
+		li
+			font-weight normal
+		.active-language
+			color hoverColor
+			text-decoration none
+			padding .35em .5em
+			margin .25em 0
+			border-radius 10px
+			font-weight bold
+
+.list-overview
+	padding-left .5em
+	ul
+		padding 0
+	li
+		background lighten(backgroundColor, 5)
+		list-style none
+		padding-right 1em
+	h2
+		small
+			font-size 12pt
+			a
+				color #777
+			.glyphicon
+				font-size 9pt	
+		font-size
+	.setting-button
+		font-size 16pt
+	.setting-button:hover
+		text-decoration none
+	.list-item
+		display block
+		border-left-color borderColor !important
+		border-top-color borderColor !important
+		border-bottom-width 5px !important
+		margin 1em 1em 1em 0em
+		border 1px solid
+		padding .75em
+		h2
+			margin-top .25em
+		button
+			border-radius 0
+			font-size 16pt
+			font-weight 200
+			padding-bottom 2px
+		li
+			display inline

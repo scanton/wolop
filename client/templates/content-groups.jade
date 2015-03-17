@@ -15,6 +15,13 @@ template(name='contentGroups')
 										input(name='name', placeholder='name')
 									.col-xs-6
 										input(name='slug', placeholder='slug')
+									.col-xs-12
+										label Risk Level
+										select.form-control(name='riskLevel')
+											option(value='undefined') Undefined
+											option(value='low') Low Risk (use for test)
+											option(value='medium') Medium Risk (use for staging)
+											option(value='high') LIVE
 									.clearfix
 								.modal-footer
 									button.btn.btn-warning Cancel

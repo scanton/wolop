@@ -1,16 +1,17 @@
 template(name='layout')
-	.container-fluid
-		header
-			.login-options.pull-right
-				if currentUser
-					if deleteEnabled
-						a.allow-delete-toggle.danger(href='#') Disable Delete
-					else
-						a.allow-delete-toggle.danger(href='#') Enable Delete
-					a(href='/logout') Logout 
-						span.name {{currentUser.profile.name}}
-			h1 
-				a(href='/') Wolop
+	nav.navbar.navbar-inverse
+		.container-fluid
+			header
+				.login-options.pull-right
+					if currentUser
+						if deleteEnabled
+							a.allow-delete-toggle.danger(href='#') Disable Delete
+						else
+							a.allow-delete-toggle.danger(href='#') Enable Delete
+						a(href='/logout') Logout 
+							span.name {{currentUser.profile.name}}
+				h1 
+					a(href='/') Wolop
 	if currentUser
 		.main-nav.pull-left
 			ul
@@ -19,6 +20,9 @@ template(name='layout')
 						a(href="/{{ link }}") 
 							.glyphicon(class="glyphicon-{{ icon }}")
 							| {{ name }}
+			.select-admin-history-limit.pull-right
+				span.instruction show:
+				input(min='1', max='30', type='number', value='{{ adminHistoryLimit }}')
 			h4 Change History
 			ul.admin-history 
 				each adminHistory
