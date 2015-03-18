@@ -1,6 +1,7 @@
+ultraCream = #FFFAEF
 backgroundColor = #2c2e2f
-bodyColor = #AAA
-linkColor = #DDD
+bodyColor = #A9A591
+linkColor = #A9A591
 hoverColor = #F90
 borderColor = darken(backgroundColor, 7)
 copyColor = #eee
@@ -31,11 +32,14 @@ form
 a
 	color linkColor
 	
-a:hover
+a:hover, a:focus
 	color hoverColor
 
 h1.section-header
 	margin-left 10px
+
+.breadcrumb
+	background-color backgroundColor
 
 .dropdown-menu > li > a
 	background backgroundColor
@@ -85,6 +89,7 @@ h1.section-header
 		border-right-color lighten(backgroundColor, 5)
 		border-bottom-color lighten(backgroundColor, 5)
 	ul
+		margin-right .25em
 		list-style none
 		padding 0
 		font-size 14pt
@@ -95,6 +100,7 @@ h1.section-header
 			border-right 1px solid lighten(backgroundColor, 3)
 			border-top 1px solid black
 			border-left 1px solid black
+			margin-bottom .25em
 			a
 				.glyphicon
 					transition all 0.6s ease
@@ -109,7 +115,10 @@ h1.section-header
 				.glyphicon
 					margin-right 0
 					border 3px solid hoverColor
+	.admin-history-heading
+		margin-top 2em
 	ul.admin-history
+		margin-right .25em
 		font-size 11pt
 		li
 			border 1px solid borderColor
@@ -122,12 +131,20 @@ h1.section-header
 				padding 0
 				background darken(backgroundColor, 7)
 				border 1px solid darken(backgroundColor, 10)
-				border-right-color light(backgroundColor, 5)
-				border-bottom-color light(backgroundColor, 5)
+				border-right-color lighten(backgroundColor, 5)
+				border-bottom-color lighten(backgroundColor, 5)
+				color lighten(backgroundColor, 15)
+			.created
+				display none
 		li:hover
+			background-color lighten(backgroundColor, 5)
 			.well
 				max-height 100%
 				padding inherit
+				background ultraCream
+				color black
+			.created
+				display inline
 		.name
 			font-weight bold
 		.options
@@ -139,6 +156,7 @@ h1.section-header
 		.created 
 			font-size 8pt
 	.select-admin-history-limit
+		margin-right .5em
 		input
 			max-width 47px
 			text-align right
@@ -277,8 +295,16 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 			.glyphicon
 				font-size 9pt	
 		font-size
+	.dropdown-menu
+		li
+			background none
+			padding-right 0
 	.setting-button
-		font-size 16pt
+		button
+			font-size 9pt
+			padding .25em
+		.glyphicon-triangle-bottom
+			font-size 10pt
 	.setting-button:hover
 		text-decoration none
 	.list-item
@@ -298,3 +324,15 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 			padding-bottom 2px
 		li
 			display inline
+
+.header-label
+	color white
+	padding .25em
+	padding-right .75em
+	text-align right
+	
+.reactivate-button
+	margin-right 1em
+
+.team-status
+	display none

@@ -3,7 +3,7 @@ Languages = new Mongo.Collection('languages');
 Menus = new Mongo.Collection('menus');
 Notices = new Mongo.Collection('notices');
 Pages = new Mongo.Collection('pages');
-PageDetails = new Mongo.Collection('page_details');
+PageLocalizations = new Mongo.Collection('page_localizations');
 Products = new Mongo.Collection('products');
 Regions = new Mongo.Collection('regions');
 StaticText = new Mongo.Collection('static_text');
@@ -62,12 +62,12 @@ var updatePage = function(query, options) {
 		Pages.update(query, options)
 	);
 };
-var updatePageDetail = function(query, options) {
+var updatePageLocalization = function(query, options) {
 	actionLogger(
-		'PageDetails.update', 
+		'PageLocalizations.update', 
 		query, 
 		options, 
-		PageDetails.update(query, options)
+		PageLocalizations.update(query, options)
 	);
 };
 var updateMenu = function(query, options) {
@@ -118,12 +118,12 @@ var insertPage = function(data) {
 		Pages.insert(data)
 	);
 };
-var insertPageDetail = function(data) {
+var insertPageLocalization = function(data) {
 	actionLogger(
-		'PageDetails.insert',
+		'PageLocalizations.insert',
 		'',
 		data,
-		PageDetails.insert(data)
+		PageLocalizations.insert(data)
 	);
 };
 var insertMenu = function(data) {
@@ -143,14 +143,30 @@ collections = {
 	updateLanguage: updateLanguage,
 	updateMenu: updateMenu,
 	updatePage: updatePage,
-	updatePageDetail: updatePageDetail,
+	updatePageLocalization: updatePageLocalization,
 	insertWebsite: insertWebsite,
 	insertContentGroup: insertContentGroup,
 	insertRegion: insertRegion,
 	insertLanguage: insertLanguage,
 	insertMenu: insertMenu,
 	insertPage: insertPage,
-	insertPageDetail: insertPageDetail,
+	insertPageLocalization: insertPageLocalization,
+	deactivateWebsite: function(slug) {
+		if(slug) {
+			var id = Websites.findOne({slug: slug})._id;
+			if(id) {
+				Websites.update({ _id: id }, { $set: { isActive: '0' } });
+			}
+		}
+	},
+	reactivateWebsite: function(slug) {
+		if(slug) {
+			var id = Websites.findOne({slug: slug})._id;
+			if(id) {
+				Websites.update({ _id: id }, { $set: { isActive: '1' } });
+			}
+		}
+	},
 	addRegionToContentGroup: function(region, group) {
 		var g = ContentGroups.findOne({slug: group});
 		if(g) {

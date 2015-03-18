@@ -63,6 +63,7 @@ spacebars-compiler@1.0.4
 srp@1.0.2
 stylus@1.0.6
 templating@1.0.11
+tmeasday:presence@1.0.6
 tracker@1.0.5
 twbs:bootstrap@3.3.2
 ui@1.0.5

@@ -1,5 +1,6 @@
 t = Template
-t.registerHelper 'formatTime', (time, type) ->
+helper = t.registerHelper
+helper 'formatTime', (time, type) ->
 	switch type
 		when 'fromNow'
 			return moment.unix(time).fromNow()
@@ -17,19 +18,63 @@ hashCode = (str) ->
 		hash = str.charCodeAt(i) + (hash << 5) - hash
 		i++
 	hash
+riskBs = (riskLevel) ->
+	if riskLevel == 'low'
+		return 'btn-success'
+	if riskLevel == 'medium'
+		return 'btn-warning'
+	if riskLevel == 'high'
+		return 'btn-danger'
+	return 'btn-default'
+riskBsLabel = (riskLevel) ->
+	if riskLevel == 'low'
+		return 'success'
+	if riskLevel == 'medium'
+		return 'warning'
+	if riskLevel == 'high'
+		return 'danger'
+	return 'default'
 
-t.registerHelper 'intToRGB', intToRGB
-t.registerHelper 'hashCode', hashCode
-t.registerHelper 'hashColor', (str) ->
+helper 'intToRGB', intToRGB
+helper 'hashCode', hashCode
+helper 'getRiskAsBsClass', riskBs
+helper 'getRiskLabel', riskBsLabel
+helper 'websiteContext', ->
+	Websites.findOne {slug: Session.get 'website-context'}
+helper 'contentGroupContext', ->
+	ContentGroups.findOne {slug: Session.get 'content-group-context'}
+helper 'regionContext', ->
+	Regions.findOne { slug: Session.get('current-region') }
+helper 'languageContext', ->
+	Languages.findOne { slug: Session.get('current-language') }
+helper 'hashColor', (str) ->
 	intToRGB hashCode(str)
+helper 'getRegion', (region) ->
+	Regions.findOne { slug: region }
+helper 'getLanguage', (language) ->
+	Languages.findOne { slug: language }
+helper 'getMenu', (slug) ->
+	Menus.findOne { slug: slug }
+helper 'getPage', (slug) ->
+	Pages.findOne { slug: slug }
+helper 'getPageDetails', (slug) ->
+	PageDetails.findOne { parent: slug, region: Session.get('region-context'), language: Session.get('language-context') }
+helper 'coworkers', ->
+	Presences.find {}
+helper 'isCurrentLanguage', (lang) ->
+	if Session.get('current-language') == lang
+		return 'active-language'
+	else
+		return ''
+helper 'isCurrentRegion', (region) ->
+	if Session.get('current-region') == region
+		return 'active-region'
+	else
+		return ''
 
 Session.set 'delete-enabled', false
-if !Session.get 'current-region'
-	Session.set 'current-region', 'uk'
-if !Session.get 'current-language'
-	Session.set 'current-language', 'en'
 if !Session.get 'admin-history-limit'
-	Session.set 'admin-history-limit', 4
+	Session.set 'admin-history-limit', 1
 
 t.layout.helpers
 	adminHistory: ->
@@ -40,6 +85,8 @@ t.layout.helpers
 		if Session.get('delete-enabled') then 'delete-enabled' else 'delete-disabled'
 	adminHistoryLimit: ->
 		Session.get 'admin-history-limit'
+	getUserDetails: (id) ->
+		Meteor.users.findOne {_id: id}
 
 t.contentGroups.helpers
 	contentGroups: ->
@@ -56,56 +103,26 @@ t.contentGroups.helpers
 t.editMenuDetails.helpers
 	contentGroup: ->
 		ContentGroups.findOne { slug: @group }
-	getRegion: (region) ->
-		Regions.findOne { slug: region }
-	getLanguage: (language) ->
-		Languages.findOne { slug: language }
-	isCurrentLanguage: (lang) ->
-		if Session.get('current-language') == lang
-			return 'active-language'
-		else
-			return ''
-	isCurrentRegion: (region) ->
-		if Session.get('current-region') == region
-			return 'active-region'
-		else
-			return ''
 
 t.editPageDetails.helpers
 	contentGroup: ->
 		ContentGroups.findOne { slug: @group }
-	getRegion: (region) ->
-		Regions.findOne { slug: region }
-	getLanguage: (language) ->
-		Languages.findOne { slug: language }
-	getPage: (pageSlug) ->
-		Pages.findOne { slug: pageSlug }
-	getPageDetails: (pageSlug) ->
-		#PageDetails
-	isCurrentLanguage: (lang) ->
-		if Session.get('current-language') == lang
-			return 'active-language'
-		else
-			return ''
-	isCurrentRegion: (region) ->
-		if Session.get('current-region') == region
-			return 'active-region'
-		else
-			return ''
+
+t.editWebsiteContentGroup.helpers
+	getRiskLabel: riskBsLabel
+	website: ->
+		Websites.findOne { slug: @website }
+	contentGroup: ->
+		ContentGroups.findOne { slug: @group }
 
 t.home.helpers
 	websites: ->
-		Websites.find {}, { sort: { name: -1 } }
+		Websites.find { isActive: '1' }, { sort: { name: -1 } }
 	getContentGroupDetails: (slug) ->
-		ContentGroups.findOne {slug: slug}
-	getRiskAsBSClass: (riskLevel) ->
-		if riskLevel == 'low'
-			return 'btn-success'
-		else if riskLevel == 'medium'
-			return 'btn-warning'
-		else if riskLevel == 'high'
-			return 'btn-danger'
-		return 'btn-default'
+		ContentGroups.findOne { slug: slug }
+	deleteEnabled: ->
+		Session.get 'delete-enabled'
+	getRiskAsBsClass: riskBs
 
 t.languages.helpers
 	languages: ->
@@ -130,3 +147,6 @@ t.websites.helpers
 		Websites.find {}, { sort: { name: 1 } }
 	contentGroups: ->
 		ContentGroups.find {}
+	canReactivate: (slug) ->
+		w = Websites.findOne {slug: slug}
+		return w.isActive == '0'

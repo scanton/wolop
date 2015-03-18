@@ -49,6 +49,14 @@ Router.map ->
 			Meteor.logout()
 			Router.go '/'
 
+	@route 'edit-website-content-group',
+		routeNames.push 'edit-website-content-group'
+		path: '/edit-website-content-group/:website/:group'
+		template: 'edit-website-content-group'
+		data: ->
+			group: @params.group
+			website: @params.website
+
 	@route 'edit-menu-details',
 		routeNames.push 'edit-menu-details'
 		path: '/edit-menu-details/:menu/:contentGroup'
@@ -71,6 +79,7 @@ Router.map ->
 		template: 'website-details'
 		data: ->
 			slug: @params.slug
+
 requiresLogin = ->
 	if !Meteor.user() or !Meteor.user().roles || !Meteor.user().roles.admin
 		@render 'loginRequired'

@@ -2,16 +2,28 @@ template(name='home')
 	h1.section-header Websites
 	ul.websites-overview.list-overview
 		each websites
-			li.list-item(style='border-color: #{{hashColor slug}}')
-				a.glyphicon.glyphicon-cog.setting-button.pull-right(href='#')
+			li.list-item.website(data-slug='{{ slug }}', style='border-color: #{{ hashColor slug }}')
+				.btn-group.setting-button.pull-right
+					button.btn.btn-primary.dropdown-toggle(data-toggle='dropdown')
+						span.glyphicon.glyphicon-cog
+						span.glyphicon.glyphicon-triangle-bottom
+					ul.dropdown-menu(role='menu')
+						li
+							a(href='/website-details/{{ slug }}') Edit Website
+						li
+							a.add-content-group-link(href='#', data-slug='{{ slug }}') Add Content Group
+						if deleteEnabled
+							li.danger
+								a.disable-website(href='#', data-slug='{{ slug }}') Deactivate Website
 				h2
-					a(href='website-details/{{slug}}')= name
+					a(href='website-details/{{ slug }}')= name
 					| -
 					small
-						a(href='http://{{url}}')= url
+						a(href='http://{{ url }}')= url
 						span.glyphicon.glyphicon-share
 				ul
 					each supportedContentGroups
 						with getContentGroupDetails this
 							li.content-group
-								button.btn(class='{{ getRiskAsBSClass riskLevel }}')= name
+								button.btn.edit-content-group-button(class='{{ getRiskAsBsClass riskLevel }}', data-slug='{{ slug }}')= name
+		

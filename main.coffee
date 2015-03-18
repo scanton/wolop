@@ -10,6 +10,7 @@ if Meteor.isClient
 	Meteor.subscribe 'pages'
 	Meteor.subscribe 'menus'
 	Meteor.subscribe 'admin-history'
+	Meteor.subscribe 'user-presence'
 	window.Wolop = Meteor
 	window.objectify = (arr) ->
 		a = []

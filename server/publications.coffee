@@ -45,3 +45,9 @@ Meteor.publish 'admin-history', ->
 		return AdminHistory.find {}, {sort: {created: -1}}
 	else
 		@ready()
+
+Meteor.publish 'user-presence', ->
+	if @userId
+		return Presences.find {}
+	else
+		@ready()

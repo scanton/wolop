@@ -5,14 +5,20 @@ template(name='layout')
 				.login-options.pull-right
 					if currentUser
 						if deleteEnabled
-							a.allow-delete-toggle.danger(href='#') Disable Delete
+							a.allow-delete-toggle.btn.btn-danger(href='#') Disable Delete
 						else
-							a.allow-delete-toggle.danger(href='#') Enable Delete
+							a.allow-delete-toggle.btn.btn-warning(href='#') Enable Delete
 						a(href='/logout') Logout 
 							span.name {{currentUser.profile.name}}
 				h1 
 					a(href='/') Wolop
 	if currentUser
+		.team-status
+			each coworkers
+				.coworker(class='{{ state }}', data-id='{{ userId }}')
+					with getUserDetails userId
+						h3= profile.name
+
 		.main-nav.pull-left
 			ul
 				each navData
@@ -20,10 +26,11 @@ template(name='layout')
 						a(href="/{{ link }}") 
 							.glyphicon(class="glyphicon-{{ icon }}")
 							| {{ name }}
-			.select-admin-history-limit.pull-right
-				span.instruction show:
-				input(min='1', max='30', type='number', value='{{ adminHistoryLimit }}')
-			h4 Change History
+			.admin-history-heading
+				.select-admin-history-limit.pull-right
+					span.instruction show:
+					input(min='1', max='30', type='number', value='{{ adminHistoryLimit }}')
+				h4 Event History
 			ul.admin-history 
 				each adminHistory
 					li 

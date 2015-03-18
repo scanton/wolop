@@ -135,7 +135,27 @@ t.editMenuDetails.events
 
 t.editPageDetails.events
 	'click .set-region-and-language': setRegionLanguageHandler
-		
+
+t.editWebsiteContentGroup.events
+	'click .set-region-and-language': setRegionLanguageHandler
+	
+t.home.events
+	'click .disable-website': (e) ->
+		e.preventDefault()
+		slug = $(e.target).attr 'data-slug'
+		if (Session.get 'delete-enabled') && slug
+			collections.deactivateWebsite slug
+
+	'click .edit-content-group-button': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		slug = $this.attr 'data-slug'
+		website = $this.closest('.website').attr 'data-slug'
+		if slug && website
+			Session.set 'website-context', website
+			Session.set 'content-group-context', slug
+			Router.go '/edit-website-content-group/' + website + '/' + slug
+
 t.menus.events
 
 	'click .add-item-button': (e) ->
@@ -231,6 +251,10 @@ t.languages.events
 			collections.insertLanguage o
 
 t.websites.events
+	'click .reactivate-button': (e) ->
+		e.preventDefault()
+		slug = $(e.target).attr 'data-slug'
+		collections.reactivateWebsite slug
 
 	'click .add-item-button': (e) ->
 		e.preventDefault()

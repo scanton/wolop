@@ -1,0 +1,34 @@
+template(name='editWebsiteContentGroup')
+	+breadcrumbs
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}')= contentGroup.name
+	.col-xs-8
+		.menu-list
+			h1 Menus
+			ul.menus
+				each contentGroup.supportedMenus
+					with getMenu this
+						li.menu(data-slug='{{ slug }}')					
+							h2= name
+		.page-list
+			h1 Pages
+			ul.pages
+				each contentGroup.supportedPages
+					with getPage this
+						li.page(data-slug='{{ slug }}')
+							a(href='/edit-page-details/{{slug}}/{{ group }}{{ contentGroupContext.slug }}')
+								h2= name
+
+	.col-xs-4
+		h3 Region/Language
+		.region-language-selector
+			ul.regions
+			each contentGroup.supportedRegions
+				with getRegion this 
+					li.region(data-slug='{{ slug }}', class='{{ isCurrentRegion slug }}')
+						span.name= name
+						if supportedLanguages
+							ul.supported-languages
+								each supportedLanguages
+									li.language
+										with getLanguage this
+											a.set-region-and-language.name(href='#', data-slug='{{ slug }}', class='{{ isCurrentLanguage slug }}')= name

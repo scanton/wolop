@@ -19,6 +19,7 @@ template(name='websites')
 										input(name='url', placeholder='url')
 									.clearfix
 								.modal-footer
+									input(type='hidden', name='isActive', value='1')
 									button.btn.btn-warning Cancel
 									button.btn.btn-success(type='submit') Add Website
 			.col-xs-12
@@ -36,6 +37,8 @@ template(name='websites')
 										each contentGroups
 											li(role='presentation')
 												a.add-content-group-to-website(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+								if canReactivate slug
+									button.btn.btn-warning.reactivate-button.pull-right(data-slug='{{ slug }}') Reactivate
 								if supportedContentGroups
 									h4 content groups:
 									ul
