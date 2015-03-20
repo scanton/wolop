@@ -78,7 +78,7 @@ if !Session.get 'admin-history-limit'
 
 t.layout.helpers
 	adminHistory: ->
-		AdminHistory.find {}, {limit: Session.get 'admin-history-limit'}
+		AdminHistory.find {}, { limit: Session.get 'admin-history-limit', sort: { created: -1 } }
 	deleteEnabled: ->
 		Session.get 'delete-enabled'
 	deleteEnabledClass: ->
@@ -103,10 +103,37 @@ t.contentGroups.helpers
 t.editMenuDetails.helpers
 	contentGroup: ->
 		ContentGroups.findOne { slug: @group }
+	menu: ->
+		Menus.findOne { slug: @menu }
+	filterUsedPages: (pages) ->
+		if pages
+			menu = Menus.findOne { slug: @menu }
+			if menu
+				sp = menu.supportedPages || []
+				a = []
+				l = pages.length
+				while l--
+					page = pages[l]
+					isUsed = false
+					l2 = sp.length
+					while l2--
+						if sp[l2] == page
+							isUsed = true
+					if !isUsed
+						a.push page
+				return a
 
-t.editPageDetails.helpers
+t.editPageLocalization.helpers
 	contentGroup: ->
 		ContentGroups.findOne { slug: @group }
+	showChecked: (val) ->
+		if val == 'on'
+			return 'checked'
+		return ''
+	getPageLocalization: (page) ->
+		region = Session.get 'current-region'
+		language = Session.get 'current-language'
+		PageLocalizations.findOne { page: page, region: region, language: language }
 
 t.editWebsiteContentGroup.helpers
 	getRiskLabel: riskBsLabel
@@ -118,6 +145,8 @@ t.editWebsiteContentGroup.helpers
 t.home.helpers
 	websites: ->
 		Websites.find { isActive: '1' }, { sort: { name: -1 } }
+	contentGroups: ->
+		ContentGroups.find {}
 	getContentGroupDetails: (slug) ->
 		ContentGroups.findOne { slug: slug }
 	deleteEnabled: ->

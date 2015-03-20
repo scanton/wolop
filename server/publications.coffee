@@ -34,6 +34,12 @@ Meteor.publish 'pages', ->
 	else
 		@ready()
 
+Meteor.publish 'page-localizations', ->
+	if @userId
+		return PageLocalizations.find {}, {sort: {language: 1}}
+	else
+		@ready()
+
 Meteor.publish 'menus', ->
 	if @userId
 		return Menus.find {}, {sort: {slug: 1}}

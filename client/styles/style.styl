@@ -9,7 +9,7 @@ copyColor = #eee
 *
 	transition all 0.3s ease
 	border-radius 0 !important
-	
+
 html
 	height 100%
 body
@@ -29,17 +29,30 @@ form
 		font-size 14pt !important
 		padding .5em
 		letter-spacing .067em
+	input[type='submit']
+		letter-spacing 0
 a
 	color linkColor
+	
+input, .form-control
+	background bodyColor
+	border-color borderColor
 	
 a:hover, a:focus
 	color hoverColor
 
 h1.section-header
-	margin-left 10px
+	margin-left 0
 
 .breadcrumb
 	background-color backgroundColor
+	margin 0
+	
+.modal-content
+	background backgroundColor
+	
+.modal-header, .modal-footer
+	border-color bodyColor
 
 .dropdown-menu > li > a
 	background backgroundColor
@@ -50,6 +63,8 @@ h1.section-header
 	background backgroundColor
 	color copyColor
 
+.raw-header
+	margin-left .25em
 
 .navbar
 	margin-bottom 0
@@ -204,8 +219,6 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 				padding 0
 				margin 0
 				min-height 0
-	.slug
-		font-family monospace
 
 .supported-languages, .supported-regions, .supported-content-groups, .supported-menus, .supported-pages
 	ul
@@ -325,11 +338,24 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 		li
 			display inline
 
+.btn-mellow
+	background backgroundColor
+	color bodyColor
+	
+.btn-mellow:hover, .btn-mellow:focus
+	backgroundColor darken(backgroundColor, 7)
+	color orange
+	
 .header-label
 	color white
 	padding .25em
 	padding-right .75em
-	text-align right
+	text-align center
+	font-weight bold
+	margin 0
+
+.btn-antique
+	background lighten(backgroundColor, 10)
 	
 .reactivate-button
 	margin-right 1em

@@ -1,10 +1,20 @@
 template(name='home')
-	h1.section-header Websites
+	h1.raw-header Websites
 	ul.websites-overview.list-overview
 		each websites
 			li.list-item.website(data-slug='{{ slug }}', style='border-color: #{{ hashColor slug }}')
-				.btn-group.setting-button.pull-right
-					button.btn.btn-primary.dropdown-toggle(data-toggle='dropdown')
+				.dropdown.pull-right
+					button.btn.btn-mellow.dropdown-toggle(type='button', data-toggle='dropdown') add content group
+						span.glyphicon.glyphicon-triangle-bottom
+					ul.dropdown-menu(role='menu')
+						each contentGroups
+							with getContentGroupDetails slug
+								li(role='presentation')
+									a.add-content-group-to-website(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+				if deleteEnabled
+					button.btn.btn-danger.pull-right(data-slug='{{ slug }}') Deactivate
+				//.btn-group.setting-button.pull-right
+					button.btn.btn-antique.dropdown-toggle(data-toggle='dropdown')
 						span.glyphicon.glyphicon-cog
 						span.glyphicon.glyphicon-triangle-bottom
 					ul.dropdown-menu(role='menu')
@@ -15,9 +25,7 @@ template(name='home')
 						if deleteEnabled
 							li.danger
 								a.disable-website(href='#', data-slug='{{ slug }}') Deactivate Website
-				h2
-					a(href='website-details/{{ slug }}')= name
-					| -
+				h2 {{ name }} - 
 					small
 						a(href='http://{{ url }}')= url
 						span.glyphicon.glyphicon-share

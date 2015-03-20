@@ -1,22 +1,29 @@
 template(name='editMenuDetails')
-	.col-xs-8
-		h1 Edit Menu Details
-		h2= contentGroup.name
-		h3 Pages
-		ul.pages
-			each contentGroup.supportedPages
-				li.page= this
-	.col-xs-4
-		h3 Region/Language
-		.region-language-selector
-			ul.regions
-			each contentGroup.supportedRegions
-				with getRegion this 
-					li.region(data-slug='{{ slug }}', class='{{ isCurrentRegion slug }}')
-						span.name= name
-						if supportedLanguages
-							ul.supported-languages
-								each supportedLanguages
-									li.language
-										with getLanguage this
-											a.set-region-and-language.name(href='#', data-slug='{{ slug }}', class='{{ isCurrentLanguage slug }}')= name
+	+shortBreadcrumbs
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}')= contentGroup.name
+	.menu-manager.menu(data-slug='{{ menu.slug }}')
+		.col-xs-6
+			h3 {{ menu.name }} Menu Items 
+			ul.pages
+				each menu.supportedPages
+					li.page
+						button.btn.btn-primary.move-page-up.pull-right(data-slug='{{ this }}')
+							span.glyphicon.glyphicon-triangle-top
+						button.btn.btn-primary.move-page-down.pull-right(data-slug='{{ this }}')
+							span.glyphicon.glyphicon-triangle-bottom
+						button.btn.btn-primary.indent-page.pull-right(data-slug='{{ this }}')
+							span.glyphicon.glyphicon-indent-left
+						button.btn.btn-primary.outdent-page.pull-right(data-slug='{{ this }}')
+							span.glyphicon.glyphicon-indent-right
+						button.btn.btn-danger.remove-page-from-menu-button(data-slug='{{ this }}')
+							span.glyphicon.glyphicon-minus
+						span.slug {{ this }}
+		.col-xs-6
+			h3 Unused Pages
+			ul.pages
+				each filterUsedPages contentGroup.supportedPages
+					li.page
+						button.btn.btn-success.add-page-to-menu-button(data-slug='{{ this }}')
+							span.glyphicon.glyphicon-plus
+						span.slug {{ this }}
+		

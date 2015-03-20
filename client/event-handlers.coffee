@@ -133,8 +133,43 @@ setRegionLanguageHandler = (e) ->
 t.editMenuDetails.events
 	'click .set-region-and-language': setRegionLanguageHandler
 
-t.editPageDetails.events
+	'click .add-page-to-menu-button': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		page = $this.closest('button').attr 'data-slug'
+		menu = $this.closest('.menu').attr 'data-slug'
+		collections.addPageToMenu page, menu
+
+	'click .remove-page-from-menu-button': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		page = $this.closest('button').attr 'data-slug'
+		menu = $this.closest('.menu').attr 'data-slug'
+		collections.removePageFromMenu page, menu
+
+	'click .move-page-up': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		page = $this.closest('button').attr 'data-slug'
+		menu = $this.closest('.menu').attr 'data-slug'
+		collections.movePageUpOnMenu page, menu
+
+	'click .move-page-down': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		page = $this.closest('button').attr 'data-slug'
+		menu = $this.closest('.menu').attr 'data-slug'
+		collections.movePageDownOnMenu page, menu
+
+t.editPageLocalization.events
 	'click .set-region-and-language': setRegionLanguageHandler
+
+	'submit .page-details-form': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		o = objectifyFormArray $this.serializeArray()
+		if o.region && o.language
+			collections.updatePageDetails o
 
 t.editWebsiteContentGroup.events
 	'click .set-region-and-language': setRegionLanguageHandler

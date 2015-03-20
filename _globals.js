@@ -151,6 +151,96 @@ collections = {
 	insertMenu: insertMenu,
 	insertPage: insertPage,
 	insertPageLocalization: insertPageLocalization,
+	movePageUpOnMenu: function(page, menu) {
+		if(page && menu) {
+			var m = Menus.findOne({ slug: menu });
+			var sp = m.supportedPages || [];
+			var l = sp.length
+			while(l--) {
+				if(sp[l] == page) {
+					var index = l
+					break
+				}
+			}
+			if(index && index > 0) {
+				var x = sp.splice(index, 1);
+				sp.splice(index - 1, 0, x[0]);
+			}
+			updateMenu({ _id: m._id }, { $set: { supportedPages: sp } });
+		}
+	},
+	movePageDownOnMenu: function(page, menu) {
+		if(page && menu) {
+			var m = Menus.findOne({ slug: menu });
+			var sp = m.supportedPages || [];
+			var l = sp.length;
+			while(l--) {
+				if(sp[l] == page) {
+					var index = l;
+					break;
+				}
+			}
+			if(index < sp.length - 1) {
+				var x = sp.splice(index, 1);
+				sp.splice(index + 1, 0, x[0]);
+			}
+			updateMenu({ _id: m._id }, { $set: { supportedPages: sp } });
+		}
+	},
+	addPageToMenu: function(page, menu) {
+		if(page && menu) {
+			var m = Menus.findOne({ slug: menu });
+			var sp = m.supportedPages || [];
+			var l = sp.length;
+			while(l--){
+				if(sp[l] == page) {
+					return;
+				}
+			}
+			if(!sp) {
+				sp = [];
+			}
+			sp.unshift(page);
+			updateMenu({ _id: m._id }, { $set: { supportedPages: sp } });
+		}
+	},
+	removePageFromMenu: function(page, menu) {
+		if(page && menu) {
+			var m = Menus.findOne({ slug: menu });
+			var sp = m.supportedPages || [];
+			var l = sp.length;
+			while(l--){
+				if(sp[l] == page) {
+					sp.splice(l, 1);
+				}
+			}
+			updateMenu({ _id: m._id }, { $set: { supportedPages: sp } });
+		}
+	},
+	updatePageDetails: function(data) {
+		if(data && data.page && data.title && data.region && data.language) {
+			pageDetail = PageLocalizations.findOne({ page: data.page, region: data.region, language: data.language });
+			if(pageDetail && pageDetail._id) {
+				data.modified = new Date();
+				actionLogger(
+					'PageLocalizations.update',
+					'',
+					data,
+					PageLocalizations.update({ _id: pageDetail._id }, { $set: data })
+				);
+			} else {
+				data.modified = data.created = new Date();
+				actionLogger(
+					'PageLocalizations.insert',
+					'',
+					data,
+					PageLocalizations.insert(data)
+				);
+			}
+		} else {
+			console.log('invalid Page Details, _global.updatePageDetails');
+		}
+	},
 	deactivateWebsite: function(slug) {
 		if(slug) {
 			var id = Websites.findOne({slug: slug})._id;
@@ -371,6 +461,12 @@ if (Meteor.isServer) {
 	});
 	Pages.allow({
 		insert: nameSlugRequired,
+		update: adminOnly
+	});
+	PageLocalizations.allow({
+		insert: function(userId, doc) {
+			return userId && doc.region && doc.language && doc.title
+		},
 		update: adminOnly
 	});
 	Menus.allow({

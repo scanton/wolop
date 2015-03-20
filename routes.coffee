@@ -65,10 +65,10 @@ Router.map ->
 			menu: @params.menu
 			group: @params.contentGroup
 
-	@route 'edit-page-details',
-		routeNames.push 'edit-page-details'
-		path: '/edit-page-details/:page/:contentGroup'
-		template: 'edit-page-details'
+	@route 'edit-page-localization',
+		routeNames.push 'edit-page-localization'
+		path: '/edit-page-localization/:page/:contentGroup'
+		template: 'edit-page-localization'
 		data: ->
 			page: @params.page
 			group: @params.contentGroup

@@ -1,0 +1,63 @@
+template(name='editPageLocalization')
+	+breadcrumbs
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}')= contentGroup.name
+	.col-xs-8
+		with getPage page
+			h1= name
+		if getPageLocalization page
+			with getPageLocalization page
+				form.page-details-form(name='page-details-form')
+					.form-group
+						label Localized Title
+						input.form-control(type='text', name='title', value='{{ title }}')
+					.form-group
+						input(type='checkbox', name='isActive', checked='{{ showChecked isActive }}')
+						lable Is Active
+					.form-group
+						label Thumbnail/Header Graphic (path)
+						input.form-control(type='text', name='contentThumbnail', value='{{ contentThumbnail }}')
+					.form-group
+						label Teaser Text
+						textarea.form-control(name='teaserText') {{ teaserText }}
+					.form-group
+						label Body Content
+						textarea.form-control(name='bodyContent') {{ bodyContent }}
+					input(type='hidden', name='page', value='{{ page }}')
+					input(type='hidden', name='region', value='{{ regionContext.slug }}')
+					input(type='hidden', name='language', value='{{ languageContext.slug }}')
+					input.btn.btn-success.pull-right(type='submit', value='Save Changes')
+		else
+			form.page-details-form(name='page-details-form')
+				.form-group
+					label Localized Title
+					input.form-control(type='text', name='title')
+				.form-group
+					input(type='checkbox', name='isActive', checked='checked')
+					lable Is Active
+				.form-group
+					label Thumbnail/Header Graphic (path)
+					input.form-control(type='text', name='contentThumbnail')
+				.form-group
+					label Teaser Text
+					textarea.form-control(name='teaserText') 
+				.form-group
+					label Body Content
+					textarea.form-control(name='bodyContent')
+				input(type='hidden', name='page', value='{{ page }}')
+				input(type='hidden', name='region', value='{{ regionContext.slug }}')
+				input(type='hidden', name='language', value='{{ languageContext.slug }}')
+				input.btn.btn-success.pull-right(type='submit', value='Save Changes')
+	.col-xs-4
+		h3 Region/Language
+		.region-language-selector
+			ul.regions
+			each contentGroup.supportedRegions
+				with getRegion this 
+					li.region(data-slug='{{ slug }}', class='{{ isCurrentRegion slug }}')
+						span.name= name
+						if supportedLanguages
+							ul.supported-languages
+								each supportedLanguages
+									li.language
+										with getLanguage this
+											a.set-region-and-language.name(href='#', data-slug='{{ slug }}', class='{{ isCurrentLanguage slug }}')= name

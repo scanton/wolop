@@ -3,20 +3,24 @@ template(name='editWebsiteContentGroup')
 	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}')= contentGroup.name
 	.col-xs-8
 		.menu-list
-			h1 Menus
+			h3 Menus
 			ul.menus
 				each contentGroup.supportedMenus
 					with getMenu this
-						li.menu(data-slug='{{ slug }}')					
-							h2= name
+						li.menu(data-slug='{{ slug }}')
+							if supportedPages
+								.pull-right
+									h4 ({{ supportedPages.length }} pages)
+							a(href='/edit-menu-details/{{ slug }}/{{ contentGroupContext.slug }}')
+								h4= name
 		.page-list
-			h1 Pages
+			h3 Pages
 			ul.pages
 				each contentGroup.supportedPages
 					with getPage this
 						li.page(data-slug='{{ slug }}')
-							a(href='/edit-page-details/{{slug}}/{{ group }}{{ contentGroupContext.slug }}')
-								h2= name
+							a(href='/edit-page-localization/{{ slug }}/{{ contentGroupContext.slug }}')
+								h4= name
 
 	.col-xs-4
 		h3 Region/Language
