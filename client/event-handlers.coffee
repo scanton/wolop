@@ -212,7 +212,6 @@ t.menus.events
 			collections.insertMenu o
 
 t.pages.events
-
 	'click .add-item-button': (e) ->
 		e.preventDefault()
 		$('.add-item-modal').modal

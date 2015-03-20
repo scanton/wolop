@@ -121,7 +121,13 @@ t.editMenuDetails.helpers
 							isUsed = true
 					if !isUsed
 						a.push page
+				a.sort()
 				return a
+	getPageName: (slug) ->
+		p = Pages.findOne {slug: slug}
+		if p
+			return p.name
+		return slug
 
 t.editPageLocalization.helpers
 	contentGroup: ->
@@ -144,7 +150,7 @@ t.editWebsiteContentGroup.helpers
 
 t.home.helpers
 	websites: ->
-		Websites.find { isActive: '1' }, { sort: { name: -1 } }
+		Websites.find { isActive: 'on' }, { sort: { name: -1 } }
 	contentGroups: ->
 		ContentGroups.find {}
 	getContentGroupDetails: (slug) ->
@@ -155,21 +161,21 @@ t.home.helpers
 
 t.languages.helpers
 	languages: ->
-		Languages.find {}
+		Languages.find {}, {sort: {name: 1}}
 
 t.menus.helpers
 	menus: ->
-		Menus.find {}
+		Menus.find {}, {sort: {name: 1}}
 
 t.pages.helpers
 	pages: ->
-		Pages.find {}
+		Pages.find {}, {sort: {name: 1}}
 
 t.regions.helpers
 	languages: ->
-		Languages.find {}
+		Languages.find {}, {sort: {name: 1}}
 	regions: ->
-		Regions.find {}
+		Regions.find {}, {sort: {name: 1}}
 
 t.websites.helpers
 	websites: ->
