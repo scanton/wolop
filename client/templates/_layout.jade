@@ -5,9 +5,9 @@ template(name='layout')
 				.login-options.pull-right
 					if currentUser
 						if deleteEnabled
-							a.allow-delete-toggle.btn.btn-danger(href='#') Disable Delete
+							a.allow-delete-toggle.btn.btn-success(href='#') Disable Delete
 						else
-							a.allow-delete-toggle.btn.btn-warning(href='#') Enable Delete
+							a.allow-delete-toggle.btn.btn-danger(href='#') Enable Delete
 						a(href='/logout') Logout 
 							span.name {{currentUser.profile.name}}
 				h1 

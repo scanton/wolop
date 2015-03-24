@@ -3,7 +3,27 @@ template(name='editWebsiteContentGroup')
 	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}')= contentGroup.name
 	.col-xs-8
 		.menu-list
+			button.btn.btn-primary.pull-right.add-menu-button 
+				.glyphicon.glyphicon-plus
+				.glyphicon.glyphicon-th-list
+				| Add Menu
 			h3 Menus
+			.modal.fade.add-menu-modal
+				.modal-dialog
+					.modal-content
+						form.add-item-form
+							.modal-header
+								h4.modal-title Add Menu
+							.modal-body
+								.col-xs-6
+									input(name='name', placeholder='name')
+								.col-xs-6
+									input(name='slug', placeholder='slug')
+								.clearfix
+							.modal-footer
+								input(type='hidden', name='isActive', value='on')
+								button.btn.btn-warning Cancel
+								button.btn.btn-success(type='submit') Add Menu
 			ul.menus
 				each contentGroup.supportedMenus
 					with getMenu this
@@ -14,6 +34,26 @@ template(name='editWebsiteContentGroup')
 							a(href='/edit-menu-details/{{ slug }}/{{ contentGroupContext.slug }}')
 								h4= name
 		.page-list
+			.modal.fade.add-page-modal
+				.modal-dialog
+					.modal-content
+						form.add-item-form
+							.modal-header
+								h4.modal-title Add Page
+							.modal-body
+								.col-xs-6
+									input(name='name', placeholder='name')
+								.col-xs-6
+									input(name='slug', placeholder='slug')
+								.clearfix
+							.modal-footer
+								input(type='hidden', name='isActive', value='on')
+								button.btn.btn-warning Cancel
+								button.btn.btn-success(type='submit') Add Page
+			button.btn.btn-primary.pull-right.add-page-button 
+				.glyphicon.glyphicon-plus
+				.glyphicon.glyphicon-file
+				| Add Page
 			h3 Pages
 			ul.pages
 				each contentGroup.supportedPages

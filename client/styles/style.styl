@@ -45,6 +45,19 @@ a:hover, a:focus
 h1.section-header
 	margin-left 0
 
+::-webkit-input-placeholder {
+   color lighten(backgroundColor, 12)
+}
+:-moz-placeholder { /* Firefox 18- */
+   color lighten(backgroundColor, 12)  
+}
+::-moz-placeholder {  /* Firefox 19+ */
+   color lighten(backgroundColor, 12)  
+}
+:-ms-input-placeholder {  
+   color lighten(backgroundColor, 12)
+}
+
 .breadcrumb
 	background-color backgroundColor
 	margin 0
@@ -64,8 +77,8 @@ h1.section-header
 	background backgroundColor
 	color copyColor
 
-.raw-header
-	margin-left .25em
+.list-header
+	margin 1em
 
 .navbar
 	margin-bottom 0
@@ -93,7 +106,7 @@ h1.section-header
 	a
 		margin 0 0 0 1em
 .main-nav
-	background darken(backgroundColor, 3.3)
+	//background darken(backgroundColor, 3.3)
 	width 250px
 	height 100%
 	padding 0
@@ -195,7 +208,7 @@ h1.section-header
 		letter-spacing -.01em
 	input
 		width 100%
-		border 1px solid #EEE
+		border 1px solid borderColor
 		border-radius 5px
 		padding .5em
 		margin .25em
@@ -265,7 +278,6 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 
 .region-language-selector
 	width 100%
-	padding 0 1em
 	float left
 	ul
 		padding 0 .75em
@@ -297,6 +309,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 .list-overview
 	padding-left .5em
 	ul
+		text-align right
 		padding 0
 	li
 		background lighten(backgroundColor, 5)
@@ -324,9 +337,10 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 		text-decoration none
 	.list-item
 		display block
-		border-left-color borderColor !important
-		border-top-color borderColor !important
-		border-bottom-width 5px !important
+		//border-left-color borderColor !important
+		border-width 0 !important
+		border-right-width 3px !important
+		border-left-width 9px !important
 		margin 1em 1em 1em 0em
 		border 1px solid
 		padding .75em

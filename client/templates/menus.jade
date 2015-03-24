@@ -17,10 +17,12 @@ template(name='menus')
 										input(name='slug', placeholder='slug')
 									.clearfix
 								.modal-footer
+									input(type='hidden', name='isActive', value='on')
 									button.btn.btn-warning Cancel
 									button.btn.btn-success(type='submit') Add Menu
 			.col-xs-12
 				ul.menus
 					each menus
 						li 
-							h4 {{name}}
+							h4 {{ slug }} 
+								small - {{ name }}

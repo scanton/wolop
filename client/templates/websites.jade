@@ -36,7 +36,9 @@ template(name='websites')
 									ul.dropdown-menu(role='menu')
 										each contentGroups
 											li(role='presentation')
-												a.add-content-group-to-website(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
+												a.add-content-group-to-website(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') 
+													small {{ slug }}
+													| - {{ name }}
 								if canReactivate slug
 									button.btn.btn-warning.reactivate-button.pull-right(data-slug='{{ slug }}') Reactivate
 								if supportedContentGroups

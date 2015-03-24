@@ -1,16 +1,33 @@
 template(name='home')
-	h1.raw-header Websites
+	.list-header
+		button.btn.btn-primary.pull-right.add-item-button Add Website
+		h1 Websites
+		.modal.fade.add-item-modal
+			.modal-dialog
+				.modal-content
+					form.add-item-form
+						.modal-header
+							h4.modal-title Add Website
+						.modal-body
+							.col-xs-6
+								input(name='name', placeholder='name')
+							.col-xs-6
+								input(name='slug', placeholder='slug')
+							.col-xs-12
+								input(name='url', placeholder='url')
+							.col-xs-12
+								label Default Region
+								select.form-control(name='supportedRegions')
+									each regions
+										option(value='{{ slug }}')= name
+							.clearfix
+						.modal-footer
+							input(type='hidden', name='isActive', value='on')
+							button.btn.btn-warning Cancel
+							button.btn.btn-success(type='submit') Add Website
 	ul.websites-overview.list-overview
 		each websites
 			li.list-item.website(data-slug='{{ slug }}', style='border-color: #{{ hashColor slug }}')
-				.dropdown.pull-right
-					button.btn.btn-mellow.dropdown-toggle(type='button', data-toggle='dropdown') add content group
-						span.glyphicon.glyphicon-triangle-bottom
-					ul.dropdown-menu(role='menu')
-						each contentGroups
-							with getContentGroupDetails slug
-								li(role='presentation')
-									a.add-content-group-to-website(href='#', data-slug='{{ slug }}' role='menuitem', tabindex='-1') {{ name }}
 				if deleteEnabled
 					button.btn.btn-danger.pull-right(data-slug='{{ slug }}') Deactivate
 				//.btn-group.setting-button.pull-right
@@ -25,8 +42,8 @@ template(name='home')
 						if deleteEnabled
 							li.danger
 								a.disable-website(href='#', data-slug='{{ slug }}') Deactivate Website
-				h2 {{ name }} - 
-					small
+				h2 {{ name }}
+					small - 
 						a(href='http://{{ url }}')= url
 						span.glyphicon.glyphicon-share
 				ul

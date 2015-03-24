@@ -24,13 +24,15 @@ template(name='contentGroups')
 											option(value='high') LIVE
 									.clearfix
 								.modal-footer
+									input(type='hidden', name='isActive', value='on')
 									button.btn.btn-warning Cancel
 									button.btn.btn-success(type='submit') Add Content Group
 			.col-xs-12
 				ul.content-groups
 					each contentGroups
 						li.content-group(data-slug='{{ slug }}')
-							h3.name= name
+							h3.name {{ name }}
+								small - {{ slug }}
 							.supported-regions.well
 								.dropdown.pull-right
 									button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') add region

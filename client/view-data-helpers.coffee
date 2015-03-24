@@ -150,9 +150,11 @@ t.editWebsiteContentGroup.helpers
 
 t.home.helpers
 	websites: ->
-		Websites.find { isActive: 'on' }, { sort: { name: -1 } }
+		Websites.find { isActive: 'on' }, { sort: { name: 1 } }
 	contentGroups: ->
-		ContentGroups.find {}
+		ContentGroups.find {}, { sort: { slug: 1 } }
+	regions: ->
+		Regions.find {}, { sort: { name: 1 } }
 	getContentGroupDetails: (slug) ->
 		ContentGroups.findOne { slug: slug }
 	deleteEnabled: ->
@@ -165,7 +167,7 @@ t.languages.helpers
 
 t.menus.helpers
 	menus: ->
-		Menus.find {}, {sort: {name: 1}}
+		Menus.find {}, {sort: {slug: 1}}
 
 t.pages.helpers
 	pages: ->

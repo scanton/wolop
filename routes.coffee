@@ -1,15 +1,15 @@
 pages = [
 	['Home', 'home', 'home']
-	#['Static Text', 'static-text', 'text-height']
-	#['Products', 'products', 'shopping-cart']
-	#['Notices', 'notices', 'comment']
+	['Static Text', 'static-text', 'text-height']
+	['Products', 'products', 'shopping-cart']
+	['Notices', 'notices', 'comment']
 	['Websites', 'websites', 'globe']
 	['Content Groups', 'content-groups', 'book']
 	['Pages', 'pages', 'duplicate']
 	['Menus', 'menus', 'th-list']
 	['Regions', 'regions', 'flag']
 	['Languages', 'languages', 'yen']
-	#['Users', 'users', 'user']
+	['Users', 'users', 'user']
 ]
 routeNames = []
 
@@ -40,7 +40,8 @@ Router.map ->
 		template: 'home'
 		subscriptions: ->
 			#Meteor.subscribe
-
+	routeNames.push 'root'
+	
 	@route 'logout',
 		path: '/logout'
 		template: 'logout'
@@ -50,35 +51,35 @@ Router.map ->
 			Router.go '/'
 
 	@route 'edit-website-content-group',
-		routeNames.push 'edit-website-content-group'
 		path: '/edit-website-content-group/:website/:group'
 		template: 'edit-website-content-group'
 		data: ->
 			group: @params.group
 			website: @params.website
-
+	routeNames.push 'edit-website-content-group'
+	
 	@route 'edit-menu-details',
-		routeNames.push 'edit-menu-details'
 		path: '/edit-menu-details/:menu/:contentGroup'
 		template: 'edit-menu-details'
 		data: ->
 			menu: @params.menu
 			group: @params.contentGroup
+	routeNames.push 'edit-menu-details'
 
 	@route 'edit-page-localization',
-		routeNames.push 'edit-page-localization'
 		path: '/edit-page-localization/:page/:contentGroup'
 		template: 'edit-page-localization'
 		data: ->
 			page: @params.page
 			group: @params.contentGroup
+	routeNames.push 'edit-page-localization'
 
 	@route 'website-details',
-		routeNames.push 'website-details'
 		path: 'website-details/:slug'
 		template: 'website-details'
 		data: ->
 			slug: @params.slug
+	routeNames.push 'website-details'
 
 requiresLogin = ->
 	if !Meteor.user() or !Meteor.user().roles || !Meteor.user().roles.admin
