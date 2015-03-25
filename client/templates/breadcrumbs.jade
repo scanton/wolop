@@ -3,17 +3,17 @@ template(name='breadcrumbs')
 		li
 			a(href='/home') Home
 		if websiteContext
-			li= websiteContext.name
-				//a(href='/website-details/{{ websiteContext.slug }}')= websiteContext.name
+			li
+				a(href='/website-details/{{ websiteContext.slug }}')= websiteContext.name
 		if contentGroupContext and websiteContext
 			li
 				a(href='/edit-website-content-group/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}')= contentGroupContext.name
 		if regionContext and contentGroupContext and websiteContext
-			li= regionContext.name
-				//a(href='/regions#{{ regionContext.slug }}')= regionContext.name
+			li
+				a(href='/regions#{{ regionContext.slug }}')= regionContext.name
 		if languageContext and regionContext and contentGroupContext and websiteContext
-			li= languageContext.name
-				//a(href='/languages#{{ languageContext.slug }}')= languageContext.name
+			li
+				a(href='/languages#{{ languageContext.slug }}')= languageContext.name
 
 
 template(name='shortBreadcrumbs')

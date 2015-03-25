@@ -29,7 +29,7 @@ template(name='home')
 		each websites
 			li.list-item.website(data-slug='{{ slug }}', style='border-color: #{{ hashColor slug }}')
 				if deleteEnabled
-					button.btn.btn-danger.pull-right(data-slug='{{ slug }}') Deactivate
+					button.btn.btn-danger.pull-right.disable-website(data-slug='{{ slug }}') Deactivate
 				//.btn-group.setting-button.pull-right
 					button.btn.btn-antique.dropdown-toggle(data-toggle='dropdown')
 						span.glyphicon.glyphicon-cog
@@ -42,7 +42,8 @@ template(name='home')
 						if deleteEnabled
 							li.danger
 								a.disable-website(href='#', data-slug='{{ slug }}') Deactivate Website
-				h2 {{ name }}
+				h2 
+					a(href='/website-details/{{ slug }}') {{ name }}
 					small - 
 						a(href='http://{{ url }}')= url
 						span.glyphicon.glyphicon-share

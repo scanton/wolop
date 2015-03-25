@@ -1,2 +1,17 @@
 template(name='websiteDetails')
-	h1= slug
+	with getWebsite websiteSlug
+		h1 {{name}}
+		ul.websites-overview
+			each supportedContentGroups
+				with getContentGroup this
+					li.website.list-item
+						h2
+							a(href='/edit-website-content-group/{{ getWebsiteSlug }}/{{ slug }}')= name
+						h3 Regions
+						ul.supported-regions
+							each supportedRegions
+								li= this
+						h3 Menus
+						ul.supported-menus
+							each supportedMenus
+								li= this

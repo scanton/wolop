@@ -49,6 +49,10 @@ helper 'languageContext', ->
 	Languages.findOne { slug: Session.get('current-language') }
 helper 'hashColor', (str) ->
 	intToRGB hashCode(str)
+helper 'getWebsite', (slug) ->
+	Websites.findOne { slug: slug }
+helper 'getContentGroup', (slug) ->
+	ContentGroups.findOne { slug: slug }
 helper 'getRegion', (region) ->
 	Regions.findOne { slug: region }
 helper 'getLanguage', (language) ->
@@ -74,11 +78,11 @@ helper 'isCurrentRegion', (region) ->
 
 Session.set 'delete-enabled', false
 if !Session.get 'admin-history-limit'
-	Session.set 'admin-history-limit', 1
+	Session.set 'admin-history-limit', 3
 
 t.layout.helpers
 	adminHistory: ->
-		AdminHistory.find {}, { limit: Session.get 'admin-history-limit', sort: { created: -1 } }
+		AdminHistory.find {}, { limit: Session.get 'admin-history-limit' }
 	deleteEnabled: ->
 		Session.get 'delete-enabled'
 	deleteEnabledClass: ->
@@ -86,7 +90,7 @@ t.layout.helpers
 	adminHistoryLimit: ->
 		Session.get 'admin-history-limit'
 	getUserDetails: (id) ->
-		Meteor.users.findOne {_id: id}
+		Meteor.users.findOne { _id: id }
 
 t.contentGroups.helpers
 	contentGroups: ->
@@ -124,7 +128,7 @@ t.editMenuDetails.helpers
 				a.sort()
 				return a
 	getPageName: (slug) ->
-		p = Pages.findOne {slug: slug}
+		p = Pages.findOne { slug: slug }
 		if p
 			return p.name
 		return slug
@@ -163,21 +167,25 @@ t.home.helpers
 
 t.languages.helpers
 	languages: ->
-		Languages.find {}, {sort: {name: 1}}
+		Languages.find {}, { sort: { name: 1 } }
 
 t.menus.helpers
 	menus: ->
-		Menus.find {}, {sort: {slug: 1}}
+		Menus.find {}, { sort: { slug: 1 } }
 
 t.pages.helpers
 	pages: ->
-		Pages.find {}, {sort: {name: 1}}
+		Pages.find {}, { sort: { name: 1 } }
 
 t.regions.helpers
 	languages: ->
-		Languages.find {}, {sort: {name: 1}}
+		Languages.find {}, { sort: { name: 1 } }
 	regions: ->
-		Regions.find {}, {sort: {name: 1}}
+		Regions.find {}, { sort: { name: 1 } }
+
+t.websiteDetails.helpers
+	getWebsiteSlug: ->
+		t.parentData(2).slug
 
 t.websites.helpers
 	websites: ->
@@ -185,5 +193,5 @@ t.websites.helpers
 	contentGroups: ->
 		ContentGroups.find {}
 	canReactivate: (slug) ->
-		w = Websites.findOne {slug: slug}
-		return w.isActive == '0'
+		w = Websites.findOne { slug: slug }
+		return w.isActive != 'on'

@@ -188,6 +188,43 @@ t.editWebsiteContentGroup.events
 			backdrop: true
 			keyboard: true
 
+	'click .add-menu-modal button': (e) ->
+		$('.add-menu-modal').modal 'hide'
+
+	'click .add-page-modal button': (e) ->
+		$('.add-page-modal').modal 'hide'
+
+	'submit .add-menu-form': (e) ->
+		e.preventDefault()
+		$('.add-menu-modal').modal 'hide'
+		data = $(e.target).serializeArray()
+		o = objectifyFormArray(data)
+		$(e.target).find("input").not("input[type='hidden']").not("input[type='submit']").val ''
+		if o.name && o.slug && o.contentGroup
+			slug = o.contentGroup
+			delete o.contentGroup
+			collections.insertMenu o
+			group = collections.getContentGroup slug
+			if group
+				supportedMenus = group.supportedMenus || []
+				supportedMenus.unshift o.slug
+				collections.updateContentGroup { _id: group._id }, { $set: { supportedMenus: supportedMenus } }
+
+	'submit .add-page-form': (e) ->
+		e.preventDefault()
+		$('.add-page-modal').modal 'hide'
+		data = $(e.target).serializeArray()
+		o = objectifyFormArray(data)
+		$(e.target).find("input").not("input[type='hidden']").not("input[type='submit']").val ''
+		if o.name && o.slug
+			slug = o.contentGroup
+			delete o.contentGroup
+			collections.insertPage o
+			group = collections.getContentGroup slug
+			if group
+				supportedPages = group.supportedPages || []
+				supportedPages.unshift o.slug
+				collections.updateContentGroup { _id: group._id }, { $set: { supportedPages: supportedPages } }
 
 t.home.events
 	'click .disable-website': (e) ->

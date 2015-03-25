@@ -56,6 +56,7 @@ Router.map ->
 		data: ->
 			group: @params.group
 			website: @params.website
+
 	routeNames.push 'edit-website-content-group'
 	
 	@route 'edit-menu-details',
@@ -78,7 +79,9 @@ Router.map ->
 		path: 'website-details/:slug'
 		template: 'website-details'
 		data: ->
-			slug: @params.slug
+			slug = @params.slug
+			websiteSlug: slug
+
 	routeNames.push 'website-details'
 
 requiresLogin = ->

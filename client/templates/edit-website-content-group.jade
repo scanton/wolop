@@ -11,7 +11,7 @@ template(name='editWebsiteContentGroup')
 			.modal.fade.add-menu-modal
 				.modal-dialog
 					.modal-content
-						form.add-item-form
+						form.add-menu-form
 							.modal-header
 								h4.modal-title Add Menu
 							.modal-body
@@ -21,6 +21,7 @@ template(name='editWebsiteContentGroup')
 									input(name='slug', placeholder='slug')
 								.clearfix
 							.modal-footer
+								input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
 								input(type='hidden', name='isActive', value='on')
 								button.btn.btn-warning Cancel
 								button.btn.btn-success(type='submit') Add Menu
@@ -37,7 +38,7 @@ template(name='editWebsiteContentGroup')
 			.modal.fade.add-page-modal
 				.modal-dialog
 					.modal-content
-						form.add-item-form
+						form.add-page-form
 							.modal-header
 								h4.modal-title Add Page
 							.modal-body
@@ -47,6 +48,7 @@ template(name='editWebsiteContentGroup')
 									input(name='slug', placeholder='slug')
 								.clearfix
 							.modal-footer
+								input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
 								input(type='hidden', name='isActive', value='on')
 								button.btn.btn-warning Cancel
 								button.btn.btn-success(type='submit') Add Page

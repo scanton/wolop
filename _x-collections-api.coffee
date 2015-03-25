@@ -1,6 +1,5 @@
 actionLogger = (description, query, options, data) ->
-	`var data`
-	data = 
+	o = 
 		userId: Meteor.userId()
 		user: Meteor.user().profile.name
 		description: description
@@ -8,59 +7,75 @@ actionLogger = (description, query, options, data) ->
 		query: JSON.stringify(query)
 		options: JSON.stringify(options)
 		created: new Date
-	AdminHistory.insert data
+	AdminHistory.insert o
+
+fixIsActiveBoolean = (data) ->
+	if data && data.isActive == 1
+		data.isActive = 'on'
+	data
 
 updateRegion = (query, options) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Regions.update', query, options, Regions.update(query, options)
 
 updateLanguage = (query, options) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Languages.update', query, options, Languages.update(query, options)
 
 updateWebsite = (query, options) ->
+	console.log data
+	data = fixIsActiveBoolean data
+	console.log data
 	actionLogger 'Websites.update', query, options, Websites.update(query, options)
 
 updateContentGroup = (query, options) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'ContentGroups.update', query, options, ContentGroups.update(query, options)
 
 updatePage = (query, options) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Pages.update', query, options, Pages.update(query, options)
 
 updatePageLocalization = (query, options) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'PageLocalizations.update', query, options, PageLocalizations.update(query, options)
 
 updateMenu = (query, options) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Menus.update', query, options, Menus.update(query, options)
 
 insertRegion = (data) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Regions.insert', '', data, Regions.insert(data)
 
 insertLanguage = (data) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Language.insert', '', data, Languages.insert(data)
 
 insertWebsite = (data) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Websites.insert', '', data, Websites.insert(data)
 
 insertContentGroup = (data) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'ContentGroups.insert', '', data, ContentGroups.insert(data)
 
 insertPage = (data) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Pages.insert', '', data, Pages.insert(data)
 
 insertPageLocalization = (data) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'PageLocalizations.insert', '', data, PageLocalizations.insert(data)
 
 insertMenu = (data) ->
+	data = fixIsActiveBoolean data
 	actionLogger 'Menus.insert', '', data, Menus.insert(data)
 
 defineCollectionApi
+
 	logAction: actionLogger
-	updateWebsite: updateWebsite
-	updateContentGroup: updateContentGroup
-	updateRegion: updateRegion
-	updateLanguage: updateLanguage
-	updateMenu: updateMenu
-	updatePage: updatePage
-	updatePageLocalization: updatePageLocalization
+
 	insertWebsite: insertWebsite
 	insertContentGroup: insertContentGroup
 	insertRegion: insertRegion
@@ -68,9 +83,31 @@ defineCollectionApi
 	insertMenu: insertMenu
 	insertPage: insertPage
 	insertPageLocalization: insertPageLocalization
+
+	getWebsite: (slug) ->
+		Websites.findOne {slug: slug}
+	getContentGroup: (slug) ->
+		ContentGroups.findOne {slug: slug}
+	getRegion: (slug) ->
+		Regions.findOne {slug: slug}
+	getLanguage: (slug) ->
+		Languages.findOne {slug: slug}
+	getMenu: (slug) ->
+		Menus.findOne {slug: slug}
+	getPage: (slug) ->
+		Pages.findOne {slug: slug}
+
+	updateWebsite: updateWebsite
+	updateContentGroup: updateContentGroup
+	updateRegion: updateRegion
+	updateLanguage: updateLanguage
+	updateMenu: updateMenu
+	updatePage: updatePage
+	updatePageLocalization: updatePageLocalization
+
 	movePageUpOnMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne(slug: menu)
+			m = Menus.findOne {slug: menu}
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
@@ -81,9 +118,10 @@ defineCollectionApi
 				x = sp.splice(index, 1)
 				sp.splice index - 1, 0, x[0]
 			updateMenu { _id: m._id }, $set: supportedPages: sp
+
 	movePageDownOnMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne(slug: menu)
+			m = Menus.findOne {slug: menu}
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
@@ -94,9 +132,10 @@ defineCollectionApi
 				x = sp.splice(index, 1)
 				sp.splice index + 1, 0, x[0]
 			updateMenu { _id: m._id }, $set: supportedPages: sp
+
 	addPageToMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne(slug: menu)
+			m = Menus.findOne {slug: menu}
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
@@ -106,21 +145,23 @@ defineCollectionApi
 				sp = []
 			sp.unshift page
 			updateMenu { _id: m._id }, $set: supportedPages: sp
+
 	removePageFromMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne(slug: menu)
+			m = Menus.findOne {slug: menu}
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
 				if sp[l] == page
 					sp.splice l, 1
 			updateMenu { _id: m._id }, $set: supportedPages: sp
+
 	updatePageDetails: (data) ->
 		if data and data.page and data.title and data.region and data.language
-			pageDetail = PageLocalizations.findOne(
+			pageDetail = PageLocalizations.findOne
 				page: data.page
 				region: data.region
-				language: data.language)
+				language: data.language
 			if pageDetail and pageDetail._id
 				data.modified = new Date
 				actionLogger 'PageLocalizations.update', '', data, PageLocalizations.update({ _id: pageDetail._id }, $set: data)
@@ -129,16 +170,21 @@ defineCollectionApi
 				actionLogger 'PageLocalizations.insert', '', data, PageLocalizations.insert(data)
 		else
 			console.log 'invalid Page Details, _global.updatePageDetails'
+
 	deactivateWebsite: (slug) ->
 		if slug
 			id = Websites.findOne(slug: slug)._id
 			if id
-				Websites.update { _id: id }, $set: isActive: '0'
+				actionLogger 'Website Deactivated', { _id: id }, slug
+				Websites.update { _id: id }, $set: isActive: ''
+
 	reactivateWebsite: (slug) ->
 		if slug
 			id = Websites.findOne(slug: slug)._id
 			if id
-				Websites.update { _id: id }, $set: isActive: '1'
+				actionLogger 'Website Activated', { _id: id }, slug
+				Websites.update { _id: id }, $set: isActive: 'on'
+
 	addRegionToContentGroup: (region, group) ->
 		g = ContentGroups.findOne(slug: group)
 		if g
@@ -154,6 +200,7 @@ defineCollectionApi
 			query = _id: g._id
 			options = $set: supportedRegions: g.supportedRegions
 			return updateContentGroup(query, options)
+
 	removeRegionFromContentGroup: (region, group) ->
 		g = ContentGroups.findOne(slug: group)
 		if g and g.supportedRegions
@@ -164,6 +211,7 @@ defineCollectionApi
 			query = _id: g._id
 			options = $set: supportedRegions: g.supportedRegions
 			return updateContentGroup(query, options)
+
 	addLanguageToRegion: (region, language) ->
 		l = undefined
 		options = undefined
@@ -183,6 +231,7 @@ defineCollectionApi
 			query = _id: r._id
 			options = $set: supportedLanguages: r.supportedLanguages
 			return updateRegion(query, options)
+
 	removeLanguageFromRegion: (region, language) ->
 		l = undefined
 		options = undefined
@@ -197,6 +246,7 @@ defineCollectionApi
 			query = _id: r._id
 			options = $set: supportedLanguages: r.supportedLanguages
 			return updateRegion(query, options)
+
 	addContentGroupToWebsite: (group, website) ->
 		w = Websites.findOne(slug: website)
 		if w
@@ -212,6 +262,7 @@ defineCollectionApi
 			query = _id: w._id
 			options = $set: supportedContentGroups: w.supportedContentGroups
 			return updateWebsite(query, options)
+
 	removeContentGroupFromWebsite: (group, website) ->
 		w = Websites.findOne(slug: website)
 		if w and w.supportedContentGroups
@@ -222,6 +273,7 @@ defineCollectionApi
 			query = _id: w._id
 			options = $set: supportedContentGroups: w.supportedContentGroups
 			return updateWebsite(query, options)
+
 	addMenuToContentGroup: (menu, group) ->
 		g = ContentGroups.findOne(slug: group)
 		if g
@@ -237,6 +289,7 @@ defineCollectionApi
 			query = _id: g._id
 			options = $set: supportedMenus: g.supportedMenus
 			return updateContentGroup(query, options)
+
 	removeMenuFromContentGroup: (menu, group) ->
 		g = ContentGroups.findOne(slug: group)
 		if g and g.supportedMenus
@@ -247,6 +300,7 @@ defineCollectionApi
 			query = _id: g._id
 			options = $set: supportedMenus: g.supportedMenus
 			return updateContentGroup(query, options)
+
 	addPageToContentGroup: (page, group) ->
 		g = ContentGroups.findOne(slug: group)
 		if g
@@ -262,6 +316,7 @@ defineCollectionApi
 			query = _id: g._id
 			options = $set: supportedPages: g.supportedPages
 			return updateContentGroup(query, options)
+
 	removePageFromContentGroup: (page, group) ->
 		g = ContentGroups.findOne(slug: group)
 		if g and g.supportedPages
