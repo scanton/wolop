@@ -75,10 +75,11 @@ helper 'isCurrentRegion', (region) ->
 		return 'active-region'
 	else
 		return ''
-
-Session.set 'delete-enabled', false
-if !Session.get 'admin-history-limit'
-	Session.set 'admin-history-limit', 3
+helper 'isActivePath', (str) ->
+	path = Router.current().route._path
+	if str == '/home' && path == '/' 
+		return 'active'
+	if path == str then 'active' else ''
 
 t.layout.helpers
 	adminHistory: ->
@@ -91,6 +92,8 @@ t.layout.helpers
 		Session.get 'admin-history-limit'
 	getUserDetails: (id) ->
 		Meteor.users.findOne { _id: id }
+	getGlobalWrapperClasses: ->
+		if Session.get('show-main-nav') then 'show-main-nav' else 'hide-main-nav'
 
 t.contentGroups.helpers
 	contentGroups: ->
@@ -186,6 +189,8 @@ t.regions.helpers
 t.websiteDetails.helpers
 	getWebsiteSlug: ->
 		t.parentData(2).slug
+	slugUp: (int)->
+		t.parentData(int).slug if t.parentData(int)
 
 t.websites.helpers
 	websites: ->

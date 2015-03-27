@@ -1,8 +1,8 @@
 pages = [
-	['Home', 'home', 'home']
-	['Static Text', 'static-text', 'text-height']
-	['Products', 'products', 'shopping-cart']
-	['Notices', 'notices', 'comment']
+	#['Home', 'home', 'home']
+	#['Static Text', 'static-text', 'text-height']
+	#['Products', 'products', 'shopping-cart']
+	#['Notices', 'notices', 'comment']
 	['Websites', 'websites', 'globe']
 	['Content Groups', 'content-groups', 'book']
 	['Pages', 'pages', 'duplicate']
@@ -35,12 +35,19 @@ Router.map ->
 			subscriptions: ->
 				Meteor.subscribe path
 
+	routeNames.push 'root'
 	@route 'root',
 		path: '/'
 		template: 'home'
 		subscriptions: ->
 			#Meteor.subscribe
-	routeNames.push 'root'
+
+	routeNames.push 'home'
+	@route 'home',
+		path: '/home'
+		template: 'home'
+		subscriptions: ->
+			#Meteor.subscribe
 	
 	@route 'logout',
 		path: '/logout'
@@ -50,39 +57,49 @@ Router.map ->
 			Meteor.logout()
 			Router.go '/'
 
+	routeNames.push 'edit-website-content-group'
 	@route 'edit-website-content-group',
 		path: '/edit-website-content-group/:website/:group'
 		template: 'edit-website-content-group'
 		data: ->
 			group: @params.group
 			website: @params.website
-
-	routeNames.push 'edit-website-content-group'
+		onAfterAction: ->
+			Session.set 'content-group-context', @params.group
+			Session.set 'website-context', @params.website
 	
+	routeNames.push 'edit-menu-details'
 	@route 'edit-menu-details',
 		path: '/edit-menu-details/:menu/:contentGroup'
 		template: 'edit-menu-details'
 		data: ->
 			menu: @params.menu
 			group: @params.contentGroup
-	routeNames.push 'edit-menu-details'
+		onAfterAction: ->
+			Session.set 'content-group-context', @params.contentGroup
+			Session.set 'menu-context', @params.menu
 
+	routeNames.push 'edit-page-localization'
 	@route 'edit-page-localization',
 		path: '/edit-page-localization/:page/:contentGroup'
 		template: 'edit-page-localization'
 		data: ->
 			page: @params.page
 			group: @params.contentGroup
-	routeNames.push 'edit-page-localization'
+		onAfterAction: ->
+			Session.set 'content-group-context', @params.contentGroup
+			Session.set 'page-context', @params.page
 
+	routeNames.push 'website-details'
 	@route 'website-details',
-		path: 'website-details/:slug'
+		path: '/website-details/:slug'
 		template: 'website-details'
 		data: ->
 			slug = @params.slug
 			websiteSlug: slug
-
-	routeNames.push 'website-details'
+		onAfterAction: ->
+			Session.set 'website-context', @params.slug
+			Session.set 'content-group-context', null
 
 requiresLogin = ->
 	if !Meteor.user() or !Meteor.user().roles || !Meteor.user().roles.admin

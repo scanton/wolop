@@ -22,6 +22,14 @@ t.home.helpers
 		new Spacebars.SafeString 'This text came from a helper with some <strong>HTML</strong>.'
 
 t.layout.events
+
+	'click .team-status-toggle': (e) ->
+		e.preventDefault()
+		ts = $(e.target).closest '.team-status'
+		if ts.hasClass 'show-details'
+			ts.removeClass 'show-details'
+		else
+			ts.addClass 'show-details'
 	
 	'click .allow-delete-toggle': (e) ->
 		e.preventDefault()
@@ -41,6 +49,11 @@ t.loginRequired.events
 		username = $this.find('input[name="username"]').val()
 		password = $this.find('input[name="password"]').val()
 		Meteor.loginWithPassword username, password
+
+t.breadcrumbs.events
+	'click .admin-menu-toggle': (e) ->
+		e.preventDefault()
+		Session.set 'show-main-nav', !Session.get('show-main-nav', false)
 
 t.contentGroups.events
 
@@ -227,6 +240,7 @@ t.editWebsiteContentGroup.events
 				collections.updateContentGroup { _id: group._id }, { $set: { supportedPages: supportedPages } }
 
 t.home.events
+
 	'click .disable-website': (e) ->
 		e.preventDefault()
 		slug = $(e.target).attr 'data-slug'

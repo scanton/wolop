@@ -6,9 +6,14 @@ hoverColor = #F90
 borderColor = darken(backgroundColor, 7)
 copyColor = #eee
 
+primaryColor = #337ab7
+successColor = #5cb85c
+infoColor = #5bc0de
+warningColor = #f0ad4e
+dangerColor = #d9534f
+
 *
 	transition all 0.3s ease
-	border-radius 0 !important
 
 html
 	height 100%
@@ -28,22 +33,24 @@ form
 	input, textarea
 		font-size 14pt !important
 		padding .5em
-		letter-spacing .067em
-	input[type='submit']
-		letter-spacing 0
-a
-	color linkColor
-	
+
 input, .form-control
 	background bodyColor
 	border-color borderColor
 	color backgroundColor
+
+a
+	color linkColor
+	h2
+		padding 0
+		margin 0
 	
 a:hover, a:focus
 	color hoverColor
 
 h1.section-header
 	margin-left 0
+	font-weight 200
 
 ::-webkit-input-placeholder {
    color lighten(backgroundColor, 12)
@@ -57,10 +64,23 @@ h1.section-header
 :-ms-input-placeholder {  
    color lighten(backgroundColor, 12)
 }
-
+.breadcrumb > li + li:before
+	color backgroundColor
 .breadcrumb
-	background-color backgroundColor
+	background none
 	margin 0
+	padding 0
+	font-size 10pt
+	a
+		color backgroundColor
+	a.active
+		color backgroundColor
+		background darken(bodyColor, 10)
+		padding .25em .75em
+		border-radius 5px
+	a.active:hover
+		text-decoration none
+		cursor default
 	
 .modal-content
 	background backgroundColor
@@ -107,6 +127,7 @@ h1.section-header
 		margin 0 0 0 1em
 .main-nav
 	//background darken(backgroundColor, 3.3)
+	position absolute
 	width 250px
 	height 100%
 	padding 0
@@ -123,14 +144,15 @@ h1.section-header
 		list-style none
 		padding 0
 		font-size 14pt
-		li
-			padding .25ex .5em
-			font-weight 200
+		li.active
 			border-bottom 1px solid lighten(backgroundColor, 3)
 			border-right 1px solid lighten(backgroundColor, 3)
 			border-top 1px solid black
 			border-left 1px solid black
 			margin-bottom .25em
+		li
+			padding .25ex .5em
+			font-weight 200
 			a
 				.glyphicon
 					transition all 0.6s ease
@@ -155,6 +177,7 @@ h1.section-header
 			border-right-color lighten(backgroundColor, 5)
 			border-bottom-color lighten(backgroundColor, 5)
 			margin .25em 0
+			border-radius 15px
 			.well
 				max-height 0
 				overflow hidden
@@ -344,22 +367,29 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 		margin 1em 1em 1em 0em
 		border 1px solid
 		padding .75em
+		border-radius 5px
 		h2
 			margin-top .25em
 		button
-			border-radius 0
-			font-size 16pt
+			font-size 14pt
 			font-weight 200
 			padding-bottom 2px
 		li
 			display inline
+	.high-risk
+		border-color dangerColor
+	.medium-risk
+		border-color warningColor
+	.low-risk
+		border-color successColor
 
 .btn-mellow
 	background backgroundColor
 	color bodyColor
+	border 1px solid darken(backgroundColor, 7)
 	
 .btn-mellow:hover, .btn-mellow:focus
-	backgroundColor darken(backgroundColor, 7)
+	background-color darken(backgroundColor, 7)
 	color orange
 	
 .header-label
@@ -377,4 +407,52 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	margin-right 1em
 
 .team-status
-	display none
+	position relative
+	background-color darken(bodyColor, 20)
+	color backgroundColor
+	padding .5em
+	text-align center
+	min-height 23px
+	max-height 23px
+	overflow hidden
+	.state-label.offline
+		display block
+	.state-label.online
+		display none
+	.coworker
+		margin-top 25px
+	.coworker.online-state
+		.state-label.offline
+			display none
+		.state-label.online
+			display block
+	h3
+		margin 0
+	.breadcrumb
+		position absolute
+		left 20px
+		top 3px
+	.team-status-toggle
+		color backgroundColor
+		position absolute
+		font-size 10pt
+		right 20px
+		top 4px
+	.avatar
+		margin-bottom 5px
+		img
+			max-height 75px
+			border-radius 10px
+			border 2px solid bodyColor
+	.online-state
+		.avatar
+			img
+				border-color #99FF99
+		.state-label
+			color #99FF99
+
+.team-status.show-details
+	max-height 100vh
+	
+textarea[name="bodyContent"]
+	min-height 300px

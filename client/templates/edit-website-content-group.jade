@@ -1,6 +1,5 @@
 template(name='editWebsiteContentGroup')
-	+breadcrumbs
-	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}')= contentGroup.name
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}') {{ website.name }} - {{ contentGroup.name }}
 	.col-xs-8
 		.menu-list
 			button.btn.btn-primary.pull-right.add-menu-button 

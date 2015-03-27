@@ -12,64 +12,75 @@ actionLogger = (description, query, options, data) ->
 fixIsActiveBoolean = (data) ->
 	if data && data.isActive == 1
 		data.isActive = 'on'
-	data
+	return data
+
+preprocessData = (data) ->
+	if data
+		data = fixIsActiveBoolean data
+		data.supportedMenus.sort() if data.supportedMenus
+		data.supportedPages.sort() if data.supportedPages
+		data.supportedRegions.sort() if data.supportedRegions
+		data.supportedLanguages.sort() if data.supportedLanguages
+		data.supportedContentGroups.sort() if data.supportedContentGroups
+		data.supportedWebsites.sort() if data.supportedWebsites
+	return data
 
 updateRegion = (query, options) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Regions.update', query, options, Regions.update(query, options)
 
 updateLanguage = (query, options) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Languages.update', query, options, Languages.update(query, options)
 
 updateWebsite = (query, options) ->
 	console.log data
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	console.log data
 	actionLogger 'Websites.update', query, options, Websites.update(query, options)
 
 updateContentGroup = (query, options) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'ContentGroups.update', query, options, ContentGroups.update(query, options)
 
 updatePage = (query, options) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Pages.update', query, options, Pages.update(query, options)
 
 updatePageLocalization = (query, options) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'PageLocalizations.update', query, options, PageLocalizations.update(query, options)
 
 updateMenu = (query, options) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Menus.update', query, options, Menus.update(query, options)
 
 insertRegion = (data) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Regions.insert', '', data, Regions.insert(data)
 
 insertLanguage = (data) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Language.insert', '', data, Languages.insert(data)
 
 insertWebsite = (data) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Websites.insert', '', data, Websites.insert(data)
 
 insertContentGroup = (data) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'ContentGroups.insert', '', data, ContentGroups.insert(data)
 
 insertPage = (data) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Pages.insert', '', data, Pages.insert(data)
 
 insertPageLocalization = (data) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'PageLocalizations.insert', '', data, PageLocalizations.insert(data)
 
 insertMenu = (data) ->
-	data = fixIsActiveBoolean data
+	data = preprocessData data
 	actionLogger 'Menus.insert', '', data, Menus.insert(data)
 
 defineCollectionApi

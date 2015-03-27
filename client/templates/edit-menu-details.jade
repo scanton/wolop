@@ -1,6 +1,5 @@
 template(name='editMenuDetails')
-	+shortBreadcrumbs
-	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}')= contentGroup.name
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}') {{ websiteContext.name }} - {{ contentGroup.name }}
 	.menu-manager.menu(data-slug='{{ menu.slug }}')
 		.col-xs-6
 			h3 {{ menu.name }} Menu Items 

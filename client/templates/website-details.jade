@@ -1,17 +1,29 @@
 template(name='websiteDetails')
-	with getWebsite websiteSlug
-		h1 {{name}}
-		ul.websites-overview
-			each supportedContentGroups
-				with getContentGroup this
-					li.website.list-item
-						h2
-							a(href='/edit-website-content-group/{{ getWebsiteSlug }}/{{ slug }}')= name
-						h3 Regions
-						ul.supported-regions
-							each supportedRegions
-								li= this
-						h3 Menus
-						ul.supported-menus
-							each supportedMenus
-								li= this
+	.website-details
+		with getWebsite websiteSlug
+			h1 {{name}}
+			ul.websites-overview.list-overview
+				each supportedContentGroups
+					with getContentGroup this
+						li.website.list-item(class='{{riskLevel}}-risk')
+							.container-fluid
+								.row
+									.col-xs-6
+										a.btn(class='{{ getRiskAsBsClass riskLevel }}', href='/edit-website-content-group/{{ getWebsiteSlug }}/{{ slug }}')
+											h2= name
+										h3 Menus
+										.btn-group.supported-menus
+											each supportedMenus
+												with getMenu this
+													a.btn.btn-mellow(href='/edit-menu-details/{{ slug }}/{{ slugUp 2 }}') {{ name }}
+										h3 Regions
+										.btn-group.supported-regions
+											each supportedRegions
+												with getRegion this
+													a.btn.btn-mellow(href='/regions') {{ name }}
+									.col-xs-6
+										h3 Pages
+										.btn-group-vertical.supported-pages
+											each supportedPages
+												with getPage this
+													a.btn.btn-mellow(href='/edit-page-localization/{{ slug }}/{{ slugUp 2 }}') {{ name }}
