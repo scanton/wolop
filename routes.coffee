@@ -57,6 +57,17 @@ Router.map ->
 			Meteor.logout()
 			Router.go '/'
 
+	routeNames.push 'push-manager'
+	@route 'push-manager',
+		path: '/push-manager/:website/:group'
+		template: 'push-manager'
+		data: ->
+			group: @params.group
+			website: @params.website
+		onAfterAction: ->
+			Session.set 'content-group-context', @params.group
+			Session.set 'website-context', @params.website
+
 	routeNames.push 'edit-website-content-group'
 	@route 'edit-website-content-group',
 		path: '/edit-website-content-group/:website/:group'

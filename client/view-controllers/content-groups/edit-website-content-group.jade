@@ -1,6 +1,39 @@
 template(name='editWebsiteContentGroup')
 	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}') {{ website.name }} - {{ contentGroup.name }}
-	.col-xs-8
+	.col-xs-12
+		a.btn.btn-primary.push-content-button.pull-right(href='/push-manager/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}') Push Content Manager
+		h1 Content Group Overview
+	.col-xs-6
+		.page-list
+			.modal.fade.add-page-modal
+				.modal-dialog
+					.modal-content
+						form.add-page-form
+							.modal-header
+								h4.modal-title Add Page
+							.modal-body
+								.col-xs-6
+									input(name='name', placeholder='name')
+								.col-xs-6
+									input(name='slug', placeholder='slug')
+								.clearfix
+							.modal-footer
+								input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
+								input(type='hidden', name='isActive', value='on')
+								button.btn.btn-warning Cancel
+								button.btn.btn-success(type='submit') Add Page
+			button.btn.btn-primary.pull-right.add-page-button 
+				.glyphicon.glyphicon-plus
+				.glyphicon.glyphicon-file
+				| Add Page
+			h3 Pages
+			ul.pages
+				each contentGroup.supportedPages
+					with getPage this
+						li.page(data-slug='{{ slug }}')
+							a(href='/edit-page-localization/{{ slug }}/{{ contentGroupContext.slug }}')
+								h4= name
+	.col-xs-6
 		.menu-list
 			button.btn.btn-primary.pull-right.add-menu-button 
 				.glyphicon.glyphicon-plus
@@ -33,37 +66,7 @@ template(name='editWebsiteContentGroup')
 									h4 ({{ supportedPages.length }} pages)
 							a(href='/edit-menu-details/{{ slug }}/{{ contentGroupContext.slug }}')
 								h4= name
-		.page-list
-			.modal.fade.add-page-modal
-				.modal-dialog
-					.modal-content
-						form.add-page-form
-							.modal-header
-								h4.modal-title Add Page
-							.modal-body
-								.col-xs-6
-									input(name='name', placeholder='name')
-								.col-xs-6
-									input(name='slug', placeholder='slug')
-								.clearfix
-							.modal-footer
-								input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
-								input(type='hidden', name='isActive', value='on')
-								button.btn.btn-warning Cancel
-								button.btn.btn-success(type='submit') Add Page
-			button.btn.btn-primary.pull-right.add-page-button 
-				.glyphicon.glyphicon-plus
-				.glyphicon.glyphicon-file
-				| Add Page
-			h3 Pages
-			ul.pages
-				each contentGroup.supportedPages
-					with getPage this
-						li.page(data-slug='{{ slug }}')
-							a(href='/edit-page-localization/{{ slug }}/{{ contentGroupContext.slug }}')
-								h4= name
-
-	.col-xs-4
+	//.col-xs-4
 		h3 Region/Language
 		.region-language-selector
 			ul.regions

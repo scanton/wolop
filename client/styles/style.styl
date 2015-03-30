@@ -138,6 +138,7 @@ h1.section-header
 		border 1px solid darken(backgroundColor, 5)
 		border-right-color lighten(backgroundColor, 5)
 		border-bottom-color lighten(backgroundColor, 5)
+		border-radius 7px
 		color bodyColor
 	ul
 		margin-right .25em
@@ -177,7 +178,7 @@ h1.section-header
 			border-right-color lighten(backgroundColor, 5)
 			border-bottom-color lighten(backgroundColor, 5)
 			margin .25em 0
-			border-radius 15px
+			border-radius 7px
 			.well
 				max-height 0
 				overflow hidden
@@ -391,7 +392,13 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 .btn-mellow:hover, .btn-mellow:focus
 	background-color darken(backgroundColor, 7)
 	color orange
+
+.mellow-label
+	color darken(bodyColor, 30)
 	
+.mellow-label:hover
+	color bodyColor
+
 .header-label
 	color white
 	padding .25em
@@ -412,8 +419,8 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	color backgroundColor
 	padding .5em
 	text-align center
-	min-height 23px
-	max-height 23px
+	min-height 25px
+	max-height 25px
 	overflow hidden
 	.state-label.offline
 		display block
@@ -456,3 +463,14 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	
 textarea[name="bodyContent"]
 	min-height 300px
+	
+.btn-group-vertical
+	width 100%
+
+.vs-label
+	text-align center
+	
+.footer
+	background-color darken(backgroundColor, 5)
+	padding 1em
+	margin-top 2em

@@ -1,0 +1,33 @@
+template(name='editMenuDetails')
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}') {{ websiteContext.name }} - {{ contentGroup.name }}
+	.col-xs-12
+		a.btn.btn-primary.push-content-button.pull-right(href='/push-manager/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}') Push Content Manager
+		h1 Menu Details
+		.menu-manager.menu(data-slug='{{ menu.slug }}')
+			.container-fluid
+				.row
+					.col-xs-6
+						h3 {{ menu.name }} Menu Items 
+						ul.pages
+							each menu.supportedPages
+								li.page
+									button.btn.btn-primary.move-page-up.pull-right(data-slug='{{ this }}')
+										span.glyphicon.glyphicon-triangle-top
+									button.btn.btn-primary.move-page-down.pull-right(data-slug='{{ this }}')
+										span.glyphicon.glyphicon-triangle-bottom
+									button.btn.btn-primary.indent-page.pull-right(data-slug='{{ this }}')
+										span.glyphicon.glyphicon-indent-left
+									button.btn.btn-primary.outdent-page.pull-right(data-slug='{{ this }}')
+										span.glyphicon.glyphicon-indent-right
+									button.btn.btn-danger.remove-page-from-menu-button(data-slug='{{ this }}')
+										span.glyphicon.glyphicon-minus
+									span {{ getPageName this }}
+					.col-xs-6
+						h3 Unused Pages
+						ul.pages
+							each filterUsedPages contentGroup.supportedPages
+								li.page
+									button.btn.btn-success.add-page-to-menu-button(data-slug='{{ this }}')
+										span.glyphicon.glyphicon-plus
+									span {{ getPageName this }}
+					

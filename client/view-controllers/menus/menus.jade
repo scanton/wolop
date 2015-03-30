@@ -23,6 +23,18 @@ template(name='menus')
 			.col-xs-12
 				ul.menus
 					each menus
-						li 
-							h4 {{ slug }} 
-								small - {{ name }}
+						li.menu(data-slug='{{ slug }}')
+							h3
+								span.name= slug
+								small.slug - {{ name }}
+							.supported-pages.well
+								if supportedPages
+									h4 pages:
+									ul
+										each supportedPages
+											li
+												a.delete-button.remove-page-from-menu(href='#', data-slug='{{.}}') 
+													span.glyphicon.glyphicon-remove
+												span.slug {{.}}
+								else
+									h4 (no pages in this menu)

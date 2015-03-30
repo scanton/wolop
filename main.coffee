@@ -20,3 +20,10 @@ if Meteor.isClient
 			val = arr[l]
 			a.unshift { name: val[0], link: val[1], icon: val[2] }
 		return a
+	window.objectifyFormArray = (arr) ->
+		o = {}
+		l = arr.length
+		while l--
+			d = arr[l]
+			o[d.name] = d.value
+		return o

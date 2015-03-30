@@ -8,7 +8,7 @@ template(name='layout')
 							if deleteEnabled
 								a.allow-delete-toggle.btn.btn-success(href='#') Disable Delete
 							else
-								a.allow-delete-toggle.btn.btn-danger(href='#') Enable Delete
+								a.allow-delete-toggle.btn.btn-danger.admin-access-only(href='#') Enable Delete
 							a(href='/logout') Logout 
 								span.name {{currentUser.profile.name}}
 					h1 
@@ -57,3 +57,5 @@ template(name='layout')
 			.row
 				main
 					+yield
+		//.footer
+			sup Wolop 2002 - {{ currentYear }}
