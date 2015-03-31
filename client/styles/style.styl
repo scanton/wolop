@@ -248,7 +248,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 		padding .5em
 		margin .25em
 		margin-bottom .5em
-		background lighten(backgroundColor, 5)
+		background darken(backgroundColor, 5)
 		ul.dropdown-menu
 			li
 				display inline
@@ -392,6 +392,10 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 .btn-mellow:hover, .btn-mellow:focus
 	background-color darken(backgroundColor, 7)
 	color orange
+	
+.btn-lush
+	background bodyColor
+	color backgroundColor
 
 .mellow-label
 	color darken(bodyColor, 30)
@@ -427,7 +431,8 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	.state-label.online
 		display none
 	.coworker
-		margin-top 25px
+		margin 25px 10px 0 10px
+		display inline-block
 	.coworker.online-state
 		.state-label.offline
 			display none
@@ -474,3 +479,16 @@ textarea[name="bodyContent"]
 	background-color darken(backgroundColor, 5)
 	padding 1em
 	margin-top 2em
+	
+.website-details
+	.list-overview 
+		.list-item
+			.edit-group-button
+				width 100%
+			button.btn-lush
+				font-size 11pt
+				margin-top 15px
+				
+.hide-main-nav
+	.push-options
+		display none

@@ -18,7 +18,7 @@ template(name='editPageLocalization')
 		.btn-group-vertical.pull-right
 			each groupOptions
 				button.btn(class='btn-{{ getRiskLabel riskLevel }}')= name
-		a.btn.btn-primary.push-content-button(href='/push-manager/{{ websiteContext.slug }}/{{ contentGroup.slug }}') Push Content Manager
+		//a.btn.btn-primary.push-content-button(href='/push-manager/{{ websiteContext.slug }}/{{ contentGroup.slug }}') Push Content Manager
 	.col-xs-8
 		with getPage page
 			h1= name

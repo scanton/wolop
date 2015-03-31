@@ -93,11 +93,29 @@ Template.contentGroups.events
 			collections.insertContentGroup o
 
 Template.editWebsiteContentGroup.helpers
+
 	getRiskLabel: __coffeescriptShare.riskBsLabel
+
 	website: ->
 		Websites.findOne { slug: @website }
+
 	contentGroup: ->
 		ContentGroups.findOne { slug: @group }
+
+	groupOptions: ->
+		website = Template.parentData(2).website
+		site = Websites.findOne { slug: website }
+		if site
+			a = []
+			keys = _.without site.supportedContentGroups, Template.parentData(2).group
+			for k in keys
+				a.push ContentGroups.findOne({ slug: k })
+			return a
+		else
+			return null
+
+	activeNotices: ->
+		console.log 'TODO activeNotices helper'
 
 Template.editWebsiteContentGroup.events
 	'click .set-region-and-language': (e) ->

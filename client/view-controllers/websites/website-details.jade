@@ -8,20 +8,46 @@ template(name='websiteDetails')
 						li.website.list-item(class='{{riskLevel}}-risk')
 							.container-fluid
 								.row
+									a.edit-group-button.btn(class='{{ getRiskAsBsClass riskLevel }}', href='/edit-website-content-group/{{ getWebsiteSlug }}/{{ slug }}')
+										h2= name
+								.row
 									.col-xs-6
-										a.btn(class='{{ getRiskAsBsClass riskLevel }}', href='/edit-website-content-group/{{ getWebsiteSlug }}/{{ slug }}')
-											h2= name
-										h3 Menus
-										.btn-group.supported-menus
-											each supportedMenus
-												with getMenu this
-													a.btn.btn-mellow(href='/edit-menu-details/{{ slug }}/{{ slugUp 2 }}') {{ name }}
+										.clearfix
+										button.btn.btn-lush.pull-right.add-region Add Region
 										h3 Regions
 										.btn-group.supported-regions
 											each supportedRegions
 												with getRegion this
 													a.btn.btn-mellow(href='/regions') {{ name }}
 									.col-xs-6
+										.clearfix
+										button.btn.btn-lush.pull-right.add-notice Add Notice
+										h3 Notices
+										if activeNotices
+											each activeNotices
+												.notice= text
+										else
+											.no-notices (no active notices)
+								.row
+									.col-xs-6
+										button.btn.btn-lush.pull-right.add-menu Add Menu
+										h3 Menus
+										.btn-group.supported-menus
+											each supportedMenus
+												with getMenu this
+													a.btn.btn-mellow(href='/edit-menu-details/{{ slug }}/{{ slugUp 2 }}') {{ name }}
+										.clearfix
+										button.btn.btn-lush.pull-right.add-managed-static-text Add Managed Static Text
+										h3 Managed Static Text
+										.btn-group-vertical.managed-static-text
+											if managedStaticText
+												each managedStaticText
+													.key= key
+											else
+												.no-managed-static-text (no managed static text)
+									.col-xs-6
+										.clearfix
+										button.btn.btn-lush.pull-right.add-page Add Page
 										h3 Pages
 										.btn-group-vertical.supported-pages
 											each supportedPages

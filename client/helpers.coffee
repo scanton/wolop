@@ -58,6 +58,8 @@ helper 'getLanguage', (language) ->
 	Languages.findOne { slug: language }
 helper 'getMenu', (slug) ->
 	Menus.findOne { slug: slug }
+helper 'getNotice', (slug) ->
+	Notices.findOne { slug: slug }
 helper 'getPage', (slug) ->
 	Pages.findOne { slug: slug }
 helper 'getPageDetails', (slug) ->

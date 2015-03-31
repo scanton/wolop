@@ -1,7 +1,7 @@
 template(name='editMenuDetails')
 	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}') {{ websiteContext.name }} - {{ contentGroup.name }}
 	.col-xs-12
-		a.btn.btn-primary.push-content-button.pull-right(href='/push-manager/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}') Push Content Manager
+		//a.btn.btn-primary.push-content-button.pull-right(href='/push-manager/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}') Push Content Manager
 		h1 Menu Details
 		.menu-manager.menu(data-slug='{{ menu.slug }}')
 			.container-fluid

@@ -1,8 +1,8 @@
 pages = [
 	#['Home', 'home', 'home']
-	#['Static Text', 'static-text', 'text-height']
+	['Static Text', 'static-text', 'text-height']
 	#['Products', 'products', 'shopping-cart']
-	#['Notices', 'notices', 'comment']
+	['Notices', 'notices', 'comment']
 	['Websites', 'websites', 'globe']
 	['Content Groups', 'content-groups', 'book']
 	['Pages', 'pages', 'duplicate']
@@ -56,17 +56,6 @@ Router.map ->
 			Meteor.logoutOtherClients()
 			Meteor.logout()
 			Router.go '/'
-
-	routeNames.push 'push-manager'
-	@route 'push-manager',
-		path: '/push-manager/:website/:group'
-		template: 'push-manager'
-		data: ->
-			group: @params.group
-			website: @params.website
-		onAfterAction: ->
-			Session.set 'content-group-context', @params.group
-			Session.set 'website-context', @params.website
 
 	routeNames.push 'edit-website-content-group'
 	@route 'edit-website-content-group',

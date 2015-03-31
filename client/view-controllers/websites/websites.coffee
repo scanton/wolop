@@ -1,12 +1,16 @@
 Template.websites.helpers
+
 	websites: ->
 		Websites.find {}, { sort: { name: 1 } }
+
 	contentGroups: ->
 		ContentGroups.find {}
+
 	canReactivate: (slug) ->
 		w = Websites.findOne { slug: slug }
 		return w.isActive != 'on'
-		Template.websites.events
+
+Template.websites.events
 
 	'click .reactivate-button': (e) ->
 		e.preventDefault()
@@ -48,8 +52,31 @@ Template.websites.helpers
 			collections.insertWebsite o
 
 Template.websiteDetails.helpers
+
 	getWebsiteSlug: ->
 		Template.parentData(2).slug
+
 	slugUp: (int)->
 		Template.parentData(int).slug if Template.parentData(int)
 
+Template.websiteDetails.events
+	
+	'click button.add-notice': (e) ->
+		e.preventDefault()
+		console.log 'yizzy'
+
+	'click button.add-menu': (e) ->
+		e.preventDefault()
+		console.log 'add mizzy'
+
+	'click button.add-page': (e) ->
+		e.preventDefault()
+		console.log 'add pizzy'
+
+	'click button.add-region': (e) ->
+		e.preventDefault()
+		console.log 'add rizzy'
+
+	'click button.add-managed-static-text': (e) ->
+		e.preventDefault()
+		console.log 'add meezy sizzy tizzy'
