@@ -92,7 +92,10 @@ Template.contentGroups.events
 		if o.name && o.slug
 			collections.insertContentGroup o
 
-Template.editWebsiteContentGroup.helpers
+Template.editContentGroup.rendered = ->
+	$('.content-types a[href="#pages"]').tab 'show'
+
+Template.editContentGroup.helpers
 
 	getRiskLabel: __coffeescriptShare.riskBsLabel
 
@@ -114,10 +117,25 @@ Template.editWebsiteContentGroup.helpers
 		else
 			return null
 
+	getUniqueGroupOptions: (page, region, language) ->
+		p = Template.parentData 2
+		if p
+			website = p.website
+			group = p.group
+			site = Websites.findOne { slug: website }
+			if site
+				a = []
+				keys = site.supportedContentGroups #_.without site.supportedContentGroups, group
+				for k in keys
+					pageDetail = PageLocalizations.findOne { page: page, region: region, language: language, contentGroup: k }
+					console.log pageDetail, { page: page, region: region, language: language, contentGroup: k }
+
+		return null
+
 	activeNotices: ->
 		console.log 'TODO activeNotices helper'
 
-Template.editWebsiteContentGroup.events
+Template.editContentGroup.events
 	'click .set-region-and-language': (e) ->
 		e.preventDefault()
 		$this = $ e.target

@@ -40,6 +40,7 @@ template(name='editPageLocalization')
 					.form-group
 						label Body Content
 						textarea.form-control(name='bodyContent') {{ bodyContent }}
+					input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
 					input(type='hidden', name='page', value='{{ page }}')
 					input(type='hidden', name='region', value='{{ regionContext.slug }}')
 					input(type='hidden', name='language', value='{{ languageContext.slug }}')
@@ -61,6 +62,7 @@ template(name='editPageLocalization')
 				.form-group
 					label Body Content
 					textarea.form-control(name='bodyContent')
+				input(type='hidden', name='content-group', value='{{ contentGroupContext.slug }}')
 				input(type='hidden', name='page', value='{{ page }}')
 				input(type='hidden', name='region', value='{{ regionContext.slug }}')
 				input(type='hidden', name='language', value='{{ languageContext.slug }}')

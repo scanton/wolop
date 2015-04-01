@@ -1,0 +1,154 @@
+template(name='editContentGroup')
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}') {{ website.name }} - {{ contentGroup.name }}
+	.col-xs-12
+		h1 Content Group Overview
+		.content-types(role='tabpanel')
+			ul.nav.nav-tabs(role='tablist')
+				li(role='presentation')
+					a(href='#pages', role='tab', data-toggle='tab') 
+						span.glyphicon.glyphicon-duplicate
+						| Pages
+				li(role='presentation')
+					a(href='#notices', role='tab', data-toggle='tab') 
+						span.glyphicon.glyphicon-comment
+						| Notices
+				li(role='presentation')
+					a(href='#menus', role='tab', data-toggle='tab') 
+						span.glyphicon.glyphicon-list
+						| Menus
+				li(role='presentation')
+					a(href='#static-text', role='tab', data-toggle='tab') 
+						span.glyphicon.glyphicon-text-height
+						| Static Text
+				li(role='presentation')
+					a(href='#region', role='tab', data-toggle='tab') 
+						span.glyphicon.glyphicon-flag
+						| Regions
+			.tab-content
+
+				#notices.tab-pane(role='tabpanel')
+					.notice-list
+						button.btn.btn-lush.pull-right.add-notice-button
+							.glyphicon.glyphicon-plus
+							.glyphicon.glyphicon-comment
+							| Add Notice
+						h3 Notices
+						ul.notices
+							if activeNotices contentGroup.slug
+								each activeNotices contentGroup.slug
+									with getNotice this
+										li.notice(data-slug='{{ slug }}')
+											h4= name
+							else
+								li.notice (no active notices)
+
+				#pages.tab-pane(role='tabpanel')
+					.page-list
+						.modal.fade.add-page-modal
+							.modal-dialog
+								.modal-content
+									form.add-page-form
+										.modal-header
+											h4.modal-title Add Page
+										.modal-body
+											.col-xs-6
+												input(name='name', placeholder='name')
+											.col-xs-6
+												input(name='slug', placeholder='slug')
+											.clearfix
+										.modal-footer
+											input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
+											input(type='hidden', name='isActive', value='on')
+											button.btn.btn-warning Cancel
+											button.btn.btn-success(type='submit') Add Page
+						button.btn.btn-lush.pull-right.add-page-button 
+							.glyphicon.glyphicon-plus
+							.glyphicon.glyphicon-file
+							| Add Page
+						h3 Pages
+						ul.pages
+							each contentGroup.supportedPages
+								with getPage this
+									li.page(data-slug='{{ slug }}')
+										.push-options.pull-right
+											span.mellow-label Push To:
+											.btn-group
+												each getUniqueGroupOptions slug regionContext.slug languageContext.slug
+													button.btn(class='btn-{{ getRiskLabel riskLevel }}')= name
+										a(href='/edit-page-localization/{{ slug }}/{{ contentGroupContext.slug }}')
+											h4= name
+
+				#menus.tab-pane(role='tabpanel')
+					.menu-list
+						button.btn.btn-lush.pull-right.add-menu-button 
+							.glyphicon.glyphicon-plus
+							.glyphicon.glyphicon-th-list
+							| Add Menu
+						h3 Menus
+						.modal.fade.add-menu-modal
+							.modal-dialog
+								.modal-content
+									form.add-menu-form
+										.modal-header
+											h4.modal-title Add Menu
+										.modal-body
+											.col-xs-6
+												input(name='name', placeholder='name')
+											.col-xs-6
+												input(name='slug', placeholder='slug')
+											.clearfix
+										.modal-footer
+											input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
+											input(type='hidden', name='isActive', value='on')
+											button.btn.btn-warning Cancel
+											button.btn.btn-success(type='submit') Add Menu
+						ul.menus
+							each contentGroup.supportedMenus
+								with getMenu this
+									li.menu(data-slug='{{ slug }}')
+										.push-options.pull-right
+											span.mellow-label Push To:
+											.btn-group
+												each groupOptions
+													button.btn(class='btn-{{ getRiskLabel riskLevel }}')= name
+										a(href='/edit-menu-details/{{ slug }}/{{ contentGroupContext.slug }}')
+											h4 {{ name }} 
+												if supportedPages
+													small ({{ supportedPages.length }} pages)
+
+				#static-text.tab-pane(role='tabpanel')
+					.managed-static-text-list
+						button.btn.btn-lush.pull-right.add-managed-static-text-button
+							.glyphicon.glyphicon-plus
+							.glyphicon.glyphicon-text-height
+							| Add Static Text
+						h3 Managed Static Text
+						ul.managed-static-texts
+							if managedStaticText
+								each managedStaticText
+									with getManagedStaticText this
+										li.managed-static-text(data-slug='{{ slug }}')
+											h4= name
+							else
+								li.notice (no managed static text)
+
+				#region.tab-pane(role='tabpanel')
+					.region-list
+						button.btn.btn-lush.pull-right.add-region-button 
+							.glyphicon.glyphicon-plus
+							.glyphicon.glyphicon-flag
+							| Add Region
+						h2 Regions
+						ul.regions
+							each contentGroup.supportedRegions
+								with getRegion this
+									li.region(data-slug='{{ slug }}')
+										h3= name
+										h4 Supported Languages:
+										.supported-languages-summary.summary-list.well
+											ul
+												each supportedLanguages
+													with getLanguage this
+														li.language= name
+
+	

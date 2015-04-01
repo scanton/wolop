@@ -74,9 +74,9 @@ h1.section-header
 	a
 		color backgroundColor
 	a.active
-		color backgroundColor
-		background darken(bodyColor, 10)
-		padding .25em .75em
+		color bodyColor
+		background darken(bodyColor, 30)
+		padding 4px 10px 3px 10px
 		border-radius 5px
 	a.active:hover
 		text-decoration none
@@ -419,7 +419,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 
 .team-status
 	position relative
-	background-color darken(bodyColor, 20)
+	background-color darken(bodyColor, 10)
 	color backgroundColor
 	padding .5em
 	text-align center
@@ -491,4 +491,21 @@ textarea[name="bodyContent"]
 				
 .hide-main-nav
 	.push-options
-		display none
+		//display none
+
+.nav-tabs
+	border-color bodyColor
+	li.active, li:hover
+		a, a:focus, a:hover
+			background-color bodyColor
+			border-color bodyColor
+			color backgroundColor
+			
+.summary-list
+	ul
+		padding .5em
+		li
+			margin .25em
+			display inline
+			font-size 12pt
+			

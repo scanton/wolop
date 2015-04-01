@@ -45,7 +45,7 @@ Template.home.events
 		if slug && website
 			Session.set 'website-context', website
 			Session.set 'content-group-context', slug
-			Router.go '/edit-website-content-group/' + website + '/' + slug
+			Router.go '/edit-content-group/' + website + '/' + slug
 			
 	'click .reactivate-button': (e) ->
 		e.preventDefault()

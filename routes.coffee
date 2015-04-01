@@ -57,10 +57,10 @@ Router.map ->
 			Meteor.logout()
 			Router.go '/'
 
-	routeNames.push 'edit-website-content-group'
-	@route 'edit-website-content-group',
-		path: '/edit-website-content-group/:website/:group'
-		template: 'edit-website-content-group'
+	routeNames.push 'edit-content-group'
+	@route 'edit-content-group',
+		path: '/edit-content-group/:website/:group'
+		template: 'edit-content-group'
 		data: ->
 			group: @params.group
 			website: @params.website

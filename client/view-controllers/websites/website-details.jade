@@ -8,7 +8,7 @@ template(name='websiteDetails')
 						li.website.list-item(class='{{riskLevel}}-risk')
 							.container-fluid
 								.row
-									a.edit-group-button.btn(class='{{ getRiskAsBsClass riskLevel }}', href='/edit-website-content-group/{{ getWebsiteSlug }}/{{ slug }}')
+									a.edit-group-button.btn(class='{{ getRiskAsBsClass riskLevel }}', href='/edit-content-group/{{ getWebsiteSlug }}/{{ slug }}')
 										h2= name
 								.row
 									.col-xs-6
