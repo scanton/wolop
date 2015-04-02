@@ -1,7 +1,7 @@
 pages = [
 	#['Home', 'home', 'home']
 	['Static Text', 'static-text', 'text-height']
-	#['Products', 'products', 'shopping-cart']
+	['Products', 'products', 'shopping-cart']
 	['Notices', 'notices', 'comment']
 	['Websites', 'websites', 'globe']
 	['Content Groups', 'content-groups', 'book']

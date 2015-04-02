@@ -18,6 +18,7 @@ template(name='menus')
 									.clearfix
 								.modal-footer
 									input(type='hidden', name='isActive', value='on')
+									input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
 									button.btn.btn-warning Cancel
 									button.btn.btn-success(type='submit') Add Menu
 			.col-xs-12

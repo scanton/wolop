@@ -5,6 +5,10 @@ template(name='layout')
 				header
 					.login-options.pull-right
 						if currentUser
+							if pushEnabled
+								a.allow-push-toggle.btn.btn-success(href='#') Disable Push
+							else
+								a.allow-push-toggle.btn.btn-danger.admin-access-only(href='#') Enable Push
 							if deleteEnabled
 								a.allow-delete-toggle.btn.btn-success(href='#') Disable Delete
 							else
@@ -15,7 +19,9 @@ template(name='layout')
 						a(href='/') Wolop
 		if currentUser
 			.team-status
-				a.team-status-toggle(href='#') Show Team Status
+				a.team-status-toggle(href='#') 
+					span.glyphicon.glyphicon-user 
+					| Show Team Status
 				+breadcrumbs
 				each coworkers
 					.coworker(class='{{ state }}-state', data-id='{{ userId }}')
@@ -55,5 +61,8 @@ template(name='layout')
 			.row
 				main
 					+yield
-		//.footer
-			sup Wolop 2002 - {{ currentYear }}
+		.footer
+			.logo.pull-right
+				sup Wolop 2002 - {{ currentYear }}
+				img(src='/images/wolop-logo.png')
+			.clearfix

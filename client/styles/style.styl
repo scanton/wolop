@@ -126,7 +126,7 @@ h1.section-header
 	a
 		margin 0 0 0 1em
 .main-nav
-	//background darken(backgroundColor, 3.3)
+	background darken(backgroundColor, 3.3)
 	position absolute
 	width 250px
 	height 100%
@@ -424,7 +424,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	padding .5em
 	text-align center
 	min-height 25px
-	max-height 25px
+	max-height 30px
 	overflow hidden
 	.state-label.offline
 		display block
@@ -443,13 +443,13 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	.breadcrumb
 		position absolute
 		left 20px
-		top 3px
+		top 6px
 	.team-status-toggle
 		color backgroundColor
 		position absolute
 		font-size 10pt
 		right 20px
-		top 4px
+		top 6px
 	.avatar
 		margin-bottom 5px
 		img
@@ -479,6 +479,9 @@ textarea[name="bodyContent"]
 	background-color darken(backgroundColor, 5)
 	padding 1em
 	margin-top 2em
+	.logo
+		img
+			max-height 150px
 	
 .website-details
 	.list-overview 
@@ -488,6 +491,8 @@ textarea[name="bodyContent"]
 			button.btn-lush
 				font-size 11pt
 				margin-top 15px
+	.btn-lush
+		display none
 				
 .hide-main-nav
 	.push-options
@@ -508,4 +513,7 @@ textarea[name="bodyContent"]
 			margin .25em
 			display inline
 			font-size 12pt
-			
+
+.tab-content
+	.btn-lush
+		margin-top -.5em

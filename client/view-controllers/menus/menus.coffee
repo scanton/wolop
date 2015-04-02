@@ -29,11 +29,11 @@ Template.editMenuDetails.helpers
 		ContentGroups.findOne { slug: @group }
 
 	menu: ->
-		Menus.findOne { slug: @menu }
+		Menus.findOne { slug: @menu, contentGroup: @group }
 
 	filterUsedPages: (pages) ->
 		if pages
-			menu = Menus.findOne { slug: @menu }
+			menu = Menus.findOne { slug: @menu, contentGroup: @group }
 			if menu
 				sp = menu.supportedPages || []
 				a = []

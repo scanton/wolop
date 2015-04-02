@@ -118,7 +118,7 @@ defineCollectionApi
 
 	movePageUpOnMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne {slug: menu}
+			m = Menus.findOne { slug: menu, contentGroup: Session.get 'content-group-context' }
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
@@ -132,7 +132,7 @@ defineCollectionApi
 
 	movePageDownOnMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne {slug: menu}
+			m = Menus.findOne { slug: menu, contentGroup: Session.get 'content-group-context' }
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
@@ -146,7 +146,7 @@ defineCollectionApi
 
 	addPageToMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne {slug: menu}
+			m = Menus.findOne { slug: menu, contentGroup: Session.get 'content-group-context' }
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
@@ -159,7 +159,7 @@ defineCollectionApi
 
 	removePageFromMenu: (page, menu) ->
 		if page and menu
-			m = Menus.findOne {slug: menu}
+			m = Menus.findOne { slug: menu, contentGroup: Session.get 'content-group-context' }
 			sp = m.supportedPages or []
 			l = sp.length
 			while l--
@@ -338,3 +338,63 @@ defineCollectionApi
 			query = _id: g._id
 			options = $set: supportedPages: g.supportedPages
 			return updateContentGroup(query, options)
+
+	pushPage: (page, sourceGroup, destinationGroup) ->
+		dest = ContentGroups.findOne { slug: destinationGroup }
+		sour = ContentGroups.findOne { slug: sourceGroup }
+		if dest && sour && page
+			destPages = dest.supportedPages || []
+			if !_.contains destPages, page
+				destPages.push page
+				destPages.sort()
+				query = _id: dest._id
+				options = $set: supportedPages: destPages
+				updateContentGroup query, options
+			locals = PageLocalizations.find(
+				{ contentGroup: sour.slug, page: page }
+			).fetch()
+			if locals
+				l = locals.length
+				while l--
+					local = locals[l]
+					delete local._id
+					local.contentGroup = destinationGroup
+					local.pushed = new Date()
+					existingPage = PageLocalizations.findOne(
+						{ contentGroup: destinationGroup, language: local.language, region: local.region, page: page }
+					)
+					if existingPage
+						PageLocalizations.update { _id: existingPage._id }, { $set: local }
+						return 1
+					else
+						PageLocalizations.insert local
+						return 1
+		return 0
+
+	pushMenu: (menu, sourceGroup, destinationGroup) ->
+		dest = ContentGroups.findOne { slug: destinationGroup }
+		sour = ContentGroups.findOne { slug: sourceGroup }
+		if dest && sour && menu
+			destMenus = dest.supportedMenus || []
+			if !_.contains destMenus, menu
+				destMenus.push menu
+				destMenus.sort()
+				query = _id: dest._id
+				options = $set: supportedMenus: destMenus
+				updateContentGroup query, options
+			menuDetails = Menus.findOne { slug: menu, contentGroup: sourceGroup }
+			menuDetails.pushed = new Date()
+			menuDetails.contentGroup = destinationGroup
+			delete menuDetails._id
+			destDetails = Menus.findOne { slug: menu, contentGroup: destinationGroup }
+			if destDetails
+				Menus.update { _id: destDetails._id }, { $set: menuDetails }
+				return 1
+			else
+				console.log { slug: menu, contentGroup: destinationGroup }
+				Menus.insert menuDetails
+				return 1
+		return 0
+
+
+

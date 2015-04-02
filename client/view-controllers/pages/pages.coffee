@@ -37,7 +37,8 @@ Template.editPageLocalization.helpers
 	getPageLocalization: (page) ->
 		region = Session.get 'current-region'
 		language = Session.get 'current-language'
-		PageLocalizations.findOne { page: page, region: region, language: language }
+		group = Session.get 'content-group-context'
+		PageLocalizations.findOne { page: page, region: region, language: language, contentGroup: group }
 
 	isNotActiveGroup: (slug) ->
 		slug != Session.get 'content-group-context'

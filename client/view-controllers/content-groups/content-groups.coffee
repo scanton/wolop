@@ -117,25 +117,34 @@ Template.editContentGroup.helpers
 		else
 			return null
 
-	getUniqueGroupOptions: (page, region, language) ->
-		p = Template.parentData 2
-		if p
-			website = p.website
-			group = p.group
-			site = Websites.findOne { slug: website }
-			if site
-				a = []
-				keys = site.supportedContentGroups #_.without site.supportedContentGroups, group
-				for k in keys
-					pageDetail = PageLocalizations.findOne { page: page, region: region, language: language, contentGroup: k }
-					console.log pageDetail, { page: page, region: region, language: language, contentGroup: k }
-
-		return null
+	getContentGroupMenu: (menuSlug) ->
+		group = Session.get 'content-group-context'
+		console.log { slug: menuSlug, contentGroup: group }
+		Menus.findOne { slug: menuSlug, contentGroup: group }
 
 	activeNotices: ->
-		console.log 'TODO activeNotices helper'
+		console.log 'TODO activeNotices helper in content-groups.coffee'
 
 Template.editContentGroup.events
+	
+	'click .push-page-button': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		page = $this.closest('.page').attr 'data-slug'
+		destinationGroup = $this.attr 'data-slug'
+		sourceGroup = Session.get 'content-group-context'
+		if page && destinationGroup && sourceGroup
+			collections.pushPage page, sourceGroup, destinationGroup
+	
+	'click .push-menu-button': (e) ->
+		e.preventDefault()
+		$this = $ e.target
+		menu = $this.closest('.menu').attr 'data-slug'
+		destinationGroup = $this.attr 'data-slug'
+		sourceGroup = Session.get 'content-group-context'
+		if menu && destinationGroup && sourceGroup
+			collections.pushMenu menu, sourceGroup, destinationGroup
+
 	'click .set-region-and-language': (e) ->
 		e.preventDefault()
 		$this = $ e.target
@@ -170,12 +179,13 @@ Template.editContentGroup.events
 		$(e.target).find("input").not("input[type='hidden']").not("input[type='submit']").val ''
 		if o.name && o.slug && o.contentGroup
 			slug = o.contentGroup
-			delete o.contentGroup
 			collections.insertMenu o
 			group = collections.getContentGroup slug
 			if group
 				supportedMenus = group.supportedMenus || []
-				supportedMenus.unshift o.slug
+				if !_.contains supportedMenus, o.slug
+					supportedMenus.unshift o.slug
+					supportedMenus.sort()
 				collections.updateContentGroup { _id: group._id }, { $set: { supportedMenus: supportedMenus } }
 
 	'submit .add-page-form': (e) ->

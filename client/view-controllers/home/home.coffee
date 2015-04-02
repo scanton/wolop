@@ -110,15 +110,16 @@ Template.home.events
 				supportedMenus = []
 				group = defaultGroups[dl]
 				dm = defaultMenus.length
-				while dm--
-					menu = defaultMenus[dm]
-					menuSlug = o.slug + '-' + group.slug + '-' + menu.slug
-					supportedMenus.push menuSlug
-					collections.insertMenu
-						name: menu.name
-						slug: menuSlug
-						isActive: 'on'
-						created: now
+			#	while dm--
+			#		menu = defaultMenus[dm]
+			#		menuSlug = o.slug + '-' + group.slug + '-' + menu.slug
+			#		supportedMenus.push menuSlug
+			#		collections.insertMenu
+			#			name: menu.name
+			#			slug: menuSlug
+			#			contentGroup: o.slug + '-' + group.slug
+			#			isActive: 'on'
+			#			created: now
 				collections.insertContentGroup
 					name: group.name
 					slug: o.slug + '-' + group.slug

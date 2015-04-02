@@ -56,8 +56,8 @@ if Meteor.isServer
 	Menus.allow
 		insert: (userId, doc) ->
 			if userId and doc.slug and Meteor.user().roles.admin
-				result = Menus.findOne { slug: doc.slug }
-				console.log 'Insert Menu Failed: slug must be unique' if result
+				result = Menus.findOne { slug: doc.slug, contentGroup: doc.contentGroup }
+				console.log 'Insert Menu Failed: slug/contentGroup combo must be unique' if result
 				return !result
 			return false
 		update: adminOnly
