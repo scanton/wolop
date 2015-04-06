@@ -13,32 +13,50 @@ template(name='breadcrumbs')
 					a.btn.btn-default(href='/website-details/{{ websiteContext.slug }}')
 						span.glyphicon.glyphicon-globe
 						| {{ websiteContext.name }}
-					button.btn.btn-default
-						span.caret
+					if getOtherWebsites
+						button.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+							span.caret
+						ul.dropdown-menu
+							each getOtherWebsites
+								li
+									a.switch-website(data-slug='{{ slug }}', href='#')= name
+
 		if contentGroupContext and websiteContext
 			li
 				.btn-group(class='{{ isActivePath "/edit-content-group/:website/:group" }}')
 					a.btn.btn-default(href='/edit-content-group/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}')
 						span.glyphicon.glyphicon-book
 						| {{ contentGroupContext.name }}
-					button.btn.btn-default
-						span.caret
+					if getOtherContentGroups
+						button.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+							span.caret
+						ul.dropdown-menu
+							each getOtherContentGroups
+								li
+									a.switch-content-group(data-slug='{{ slug }}', href='#')= name
 		if regionContext and contentGroupContext and websiteContext
 			li
 				.btn-group(class='{{ isActivePath "/regions" }}')
 					a.btn.btn-default(href='/regions#{{ regionContext.slug }}')
 						span.glyphicon.glyphicon-flag
 						| {{ regionContext.name }}
-					button.btn.btn-default
-						span.caret
+					if getOtherRegions
+						button.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+							span.caret
+						ul.dropdown-menu
+							each getOtherRegions
+								li
+									a.switch-region(data-slug='{{ slug }}', href='#')= name
 		if languageContext and regionContext and contentGroupContext and websiteContext
 			li
 				.btn-group(class='{{ isActivePath "/languages" }}')
 					a.btn.btn-default(href='/languages#{{ languageContext.slug }}')
 						span.glyphicon.glyphicon-yen
 						| {{ languageContext.name }}
-					button.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
-						span.caret
-					ul.dropdown-menu
-						each getOtherLanguages
-							li= name
+					if getOtherLanguages
+						button.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+							span.caret
+						ul.dropdown-menu
+							each getOtherLanguages
+								li
+									a.switch-language(data-slug='{{ slug }}', href='#')= name

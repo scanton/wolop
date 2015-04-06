@@ -5,10 +5,6 @@ template(name='layout')
 				header
 					.login-options.pull-right
 						if currentUser
-							//if pushEnabled
-								a.allow-push-toggle.btn.btn-success(href='#') Disable Push
-							//else
-								a.allow-push-toggle.btn.btn-danger.admin-access-only(href='#') Enable Push
 							if deleteEnabled
 								a.allow-delete-toggle.btn.btn-success(href='#') Disable Delete
 							else
@@ -18,23 +14,24 @@ template(name='layout')
 					h1 
 						a(href='/') Wolop
 		if currentUser
-			.team-status
-				a.team-status-toggle(href='#') 
-					span.glyphicon.glyphicon-user 
-					| Show Team Status
+			.nav-toolbar
+				.team-status
+					a.team-status-toggle(href='#') 
+						span.glyphicon.glyphicon-user 
+						| Show Team Status
+					each getOnlineUsers
+						.coworker(class='{{ state }}-state', data-id='{{ userId }}')
+							with getUserDetails userId
+								.profile
+									.avatar
+										if profile.avatar
+											img(src='{{ profile.avatar }}')
+										else
+											img(src='http://www.daisygreenmagazine.co.uk/wp-content/uploads/2010/10/iStock-potato.jpg')
+									.state-label.online Online
+									.state-label.offline Offline
+									h3= profile.name
 				+breadcrumbs
-				each coworkers
-					.coworker(class='{{ state }}-state', data-id='{{ userId }}')
-						with getUserDetails userId
-							.profile
-								.avatar
-									if profile.avatar
-										img(src='{{ profile.avatar }}')
-									else
-										img(src='http://www.daisygreenmagazine.co.uk/wp-content/uploads/2010/10/iStock-potato.jpg')
-								.state-label.online Online
-								.state-label.offline Offline
-								h3= profile.name
 			.main-nav
 				ul
 					each navData

@@ -21,6 +21,17 @@ Template.layout.helpers
 	currentYear: ->
 		new Date().getFullYear()
 
+	getOnlineUsers: ->
+		users = Presences.find({}).fetch()
+		userIds = []
+		result = []
+		l = users.length
+		while l--
+			if !_.contains userIds, users[l].userId
+				userIds.push users[l].userId
+				result.push users[l]
+		return result
+
 Template.layout.events
 
 	'click .team-status-toggle': (e) ->
