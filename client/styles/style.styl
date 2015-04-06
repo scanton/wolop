@@ -66,21 +66,34 @@ h1.section-header
 }
 .breadcrumb > li + li:before
 	color backgroundColor
+	padding 0 2px
 .breadcrumb
 	background none
 	margin 0
 	padding 0
 	font-size 10pt
+	.btn
+		background none
+		border 0
+		padding 3px 7px
 	a
 		color backgroundColor
-	a.active
+	a.btn
+		padding-right 2px
+	a:hover, button:hover
 		color bodyColor
 		background darken(bodyColor, 30)
-		padding 4px 10px 3px 10px
-		border-radius 5px
-	a.active:hover
-		text-decoration none
-		cursor default
+	.active
+		a, button
+			color bodyColor
+			background darken(bodyColor, 30)
+			padding 4px 10px 3px 10px
+			border-radius 5px
+		a:hover
+			text-decoration none
+			cursor default
+		button:hover
+			background darken(bodyColor, 40)
 	
 .modal-content
 	background backgroundColor
@@ -443,7 +456,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	.breadcrumb
 		position absolute
 		left 20px
-		top 6px
+		top 1px
 	.team-status-toggle
 		color backgroundColor
 		position absolute

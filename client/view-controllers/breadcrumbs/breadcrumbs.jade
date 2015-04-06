@@ -5,25 +5,40 @@ template(name='breadcrumbs')
 				span.glyphicon.glyphicon-cog
 		li
 			a(class='{{ isActivePath "/home" }}', href='/home') 
-						span.glyphicon.glyphicon-home
-						| Home
+				span.glyphicon.glyphicon-home
+				| Home
 		if websiteContext
 			li
-				a(class='{{ isActivePath "/website-details/:slug" }}', href='/website-details/{{ websiteContext.slug }}')
+				.btn-group(class='{{ isActivePath "/website-details/:slug" }}')
+					a.btn.btn-default(href='/website-details/{{ websiteContext.slug }}')
 						span.glyphicon.glyphicon-globe
 						| {{ websiteContext.name }}
+					button.btn.btn-default
+						span.caret
 		if contentGroupContext and websiteContext
 			li
-				a(class='{{ isActivePath "/edit-content-group/:website/:group" }}', href='/edit-content-group/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}')
+				.btn-group(class='{{ isActivePath "/edit-content-group/:website/:group" }}')
+					a.btn.btn-default(href='/edit-content-group/{{ websiteContext.slug }}/{{ contentGroupContext.slug }}')
 						span.glyphicon.glyphicon-book
 						| {{ contentGroupContext.name }}
+					button.btn.btn-default
+						span.caret
 		if regionContext and contentGroupContext and websiteContext
 			li
-				a(class='{{ isActivePath "/regions" }}', href='/regions#{{ regionContext.slug }}')
+				.btn-group(class='{{ isActivePath "/regions" }}')
+					a.btn.btn-default(href='/regions#{{ regionContext.slug }}')
 						span.glyphicon.glyphicon-flag
 						| {{ regionContext.name }}
+					button.btn.btn-default
+						span.caret
 		if languageContext and regionContext and contentGroupContext and websiteContext
 			li
-				a(class='{{ isActivePath "/languages" }}', href='/languages#{{ languageContext.slug }}')
+				.btn-group(class='{{ isActivePath "/languages" }}')
+					a.btn.btn-default(href='/languages#{{ languageContext.slug }}')
 						span.glyphicon.glyphicon-yen
 						| {{ languageContext.name }}
+					button.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+						span.caret
+					ul.dropdown-menu
+						each getOtherLanguages
+							li= name

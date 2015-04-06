@@ -26,61 +26,66 @@ preprocessData = (data) ->
 	return data
 
 updateRegion = (query, options) ->
-	data = preprocessData data
+	options['$set'].modified = new Date() if options['$set']
 	actionLogger 'Regions.update', query, options, Regions.update(query, options)
 
 updateLanguage = (query, options) ->
-	data = preprocessData data
+	options['$set'].modified = new Date() if options['$set']
 	actionLogger 'Languages.update', query, options, Languages.update(query, options)
 
 updateWebsite = (query, options) ->
-	console.log data
-	data = preprocessData data
-	console.log data
+	options['$set'].modified = new Date() if options['$set']
 	actionLogger 'Websites.update', query, options, Websites.update(query, options)
 
 updateContentGroup = (query, options) ->
-	data = preprocessData data
+	options['$set'].modified = new Date() if options['$set']
 	actionLogger 'ContentGroups.update', query, options, ContentGroups.update(query, options)
 
 updatePage = (query, options) ->
-	data = preprocessData data
+	options['$set'].modified = new Date() if options['$set']
 	actionLogger 'Pages.update', query, options, Pages.update(query, options)
 
 updatePageLocalization = (query, options) ->
-	data = preprocessData data
+	options['$set'].modified = new Date() if options['$set']
 	actionLogger 'PageLocalizations.update', query, options, PageLocalizations.update(query, options)
 
 updateMenu = (query, options) ->
-	data = preprocessData data
+	options['$set'].modified = new Date() if options['$set']
 	actionLogger 'Menus.update', query, options, Menus.update(query, options)
 
 insertRegion = (data) ->
 	data = preprocessData data
+	data.created = data.modified = new Date()
 	actionLogger 'Regions.insert', '', data, Regions.insert(data)
 
 insertLanguage = (data) ->
 	data = preprocessData data
+	data.created = data.modified = new Date()
 	actionLogger 'Language.insert', '', data, Languages.insert(data)
 
 insertWebsite = (data) ->
 	data = preprocessData data
+	data.created = data.modified = new Date()
 	actionLogger 'Websites.insert', '', data, Websites.insert(data)
 
 insertContentGroup = (data) ->
 	data = preprocessData data
+	data.created = data.modified = new Date()
 	actionLogger 'ContentGroups.insert', '', data, ContentGroups.insert(data)
 
 insertPage = (data) ->
 	data = preprocessData data
+	data.created = data.modified = new Date()
 	actionLogger 'Pages.insert', '', data, Pages.insert(data)
 
 insertPageLocalization = (data) ->
 	data = preprocessData data
+	data.created = data.modified = new Date()
 	actionLogger 'PageLocalizations.insert', '', data, PageLocalizations.insert(data)
 
 insertMenu = (data) ->
 	data = preprocessData data
+	data.created = data.modified = new Date()
 	actionLogger 'Menus.insert', '', data, Menus.insert(data)
 
 defineCollectionApi
@@ -339,6 +344,9 @@ defineCollectionApi
 			options = $set: supportedPages: g.supportedPages
 			return updateContentGroup(query, options)
 
+	insertManagedStaticText: (data) ->
+		#adsf
+
 	pushPage: (page, sourceGroup, destinationGroup) ->
 		dest = ContentGroups.findOne { slug: destinationGroup }
 		sour = ContentGroups.findOne { slug: sourceGroup }
@@ -346,23 +354,24 @@ defineCollectionApi
 			destPages = dest.supportedPages || []
 			if !_.contains destPages, page
 				destPages.push page
-				destPages.sort()
 				query = _id: dest._id
 				options = $set: supportedPages: destPages
 				updateContentGroup query, options
-			locals = PageLocalizations.find(
-				{ contentGroup: sour.slug, page: page }
-			).fetch()
-			if locals
-				l = locals.length
+			pageLocals = PageLocalizations.find({ page: page, contentGroup: sour.slug }).fetch()
+			
+			#TODO: Find out why pageLocals (sometimes) contains pages from wrong contentGroups
+			console.log pageLocals, { page: page, contentGroup: sour.slug }
+			
+			if pageLocals
+				l = pageLocals.length
 				while l--
-					local = locals[l]
+					local = pageLocals[l]
 					delete local._id
-					local.contentGroup = destinationGroup
-					local.pushed = new Date()
+					local.modified = local.pushed = new Date()
 					existingPage = PageLocalizations.findOne(
 						{ contentGroup: destinationGroup, language: local.language, region: local.region, page: page }
 					)
+					local.contentGroup = destinationGroup
 					if existingPage
 						PageLocalizations.update { _id: existingPage._id }, { $set: local }
 						return 1
@@ -378,12 +387,11 @@ defineCollectionApi
 			destMenus = dest.supportedMenus || []
 			if !_.contains destMenus, menu
 				destMenus.push menu
-				destMenus.sort()
 				query = _id: dest._id
 				options = $set: supportedMenus: destMenus
 				updateContentGroup query, options
 			menuDetails = Menus.findOne { slug: menu, contentGroup: sourceGroup }
-			menuDetails.pushed = new Date()
+			menuDetails.modified = menuDetails.pushed = new Date()
 			menuDetails.contentGroup = destinationGroup
 			delete menuDetails._id
 			destDetails = Menus.findOne { slug: menu, contentGroup: destinationGroup }

@@ -5,9 +5,9 @@ template(name='layout')
 				header
 					.login-options.pull-right
 						if currentUser
-							if pushEnabled
+							//if pushEnabled
 								a.allow-push-toggle.btn.btn-success(href='#') Disable Push
-							else
+							//else
 								a.allow-push-toggle.btn.btn-danger.admin-access-only(href='#') Enable Push
 							if deleteEnabled
 								a.allow-delete-toggle.btn.btn-success(href='#') Disable Delete

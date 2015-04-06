@@ -1,12 +1,17 @@
 Template.contentGroups.helpers
+
 	contentGroups: ->
 		ContentGroups.find {}
+
 	languages: ->
 		Languages.find {}
+
 	regions: ->
 		Regions.find {}
+
 	menus: ->
 		Menus.find {}
+
 	pages: ->
 		Pages.find {}
 
@@ -95,6 +100,39 @@ Template.contentGroups.events
 Template.editContentGroup.rendered = ->
 	$('.content-types a[href="#pages"]').tab 'show'
 
+clearCruft = (o) ->
+	if o
+		o = _.clone o
+		delete o._id
+		delete o.created
+		delete o.updated
+		delete o.modified
+		delete o.pushed
+		delete o.contentGroup
+	return o
+
+areEqual = (o1, o2) ->
+	if _.keys(o1).length != _.keys(o2).length
+		return false
+	for i of o1
+		if o2[i] != o1[i]
+			return false
+	return true
+
+findMatchingPage = (page, list) ->
+	page = clearCruft page
+	for p in list
+		p = clearCruft p
+		if areEqual(p, page)
+			return p
+	return null
+
+groupIsEqual = (sourceGroup, destinationGroup) ->
+	for page in sourceGroup
+		if !findMatchingPage page, destinationGroup
+			return false
+	return true
+
 Template.editContentGroup.helpers
 
 	getRiskLabel: __coffeescriptShare.riskBsLabel
@@ -105,21 +143,43 @@ Template.editContentGroup.helpers
 	contentGroup: ->
 		ContentGroups.findOne { slug: @group }
 
-	groupOptions: ->
-		website = Template.parentData(2).website
+	groupPageOptions: (page) ->
+		parent = Template.parentData 2
+		website = parent.website
 		site = Websites.findOne { slug: website }
-		if site
+		currentGroup = PageLocalizations.find({ contentGroup: parent.group, page: page }).fetch()
+		if site && currentGroup
 			a = []
-			keys = _.without site.supportedContentGroups, Template.parentData(2).group
+			keys = _.without site.supportedContentGroups, parent.group
 			for k in keys
-				a.push ContentGroups.findOne({ slug: k })
+				destGroup = PageLocalizations.find({ contentGroup: k, page: page }).fetch()
+				if !groupIsEqual currentGroup, destGroup
+					a.push ContentGroups.findOne { slug: k }
+			return a
+		else
+			return null
+
+	groupMenuOptions: (menu) ->
+		parent = Template.parentData 2
+		website = parent.website
+		site = Websites.findOne { slug: website }
+		menuDetails = clearCruft Menus.findOne({ slug: menu, contentGroup: parent.group })
+		if site && menuDetails
+			a = []
+			keys = _.without site.supportedContentGroups, parent.group
+			for k in keys
+				menu2 = clearCruft Menus.findOne({ slug: menu, contentGroup: k })
+				if menu2
+					if !_.isEqual menuDetails, menu2
+						a.push ContentGroups.findOne { slug: k }
+				else
+					a.push ContentGroups.findOne { slug: k }
 			return a
 		else
 			return null
 
 	getContentGroupMenu: (menuSlug) ->
 		group = Session.get 'content-group-context'
-		console.log { slug: menuSlug, contentGroup: group }
 		Menus.findOne { slug: menuSlug, contentGroup: group }
 
 	activeNotices: ->
@@ -165,11 +225,37 @@ Template.editContentGroup.events
 			backdrop: true
 			keyboard: true
 
+	'click .add-managed-static-text-button ': (e) ->
+		e.preventDefault()
+		$('.add-managed-static-text-modal').modal
+			backdrop: true
+			keyboard: true
+
 	'click .add-menu-modal button': (e) ->
 		$('.add-menu-modal').modal 'hide'
 
 	'click .add-page-modal button': (e) ->
 		$('.add-page-modal').modal 'hide'
+
+	'click .add-managed-static-text-modal button': (e) ->
+		$('.add-managed-static-text-modal').modal 'hide'
+
+	'submit .add-managed-static-text-form': (e) ->
+		e.preventDefault()
+		$('.add-managed-static-text-modal').modal 'hide'
+		data = $(e.target).serializeArray()
+		o = objectifyFormArray(data)
+		$(e.target).find("input").not("input[type='hidden']").not("input[type='submit']").val ''
+		if o.name && o.slug && o.contentGroup
+			slug = o.contentGroup
+			collections.insertManagedStaticText o
+			group = collections.getContentGroup slug
+			if group
+				supportedManagedStaticText = group.supportedManagedStaticText || []
+				if !_.contains supportedManagedStaticText, o.slug
+					supportedManagedStaticText.unshift o.slug
+					supportedManagedStaticText.sort()
+				collections.updateContentGroup { _id: group._id }, { $set: { supportedManagedStaticText: supportedManagedStaticText } }
 
 	'submit .add-menu-form': (e) ->
 		e.preventDefault()
