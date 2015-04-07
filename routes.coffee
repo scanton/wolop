@@ -79,6 +79,17 @@ Router.map ->
 			Session.set 'content-group-context', @params.contentGroup
 			Session.set 'menu-context', @params.menu
 
+	routeNames.push 'edit-managed-static-text-localization'
+	@route 'edit-managed-static-text-localization',
+		path: '/edit-managed-static-text-localization/:managedStaticText/:contentGroup'
+		template: 'edit-managed-static-text-localization'
+		data: ->
+			managedStaticText: @params.managedStaticText
+			group: @params.contentGroup
+		onAfterAction: ->
+			Session.set 'content-group-context', @params.contentGroup
+			Session.set 'managed-static-text-context', @params.managedStaticText
+
 	routeNames.push 'edit-page-localization'
 	@route 'edit-page-localization',
 		path: '/edit-page-localization/:page/:contentGroup'
@@ -99,6 +110,18 @@ Router.map ->
 			websiteSlug: slug
 		onAfterAction: ->
 			Session.set 'website-context', @params.slug
+			site = Websites.findOne { slug: @params.slug }
+			cg = Session.get 'content-group-context'
+			lastGroup = ContentGroups.findOne { slug: cg }
+			if site and lastGroup
+				supportedGroups = ContentGroups.find({ slug: { $in: site.supportedContentGroups } }).fetch()
+				lastName = lastGroup.name
+				l = supportedGroups.length
+				while l--
+					sg = supportedGroups[l]
+					if sg.name == lastName
+						Session.set 'content-group-context', sg.slug
+						return null
 			Session.set 'content-group-context', null
 
 requiresLogin = ->

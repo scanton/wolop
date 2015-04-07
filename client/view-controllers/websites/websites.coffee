@@ -54,29 +54,13 @@ Template.websites.events
 Template.websiteDetails.helpers
 
 	getWebsiteSlug: ->
-		Template.parentData(2).slug
+		Template.parentData(1).slug
 
 	slugUp: (int)->
 		Template.parentData(int).slug if Template.parentData(int)
 
-Template.websiteDetails.events
-	
-	'click button.add-notice': (e) ->
-		e.preventDefault()
-		console.log 'yizzy'
-
-	'click button.add-menu': (e) ->
-		e.preventDefault()
-		console.log 'add mizzy'
-
-	'click button.add-page': (e) ->
-		e.preventDefault()
-		console.log 'add pizzy'
-
-	'click button.add-region': (e) ->
-		e.preventDefault()
-		console.log 'add rizzy'
-
-	'click button.add-managed-static-text': (e) ->
-		e.preventDefault()
-		console.log 'add meezy sizzy tizzy'
+	getDetailedContentGroups: (slugs) ->
+		result = ContentGroups.find({ slug: { $in: slugs } }).fetch()
+		result.sort (a, b) ->
+			priority = ['low', 'medium', 'high']
+			priority.indexOf(a.riskLevel) - priority.indexOf(b.riskLevel)

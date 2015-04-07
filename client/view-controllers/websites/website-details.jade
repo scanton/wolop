@@ -3,58 +3,58 @@ template(name='websiteDetails')
 		with getWebsite websiteSlug
 			h1 {{name}}
 			ul.websites-overview.list-overview
-				each supportedContentGroups
-					with getContentGroup this
-						li.website.list-item(class='{{riskLevel}}-risk')
-							.container-fluid
-								.row
-									a.edit-group-button.btn(class='{{ getRiskAsBsClass riskLevel }}', href='/edit-content-group/{{ getWebsiteSlug }}/{{ slug }}')
-										h2= name
-								.row
-									.col-xs-6
-										.clearfix
-										button.btn.btn-lush.pull-right.add-region Add Region
-										h3 Regions 
-											small ({{ supportedRegions.length }})
-										.btn-group.supported-regions
-											each supportedRegions
-												with getRegion this
-													a.btn.btn-mellow(href='/regions') {{ name }} 
-														small ({{ supportedLanguages.length }})
-									.col-xs-6
-										.clearfix
-										button.btn.btn-lush.pull-right.add-notice Add Notice
-										h3 Notices 
-											small ({{  activeNotices.length }})
-										if activeNotices
-											each activeNotices
-												.notice {{ text }}
+				each getDetailedContentGroups supportedContentGroups
+					li.website.list-item(class='{{riskLevel}}-risk')
+						.container-fluid
+							.row
+								a.edit-group-button.btn(class='{{ getRiskAsBsClass riskLevel }}', href='/edit-content-group/{{ getWebsiteSlug }}/{{ slug }}')
+									h2= name
+							.row
+								.col-xs-6
+									.clearfix
+									button.btn.btn-lush.pull-right.add-region Add Region
+									h3 Regions 
+										small ({{ supportedRegions.length }})
+									.btn-group.supported-regions
+										each supportedRegions
+											with getRegion this
+												a.btn.btn-mellow(href='/regions') {{ name }} 
+													small ({{ supportedLanguages.length }})
+								.col-xs-6
+									.clearfix
+									button.btn.btn-lush.pull-right.add-notice Add Notice
+									h3 Notices 
+										small ({{  activeNotices.length }})
+									if activeNotices
+										each activeNotices
+											.notice {{ text }}
+									else
+										.no-notices (no active notices)
+							.row
+								.col-xs-6
+									button.btn.btn-lush.pull-right.add-menu Add Menu
+									h3 Menus 
+										small ({{ supportedMenus.length }})
+									.btn-group.supported-menus
+										each supportedMenus
+											with getMenu this
+												a.btn.btn-mellow(href='/edit-menu-details/{{ slug }}/{{ slugUp 2 }}') {{ name }} 
+													small ({{ supportedPages.length }})
+									.clearfix
+									button.btn.btn-lush.pull-right.add-managed-static-text Add Managed Static Text
+									h3 Managed Static Text
+									.btn-group-vertical.managed-static-text
+										each supportedManagedStaticText
+											with getManagedStaticText this
+												a.btn.btn-mellow(href='/edit-managed-static-text-localization/{{ slug }}/{{ slugUp 2 }}') {{ name }}
 										else
-											.no-notices (no active notices)
-								.row
-									.col-xs-6
-										button.btn.btn-lush.pull-right.add-menu Add Menu
-										h3 Menus 
-											small ({{ supportedMenus.length }})
-										.btn-group.supported-menus
-											each supportedMenus
-												with getMenu this
-													a.btn.btn-mellow(href='/edit-menu-details/{{ slug }}/{{ slugUp 2 }}') {{ name }} 
-														small ({{ supportedPages.length }})
-										.clearfix
-										button.btn.btn-lush.pull-right.add-managed-static-text Add Managed Static Text
-										h3 Managed Static Text
-										.btn-group-vertical.managed-static-text
-											each managedStaticText
-													.key= key
-											else
-												.no-managed-static-text (no managed static text)
-									.col-xs-6
-										.clearfix
-										button.btn.btn-lush.pull-right.add-page Add Page
-										h3 Pages
-											small ({{ supportedPages.length }})
-										.btn-group-vertical.supported-pages
-											each supportedPages
-												with getPage this
-													a.btn.btn-mellow(href='/edit-page-localization/{{ slug }}/{{ slugUp 2 }}') {{ name }}
+											.no-managed-static-text (no managed static text)
+								.col-xs-6
+									.clearfix
+									button.btn.btn-lush.pull-right.add-page Add Page
+									h3 Pages
+										small ({{ supportedPages.length }})
+									.btn-group-vertical.supported-pages
+										each supportedPages
+											with getPage this
+												a.btn.btn-mellow(href='/edit-page-localization/{{ slug }}/{{ slugUp 2 }}') {{ name }}

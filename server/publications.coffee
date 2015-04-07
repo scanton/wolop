@@ -28,6 +28,30 @@ Meteor.publish 'content-groups', ->
 	else
 		@ready()
 
+Meteor.publish 'static-text', ->
+	if @userId
+		return StaticText.find {}, {sort: {slug: 1}}
+	else
+		@ready()
+
+Meteor.publish 'static-text-localizations', ->
+	if @userId
+		return StaticTextLocalizations.find {}, {sort: {language: 1}}
+	else
+		@ready()
+
+Meteor.publish 'managed-static-text', ->
+	if @userId
+		return ManagedStaticText.find {}, {sort: {slug: 1}}
+	else
+		@ready()
+
+Meteor.publish 'managed-static-text-localizations', ->
+	if @userId
+		return ManagedStaticTextLocalizations.find {}, {sort: {language: 1}}
+	else
+		@ready()
+
 Meteor.publish 'pages', ->
 	if @userId
 		return Pages.find {}, {sort: {slug: 1}}

@@ -35,9 +35,13 @@ Template.breadcrumbs.helpers
 
 Template.breadcrumbs.events
 	
-	'click .switch-website': (e) ->
+	'click .switch-region': (e) ->
 		e.preventDefault()
-		Session.set 'website-context', $(e.target).attr 'data-slug'
+		Session.set 'current-region', $(e.target).attr 'data-slug'
+	
+	'click .switch-language': (e) ->
+		e.preventDefault()
+		Session.set 'current-language', $(e.target).attr 'data-slug'
 
 	'click .admin-menu-toggle': (e) ->
 		e.preventDefault()

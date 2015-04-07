@@ -19,7 +19,7 @@ template(name='breadcrumbs')
 						ul.dropdown-menu
 							each getOtherWebsites
 								li
-									a.switch-website(data-slug='{{ slug }}', href='#')= name
+									a.switch-website(data-slug='{{ slug }}', href='/website-details/{{ slug }}')= name
 
 		if contentGroupContext and websiteContext
 			li
@@ -33,7 +33,7 @@ template(name='breadcrumbs')
 						ul.dropdown-menu
 							each getOtherContentGroups
 								li
-									a.switch-content-group(data-slug='{{ slug }}', href='#')= name
+									a.switch-content-group(data-slug='{{ slug }}', href='/edit-content-group/{{ websiteContext.slug }}/{{ slug }}')= name
 		if regionContext and contentGroupContext and websiteContext
 			li
 				.btn-group(class='{{ isActivePath "/regions" }}')

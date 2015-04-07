@@ -143,6 +143,9 @@ Template.editContentGroup.helpers
 	contentGroup: ->
 		ContentGroups.findOne { slug: @group }
 
+	groupManagedStaticTextOptions: (slug) ->
+		#check for push/match options
+
 	groupPageOptions: (page) ->
 		parent = Template.parentData 2
 		website = parent.website
@@ -181,6 +184,13 @@ Template.editContentGroup.helpers
 	getContentGroupMenu: (menuSlug) ->
 		group = Session.get 'content-group-context'
 		Menus.findOne { slug: menuSlug, contentGroup: group }
+
+	groupStaticText: ->
+		g = ContentGroups.findOne { slug: Session.get 'content-group-context' }
+		if g and g.supportedManagedStaticText
+			result = ManagedStaticText.find({ slug: { $in: g.supportedManagedStaticText } }).fetch()
+			return result
+		return null
 
 	activeNotices: ->
 		console.log 'TODO activeNotices helper in content-groups.coffee'

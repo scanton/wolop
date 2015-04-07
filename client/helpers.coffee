@@ -64,6 +64,10 @@ helper 'getPage', (slug) ->
 	Pages.findOne { slug: slug }
 helper 'getPageDetails', (slug) ->
 	PageDetails.findOne { parent: slug, region: Session.get('region-context'), language: Session.get('language-context') }
+helper 'getStaticText', (slug) ->
+	StaticText.findOne { slug: slug }
+helper 'getManagedStaticText', (slug) ->
+	ManagedStaticText.findOne { slug: slug }
 helper 'coworkers', ->
 	Presences.find {}
 helper 'isCurrentLanguage', (lang) ->

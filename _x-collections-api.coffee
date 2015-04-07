@@ -173,20 +173,36 @@ defineCollectionApi
 			updateMenu { _id: m._id }, $set: supportedPages: sp
 
 	updatePageDetails: (data) ->
-		if data and data.page and data.title and data.region and data.language
+		if data and data.contentGroup and data.page and data.title and data.region and data.language
 			pageDetail = PageLocalizations.findOne
 				page: data.page
 				region: data.region
 				language: data.language
+				contentGroup: data.contentGroup
 			if pageDetail and pageDetail._id
-				data.modified = new Date
+				data.modified = new Date()
 				actionLogger 'PageLocalizations.update', '', data, PageLocalizations.update({ _id: pageDetail._id }, $set: data)
 			else
-				data.modified = data.created = new Date
+				data.modified = data.created = new Date()
 				actionLogger 'PageLocalizations.insert', '', data, PageLocalizations.insert(data)
 		else
-			console.log 'invalid Page Details, _global.updatePageDetails'
+			console.log 'invalid Page Details.'
 
+	updateManagedStaticTextDetails: (data) ->
+		if data and data.contentGroup and data.managedStaticText and data.translation and data.region and data.language
+			mstDetail = ManagedStaticTextLocalizations.findOne
+				managedStaticText: data.managedStaticText
+				region: data.region
+				language: data.language
+				contentGroup: data.contentGroup
+			if mstDetail and mstDetail._id
+				data.modified = new Date()
+				actionLogger 'ManagedStaticTextLocalizations.update', '', data, ManagedStaticTextLocalizations.update({ _id: mstDetail._id }, { $set: data })
+			else
+				data.modified = data.created = new Date()
+				actionLogger 'ManagedStaticTextLocalizations.insert', '', data, ManagedStaticTextLocalizations.insert(data)
+		else
+			console.log 'invalid Managed Static Text Details.'
 	deactivateWebsite: (slug) ->
 		if slug
 			id = Websites.findOne(slug: slug)._id
@@ -345,40 +361,30 @@ defineCollectionApi
 			return updateContentGroup(query, options)
 
 	insertManagedStaticText: (data) ->
-		#adsf
+		ManagedStaticText.insert data
 
 	pushPage: (page, sourceGroup, destinationGroup) ->
-		dest = ContentGroups.findOne { slug: destinationGroup }
-		sour = ContentGroups.findOne { slug: sourceGroup }
-		if dest && sour && page
-			destPages = dest.supportedPages || []
-			if !_.contains destPages, page
-				destPages.push page
-				query = _id: dest._id
-				options = $set: supportedPages: destPages
-				updateContentGroup query, options
-			pageLocals = PageLocalizations.find({ page: page, contentGroup: sour.slug }).fetch()
-			
-			#TODO: Find out why pageLocals (sometimes) contains pages from wrong contentGroups
-			console.log pageLocals, { page: page, contentGroup: sour.slug }
-			
-			if pageLocals
-				l = pageLocals.length
-				while l--
-					local = pageLocals[l]
-					delete local._id
-					local.modified = local.pushed = new Date()
-					existingPage = PageLocalizations.findOne(
-						{ contentGroup: destinationGroup, language: local.language, region: local.region, page: page }
-					)
-					local.contentGroup = destinationGroup
-					if existingPage
-						PageLocalizations.update { _id: existingPage._id }, { $set: local }
-						return 1
-					else
-						PageLocalizations.insert local
-						return 1
-		return 0
+		if page and sourceGroup and destinationGroup
+			destinationGroupDetail = ContentGroups.findOne { slug: destinationGroup }
+			sourceGroupDetail = ContentGroups.findOne { slug: sourceGroup }
+			if destinationGroupDetail and sourceGroupDetail
+				destinationSupportedPages = destinationGroupDetail.supportedPages || []
+				if !_.contains destinationSupportedPages, page
+					destinationSupportedPages.push page
+					updateContentGroup { _id: destinationGroupDetail._id }, { $set: { supportedPages: destinationSupportedPages } }
+				localizations = PageLocalizations.find( { page: page, contentGroup: sourceGroupDetail.slug } ).fetch()
+				if localizations
+					l = localizations.length
+					while l--
+						local = localizations[l]
+						delete local._id
+						local.contentGroup = destinationGroup
+						local.modified = local.pushed = new Date()
+						existingPage = PageLocalizations.findOne({ contentGroup: destinationGroup, language: local.language, region: local.region, page: page })
+						if existingPage
+							updatePageLocalization { _id: existingPage._id }, { $set: local }
+						else
+							insertPageLocalization local
 
 	pushMenu: (menu, sourceGroup, destinationGroup) ->
 		dest = ContentGroups.findOne { slug: destinationGroup }

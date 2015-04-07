@@ -41,6 +41,30 @@ if Meteor.isServer
 				return !result
 			return false
 		update: adminOnly
+	StaticText.allow
+		insert: (userId, doc) ->
+			if userId and doc.slug and Meteor.user().roles.admin
+				result = StaticText.findOne { slug: doc.slug }
+				console.log 'Insert StaticText Failed: slug must be unique' if result
+				return !result
+			return false
+		update: adminOnly
+	StaticTextLocalizations.allow
+		insert: (userId, doc) ->
+			userId and doc.region and doc.language and doc.translation
+		update: adminOnly
+	ManagedStaticText.allow
+		insert: (userId, doc) ->
+			if userId and doc.slug and Meteor.user().roles.admin
+				result = ManagedStaticText.findOne { slug: doc.slug }
+				console.log 'Insert ManagedStaticText Failed: slug must be unique' if result
+				return !result
+			return false
+		update: adminOnly
+	ManagedStaticTextLocalizations.allow
+		insert: (userId, doc) ->
+			userId and doc.region and doc.language and doc.translation
+		update: adminOnly
 	Pages.allow
 		insert: (userId, doc) ->
 			if userId and doc.slug and Meteor.user().roles.admin

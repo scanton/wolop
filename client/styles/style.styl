@@ -71,7 +71,7 @@ h1.section-header
 	position relative
 	.breadcrumb
 		position absolute
-		top 1px
+		top 0
 		left 10px
 		background none
 		margin 0
@@ -85,6 +85,8 @@ h1.section-header
 			color backgroundColor
 		a.btn
 			padding-right 2px
+		a, button
+			border-radius 0
 		a:hover, button:hover
 			color bodyColor
 			background darken(bodyColor, 30)
@@ -93,7 +95,6 @@ h1.section-header
 				color bodyColor
 				background darken(bodyColor, 30)
 				padding 4px 10px 3px 10px
-				border-radius 5px
 			a:hover
 				text-decoration none
 				cursor default
@@ -102,7 +103,12 @@ h1.section-header
 		.dropdown-menu
 			a
 				color bodyColor
-	
+				background none
+			a:hover
+				cursor pointer
+				background darken(bodyColor, 10)
+				color backgroundColor
+
 .modal-content
 	background backgroundColor
 	
@@ -258,7 +264,7 @@ h1.section-header
 		padding .5em
 		margin .25em
 
-ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
+ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups, ul.mellow-list
 	list-style none
 	padding 0
 	li
@@ -280,7 +286,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 				margin 0
 				min-height 0
 
-.supported-languages, .supported-regions, .supported-content-groups, .supported-menus, .supported-pages
+.supported-languages, .supported-regions, .supported-content-groups, .supported-menus, .supported-pages, .supported-mellow-list
 	ul
 		list-style none
 		padding 0
@@ -445,7 +451,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 	padding .5em
 	text-align center
 	min-height 25px
-	max-height 30px
+	max-height 27px
 	overflow hidden
 	.state-label.offline
 		display block
@@ -466,7 +472,7 @@ ul.languages, ul.regions, ul.websites, ul.pages, ul.menus, ul.content-groups
 		position absolute
 		font-size 10pt
 		right 20px
-		top 6px
+		top 5px
 	.avatar
 		margin-bottom 5px
 		img

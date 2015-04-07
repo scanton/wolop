@@ -146,14 +146,23 @@ template(name='editContentGroup')
 												input(type='hidden', name='isActive', value='on')
 												button.btn.btn-warning Cancel
 												button.btn.btn-success(type='submit') Add Static Text
-							ul.managed-static-texts
-								if managedStaticText
-									each managedStaticText
-										with getManagedStaticText this
-											li.managed-static-text(data-slug='{{ slug }}')
-												h4= name
+							ul.managed-static-texts.mellow-list
+								each groupStaticText
+									li.managed-static-text(data-slug='{{ slug }}')
+										.push-options.pull-right
+											if groupManagedStaticTextOptions slug
+												span.mellow-label Push To:&nbsp;
+												.btn-group
+													each groupManagedStaticTextOptions slug
+														button.push-managed-static-text-button.btn(data-slug='{{ slug }}', class='btn-{{ getRiskLabel riskLevel }}')= name
+											else
+												span.mellow-label All managed static text in sync
+										a(href='/edit-managed-static-text-localization/{{ slug }}/{{ contentGroupContext.slug }}')
+											h4= name
 								else
 									li.notice (no managed static text)
+
+									
 
 					#region.tab-pane(role='tabpanel')
 						.region-list

@@ -1,0 +1,53 @@
+template(name='editManagedStaticTextLocalization')
+	h1.header-label.section-header(class='label-{{ getRiskLabel contentGroup.riskLevel }}') {{ websiteContext.name }} - {{ contentGroup.name }}
+	.col-xs-4
+		h3 Region/Language
+		.region-language-selector
+			ul.regions
+			each contentGroup.supportedRegions
+				with getRegion this 
+					li.region(data-slug='{{ slug }}', class='{{ isCurrentRegion slug }}')
+						span.name= name
+						if supportedLanguages
+							ul.supported-languages
+								each supportedLanguages
+									li.language
+										with getLanguage this
+											a.set-region-and-language.name(href='#', data-slug='{{ slug }}', class='{{ isCurrentLanguage slug }}')= name
+		
+		.btn-group-vertical.pull-right
+			each groupOptions
+				button.btn(class='btn-{{ getRiskLabel riskLevel }}')= name
+		//a.btn.btn-primary.push-content-button(href='/push-manager/{{ websiteContext.slug }}/{{ contentGroup.slug }}') Push Content Manager
+	.col-xs-8
+		with getManagedStaticText managedStaticText
+			h1= name
+		if getManagedStaticTextLocalization managedStaticText
+			with getManagedStaticTextLocalization managedStaticText
+				form.managed-static-text-details-form(name='managed-static-text-details-form')
+					.form-group
+						label Translation
+						textarea.form-control(name='translation') {{ translation }}
+					.form-group
+						input(type='checkbox', name='isActive', checked='{{ showChecked isActive }}')
+						lable Is Active
+					input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
+					input(type='hidden', name='managedStaticText', value='{{ managedStaticText }}')
+					input(type='hidden', name='region', value='{{ regionContext.slug }}')
+					input(type='hidden', name='language', value='{{ languageContext.slug }}')
+					input.btn.btn-success.pull-right(type='submit', value='Save Changes')
+		else
+			form.managed-static-text-details-form(name='managed-static-text-details-form')
+				.form-group
+					label Translation
+					textarea.form-control(name='translation')
+				.form-group
+					input(type='checkbox', name='isActive', checked='checked')
+					lable Is Active
+				input(type='hidden', name='contentGroup', value='{{ contentGroupContext.slug }}')
+				input(type='hidden', name='managedStaticText', value='{{ managedStaticText }}')
+				input(type='hidden', name='region', value='{{ regionContext.slug }}')
+				input(type='hidden', name='language', value='{{ languageContext.slug }}')
+				input.btn.btn-success.pull-right(type='submit', value='Save Changes')
+
+
