@@ -37,7 +37,12 @@ Template.breadcrumbs.events
 	
 	'click .switch-region': (e) ->
 		e.preventDefault()
-		Session.set 'current-region', $(e.target).attr 'data-slug'
+		region = $(e.target).attr 'data-slug'
+		Session.set 'current-region', region
+		currentLang = Session.get 'current-language'
+		regionDetail = Regions.findOne { slug: region }
+		if !_.contains regionDetail.supportedLanguages, currentLang
+			Session.set 'current-language', regionDetail.supportedLanguages[0]
 	
 	'click .switch-language': (e) ->
 		e.preventDefault()
@@ -46,3 +51,5 @@ Template.breadcrumbs.events
 	'click .admin-menu-toggle': (e) ->
 		e.preventDefault()
 		Session.set 'show-main-nav', !Session.get('show-main-nav', false)
+
+		
